@@ -35,7 +35,7 @@ To run it for real, use the image:
 mkdir -p config data
 docker run -d --name homelabdash -p 3000:3000 --user "$(id -u):$(id -g)" \
   -v "$PWD/config:/config" -v "$PWD/data:/data" \
-  ghcr.io/xiaodoudou/homelabdash:latest
+  xiaodoudoufr/homelabdash:latest
 ```
 
 On first start it writes a starter `config/homelabdash.yaml`, and the page follows every save you make to it. [Deploying](docs/operations/DEPLOY.md) covers docker compose, Unraid, the Docker socket and reverse proxies.

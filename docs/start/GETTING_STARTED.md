@@ -21,13 +21,13 @@ npm run dev:showcase
 
 ## Run your own
 
-The image is `ghcr.io/xiaodoudou/homelabdash`, for amd64 and arm64. It needs two folders: `/config` for what you edit, and `/data` for what the dashboard writes itself (dismissed alerts, plugin state, graph history, cached icons).
+The image is `xiaodoudoufr/homelabdash` on Docker Hub, for amd64 and arm64. It needs two folders: `/config` for what you edit, and `/data` for what the dashboard writes itself (dismissed alerts, plugin state, graph history, cached icons).
 
 ```sh
 mkdir -p config data
 docker run -d --name homelabdash -p 3000:3000 --user "$(id -u):$(id -g)" \
   -v "$PWD/config:/config" -v "$PWD/data:/data" \
-  ghcr.io/xiaodoudou/homelabdash:latest
+  xiaodoudoufr/homelabdash:latest
 ```
 
 On first start it writes a starter `config/homelabdash.yaml`. Open <http://localhost:3000> and start editing the file; the page follows every save.

@@ -2,7 +2,7 @@
 # On first start an empty ./config gets a starter homelabdash.yaml.
 services:
   homelabdash:
-    image: ghcr.io/xiaodoudou/homelabdash:latest
+    image: xiaodoudoufr/homelabdash:latest
     container_name: homelabdash
     restart: unless-stopped
     # Must be able to write ./config (first start only) and ./data. Create both folders first.

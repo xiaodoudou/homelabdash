@@ -171,4 +171,4 @@ A release is a tag on `main`. Any change worth mentioning gets a line under **Un
    git push origin dev
    ```
 
-Pushing the tag starts `.github/workflows/release.yml`. It first checks that the tag names the version in `package.json` and sits on `main`, runs the same jobs as every push, pushes the image to `ghcr.io/xiaodoudou/homelabdash` for amd64 and arm64, and finally creates the GitHub release with generated notes. If a step fails the rest don't run, so a red build never gets published. A prerelease tag such as `v0.3.0-rc.1` only gets its own image tag, and the release is marked as a prerelease.
+Pushing the tag starts `.github/workflows/release.yml`. It first checks that the tag names the version in `package.json` and sits on `main`, runs the same jobs as every push, pushes the image to Docker Hub as `xiaodoudoufr/homelabdash` for amd64 and arm64 (logging in with the `DOCKERHUB_TOKEN` repository secret), and finally creates the GitHub release with generated notes. If a step fails the rest don't run, so a red build never gets published. A prerelease tag such as `v0.3.0-rc.1` only gets its own image tag, and the release is marked as a prerelease.

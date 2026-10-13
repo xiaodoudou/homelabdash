@@ -2,7 +2,7 @@
 
 # Deploying
 
-homelabdash ships as one image, `ghcr.io/xiaodoudou/homelabdash`, for amd64 and arm64. It listens on port 3000 and uses two folders:
+homelabdash ships as one image on Docker Hub, `xiaodoudoufr/homelabdash`, for amd64 and arm64. It listens on port 3000 and uses two folders:
 
 | Folder | Holds | Needs |
 |---|---|---|
@@ -32,7 +32,7 @@ docker run -d --name homelabdash --restart unless-stopped -p 3000:3000 \
   -v /srv/homelabdash:/config -v /srv/homelabdash/data:/data \
   -v /var/run/docker.sock:/var/run/docker.sock:ro \
   --group-add "$(stat -c %g /var/run/docker.sock)" \
-  ghcr.io/xiaodoudou/homelabdash:latest
+  xiaodoudoufr/homelabdash:latest
 ```
 
 Only the `docker` plugin needs the Docker socket and `--group-add`. Mounting the socket read-only doesn't limit what the Docker API lets you do, so for least privilege put a socket proxy in front of it and give the `docker` source its `url` instead.
@@ -139,7 +139,7 @@ Whatever you choose, `/api/health` stays open for health checks.
 ## Upgrading
 
 ```sh
-docker pull ghcr.io/xiaodoudou/homelabdash:latest
+docker pull xiaodoudoufr/homelabdash:latest
 docker rm -f homelabdash   # then the same docker run as before, or: docker compose up -d
 ```
 

@@ -5,7 +5,7 @@ description: Install, upgrade, expose and troubleshoot homelabdash with Docker, 
 
 # Deploy and operate homelabdash
 
-One image: `ghcr.io/xiaodoudou/homelabdash` (amd64, arm64). Port 3000. Volumes: `/config` (what the user edits) and `/data` (what the dashboard writes: alert dismissals, plugin state, job history, icon cache, pinned SSH host keys). An empty `/config` gets a starter `homelabdash.yaml`.
+One image on Docker Hub: `xiaodoudoufr/homelabdash` (amd64, arm64). Port 3000. Volumes: `/config` (what the user edits) and `/data` (what the dashboard writes: alert dismissals, plugin state, job history, icon cache, pinned SSH host keys). An empty `/config` gets a starter `homelabdash.yaml`.
 
 ## Run
 
@@ -18,7 +18,7 @@ docker run -d --name homelabdash -p 3000:3000 --user "$(stat -c %u:%g /srv/homel
   -v /srv/homelabdash:/config -v /srv/homelabdash/data:/data \
   -v /var/run/docker.sock:/var/run/docker.sock:ro \
   --group-add "$(stat -c %g /var/run/docker.sock)" \
-  ghcr.io/xiaodoudou/homelabdash:latest
+  xiaodoudoufr/homelabdash:latest
 ```
 
 Unraid: template `unraid/homelabdash.xml`. Appdata is owned by `nobody:users`, so the template runs the container with `--user 99:100`; `--group-add` must match the docker socket group (`stat -c %g /var/run/docker.sock`, often 281 on Unraid). A dedicated LAN address (br0 with a fixed IP) works like any other container.
@@ -36,7 +36,7 @@ Access: keep the dashboard to local addresses (proxy allow-list of the LAN range
 
 ## Upgrade
 
-`docker pull ghcr.io/xiaodoudou/homelabdash:latest && docker restart homelabdash` (or recreate). Config and data are untouched. User plugins in `/config/plugins` keep working; run `docker exec homelabdash homelabdash plugin test` after an upgrade to confirm.
+`docker pull xiaodoudoufr/homelabdash:latest && docker restart homelabdash` (or recreate). Config and data are untouched. User plugins in `/config/plugins` keep working; run `docker exec homelabdash homelabdash plugin test` after an upgrade to confirm.
 
 ## Troubleshoot
 

@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <Container version="2">
   <Name>homelabdash</Name>
-  <Repository>ghcr.io/xiaodoudou/homelabdash:latest</Repository>
-  <Registry>https://github.com/xiaodoudou/homelabdash/pkgs/container/homelabdash</Registry>
+  <Repository>xiaodoudoufr/homelabdash:latest</Repository>
+  <Registry>https://hub.docker.com/r/xiaodoudoufr/homelabdash</Registry>
   <Network>bridge</Network>
   <Shell>sh</Shell>
   <Privileged>false</Privileged>
