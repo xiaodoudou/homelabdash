@@ -1,0 +1,29 @@
+{
+  "GET /containers/json": {
+    "body": [
+      { "Id": "1", "Names": ["/media-server"], "Image": "example/media-server:latest", "State": "running", "Status": "Up 3 days (healthy)", "Created": 1790000000, "Labels": { "homelabdash.expected": "true" }, "Health": { "Status": "healthy" } },
+      { "Id": "2", "Names": ["/downloader"], "Image": "example/downloader:latest", "State": "running", "Status": "Up 2 hours (unhealthy)", "Created": 1790000100, "Labels": {} },
+      { "Id": "3", "Names": ["/backup"], "Image": "example/backup:latest", "State": "exited", "Status": "Exited (1) 5 minutes ago", "Created": 1790000200, "Labels": {} },
+      { "Id": "4", "Names": ["/dns"], "Image": "example/dns:latest", "State": "running", "Status": "Up 9 days", "Created": 1790000300, "Labels": {}, "Health": { "Status": "none" } }
+    ]
+  },
+  "STREAM /events": {
+    "lines": [
+      { "Type": "container", "Action": "exec_start: sh", "Actor": { "Attributes": { "name": "dns" } } },
+      { "Type": "container", "Action": "die", "Actor": { "Attributes": { "name": "backup" } } }
+    ]
+  },
+  "GET /system/df": {
+    "body": {
+      "LayersSize": 21474836480,
+      "Images": [
+        { "Id": "sha256:a", "Size": 1073741824, "Containers": 1 },
+        { "Id": "sha256:b", "Size": 536870912, "Containers": 0 }
+      ],
+      "Containers": [{ "Id": "1", "SizeRw": 1048576 }],
+      "Volumes": [{ "Name": "v", "UsageData": { "Size": 2147483648 } }],
+      "BuildCache": [{ "ID": "c", "Size": 104857600 }]
+    }
+  },
+  "POST /containers/backup/start": { "status": 204, "body": "" }
+}

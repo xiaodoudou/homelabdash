@@ -1,0 +1,22 @@
+{
+  "GET /radarr/api/v3/wanted/missing": {
+    "body": { "page": 1, "pageSize": 1, "totalRecords": 42, "records": [] }
+  },
+  "GET /sonarr/api/v3/wanted/missing": {
+    "body": { "page": 1, "pageSize": 1, "totalRecords": 317, "records": [] }
+  },
+  "GET /sub": {
+    "headers": { "subscription-userinfo": "upload=1073741824; download=53687091200; total=214748364800; expire=1798761600" },
+    "body": "ok"
+  },
+  "GET /api/queue": {
+    "body": {
+      "paused": false,
+      "speed": 10485760,
+      "slots": [
+        { "id": "a1", "name": "Some.Linux.ISO", "percentage": 42, "status": "Downloading" },
+        { "id": "b2", "name": "Another.Archive", "percentage": 0, "status": "Queued" }
+      ]
+    }
+  }
+}

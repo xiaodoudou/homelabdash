@@ -1,0 +1,144 @@
+{
+  "GET /api/v1/request/count": {
+    "body": { "total": 120, "movie": 80, "tv": 40, "pending": 2, "approved": 95, "declined": 3, "processing": 12, "available": 70, "completed": 25 }
+  },
+  "GET /api/v1/issue/count": {
+    "body": { "total": 5, "video": 1, "audio": 1, "subtitles": 3, "others": 0, "open": 2, "closed": 3 }
+  },
+  "GET /api/v1/request?filter=pending": {
+    "body": {
+      "pageInfo": { "pages": 1, "pageSize": 10, "results": 2, "page": 1 },
+      "results": [
+        {
+          "id": 42,
+          "status": 1,
+          "createdAt": "2026-01-02T09:30:00.000Z",
+          "updatedAt": "2026-01-02T09:30:00.000Z",
+          "type": "tv",
+          "is4k": false,
+          "serverId": null,
+          "profileId": null,
+          "rootFolder": null,
+          "languageProfileId": null,
+          "tags": null,
+          "isAutoRequest": false,
+          "ignoreQuota": false,
+          "media": {
+            "downloadStatus": [],
+            "downloadStatus4k": [],
+            "id": 310,
+            "mediaType": "tv",
+            "tmdbId": 2002,
+            "tvdbId": 3003,
+            "imdbId": null,
+            "status": 2,
+            "status4k": 1,
+            "createdAt": "2026-01-02T09:30:00.000Z",
+            "updatedAt": "2026-01-02T09:30:00.000Z",
+            "serviceId": null,
+            "serviceId4k": null,
+            "externalServiceId": null,
+            "externalServiceId4k": null,
+            "ratingKey": null,
+            "ratingKey4k": null
+          },
+          "seasons": [
+            { "id": 77, "seasonNumber": 1, "status": 1, "createdAt": "2026-01-02T09:30:00.000Z", "updatedAt": "2026-01-02T09:30:00.000Z" }
+          ],
+          "modifiedBy": null,
+          "requestedBy": {
+            "permissions": 32,
+            "warnings": [],
+            "id": 7,
+            "email": "carol@mail.example",
+            "plexUsername": "carol",
+            "jellyfinUsername": null,
+            "username": null,
+            "userType": 1,
+            "avatar": "/avatarproxy/7",
+            "movieQuotaLimit": null,
+            "movieQuotaDays": null,
+            "tvQuotaLimit": null,
+            "tvQuotaDays": null,
+            "createdAt": "2025-05-01T10:00:00.000Z",
+            "updatedAt": "2026-01-02T09:00:00.000Z",
+            "requestCount": 12,
+            "displayName": "Carol"
+          },
+          "seasonCount": 1,
+          "canRemove": false
+        },
+        {
+          "id": 41,
+          "status": 1,
+          "createdAt": "2026-01-01T18:00:00.000Z",
+          "updatedAt": "2026-01-01T18:00:00.000Z",
+          "type": "movie",
+          "is4k": true,
+          "serverId": null,
+          "profileId": null,
+          "rootFolder": null,
+          "languageProfileId": null,
+          "tags": null,
+          "isAutoRequest": false,
+          "ignoreQuota": false,
+          "media": {
+            "downloadStatus": [],
+            "downloadStatus4k": [],
+            "id": 309,
+            "mediaType": "movie",
+            "tmdbId": 1001,
+            "tvdbId": null,
+            "imdbId": null,
+            "status": 1,
+            "status4k": 2,
+            "createdAt": "2026-01-01T18:00:00.000Z",
+            "updatedAt": "2026-01-01T18:00:00.000Z",
+            "serviceId": null,
+            "serviceId4k": null,
+            "externalServiceId": null,
+            "externalServiceId4k": null,
+            "ratingKey": null,
+            "ratingKey4k": null
+          },
+          "seasons": [],
+          "modifiedBy": null,
+          "requestedBy": {
+            "permissions": 32,
+            "warnings": [],
+            "id": 8,
+            "email": "dave@mail.example",
+            "plexUsername": null,
+            "jellyfinUsername": "dave",
+            "username": null,
+            "userType": 3,
+            "avatar": "/avatarproxy/8",
+            "movieQuotaLimit": null,
+            "movieQuotaDays": null,
+            "tvQuotaLimit": null,
+            "tvQuotaDays": null,
+            "createdAt": "2025-06-01T10:00:00.000Z",
+            "updatedAt": "2026-01-01T17:00:00.000Z",
+            "requestCount": 3,
+            "displayName": "Dave"
+          },
+          "seasonCount": 0,
+          "canRemove": false
+        }
+      ],
+      "serviceErrors": { "radarr": [], "sonarr": [] }
+    }
+  },
+  "GET /api/v1/movie/1001": {
+    "body": { "id": 1001, "title": "Example Movie", "originalTitle": "Example Movie", "releaseDate": "2025-03-14", "status": "Released", "runtime": 112, "mediaInfo": { "id": 309, "tmdbId": 1001, "status": 1, "status4k": 2 } }
+  },
+  "GET /api/v1/tv/2002": {
+    "body": { "id": 2002, "name": "Example Series", "originalName": "Example Series", "firstAirDate": "2024-09-01", "numberOfSeasons": 2, "status": "Returning Series", "mediaInfo": { "id": 310, "tmdbId": 2002, "status": 2, "status4k": 1 } }
+  },
+  "POST /api/v1/request/41/approve": {
+    "body": { "id": 41, "status": 2, "type": "movie", "is4k": true }
+  },
+  "POST /api/v1/request/41/decline": {
+    "body": { "id": 41, "status": 3, "type": "movie", "is4k": true }
+  }
+}

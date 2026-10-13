@@ -1,0 +1,109 @@
+{
+  "POST /ubus?call=session.login": {
+    "body": {
+      "jsonrpc": "2.0",
+      "id": 1,
+      "result": [0, {
+        "ubus_rpc_session": "fixture-session-0001",
+        "timeout": 600,
+        "expires": 600,
+        "acls": { "ubus": { "*": ["*"] } },
+        "data": { "username": "root" }
+      }]
+    }
+  },
+  "POST /ubus?call=network.interface.wan.status": {
+    "body": {
+      "jsonrpc": "2.0",
+      "id": 2,
+      "result": [0, {
+        "up": true,
+        "pending": false,
+        "available": true,
+        "autostart": true,
+        "dynamic": false,
+        "uptime": 864000,
+        "l3_device": "pppoe-wan",
+        "proto": "pppoe",
+        "device": "eth1",
+        "updated": ["addresses", "routes"],
+        "metric": 10,
+        "dns_metric": 0,
+        "delegation": true,
+        "ipv4-address": [{ "address": "192.0.2.10", "mask": 32, "ptpaddress": "192.0.2.1" }],
+        "ipv6-address": [],
+        "ipv6-prefix": [],
+        "ipv6-prefix-assignment": [],
+        "route": [{ "target": "0.0.0.0", "mask": 0, "nexthop": "192.0.2.1", "source": "0.0.0.0/0" }],
+        "dns-server": ["192.0.2.53"],
+        "dns-search": [],
+        "neighbors": [],
+        "inactive": { "ipv4-address": [], "ipv6-address": [], "route": [], "dns-server": [], "dns-search": [], "neighbors": [] },
+        "data": {}
+      }]
+    }
+  },
+  "POST /ubus?call=network.device.status": {
+    "body": {
+      "jsonrpc": "2.0",
+      "id": 3,
+      "result": [0, {
+        "external": true,
+        "present": true,
+        "type": "Network device",
+        "up": true,
+        "carrier": true,
+        "mtu": 1492,
+        "macaddr": "02:00:00:00:00:01",
+        "txqueuelen": 3,
+        "ipv6": true,
+        "statistics": {
+          "collisions": 0,
+          "rx_frame_errors": 0,
+          "tx_compressed": 0,
+          "multicast": 0,
+          "rx_length_errors": 0,
+          "tx_dropped": 0,
+          "rx_bytes": 512000000000,
+          "rx_missed_errors": 0,
+          "tx_errors": 0,
+          "rx_compressed": 0,
+          "rx_over_errors": 0,
+          "tx_fifo_errors": 0,
+          "rx_crc_errors": 0,
+          "rx_packets": 400000000,
+          "tx_heartbeat_errors": 0,
+          "rx_dropped": 12,
+          "tx_aborted_errors": 0,
+          "tx_packets": 250000000,
+          "rx_errors": 0,
+          "tx_bytes": 64000000000,
+          "tx_window_errors": 0,
+          "rx_fifo_errors": 0,
+          "tx_carrier_errors": 0
+        }
+      }]
+    }
+  },
+  "POST /ubus?call=file.read&path=/proc/sys/net/netfilter/nf_conntrack_count": {
+    "body": { "jsonrpc": "2.0", "id": 4, "result": [0, { "data": "3200\n" }] }
+  },
+  "POST /ubus?call=file.read&path=/proc/sys/net/netfilter/nf_conntrack_max": {
+    "body": { "jsonrpc": "2.0", "id": 5, "result": [0, { "data": "65536\n" }] }
+  },
+  "POST /ubus?call=system.info": {
+    "body": {
+      "jsonrpc": "2.0",
+      "id": 6,
+      "result": [0, {
+        "localtime": 1790000000,
+        "uptime": 864030,
+        "load": [32768, 26214, 19661],
+        "memory": { "total": 1073741824, "free": 734003200, "shared": 8388608, "buffered": 4194304, "available": 805306368, "cached": 104857600 },
+        "root": { "total": 102400, "free": 98304, "used": 4096, "avail": 98304 },
+        "tmp": { "total": 524288, "free": 520192, "used": 4096, "avail": 520192 },
+        "swap": { "total": 0, "free": 0 }
+      }]
+    }
+  }
+}

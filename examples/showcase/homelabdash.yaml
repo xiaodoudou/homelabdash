@@ -1,0 +1,123 @@
+# yaml-language-server: $schema=./.schema/config.schema.json
+#
+# A whole homelab on one screen: media, server, storage and network, with every builtin plugin.
+# `npm run dev:showcase` serves it on http://localhost:3000 against mocked services (dev/mock-upstreams.js);
+# the screenshots in docs/ui/ come from it (`npm run docs:screenshots`).
+
+settings:
+  title: Homelab
+  theme: auto
+
+sources:
+  unraid:
+    plugin: unraid
+    interval: 10s
+    config:
+      url: http://127.0.0.1:4100/unraid
+      apiKey: "${secret:UNRAID_API_KEY}"
+      notifications: { minImportance: WARNING }
+  docker:
+    plugin: docker
+    config:
+      url: http://127.0.0.1:4100/docker
+      expected: [media-server, downloader]
+  ups:
+    plugin: apcupsd
+    interval: 15s
+    config: { host: 127.0.0.1, port: 4135 }
+  plex:
+    plugin: tautulli
+    interval: 10s
+    config: { url: http://127.0.0.1:4100/tautulli, apiKey: "${secret:TAUTULLI_API_KEY}" }
+  seerr:
+    plugin: seerr
+    interval: 15s
+    config: { url: http://127.0.0.1:4100/seerr, apiKey: "${secret:SEERR_API_KEY}" }
+  radarr:
+    plugin: arr
+    config: { url: http://127.0.0.1:4100/arr, apiKey: "${secret:RADARR_API_KEY}" }
+  sonarr:
+    plugin: arr
+    config: { url: http://127.0.0.1:4100/arr/sonarr, apiKey: "${secret:SONARR_API_KEY}" }
+  sabnzbd:
+    plugin: sabnzbd
+    interval: 5s
+    config: { url: http://127.0.0.1:4100/sabnzbd, apiKey: "${secret:SABNZBD_API_KEY}" }
+  qbittorrent:
+    plugin: qbittorrent
+    interval: 5s
+    config: { url: http://127.0.0.1:4100/qbittorrent }
+  router:
+    plugin: openwrt
+    interval: 10s
+    config: { url: http://127.0.0.1:4100/openwrt, username: root, password: "${secret:ROUTER_PASSWORD}" }
+  clash:
+    plugin: mihomo
+    interval: 15s
+    config: { url: http://127.0.0.1:4100/mihomo, secret: "${secret:MIHOMO_SECRET}", group: Proxy }
+  vpn:
+    plugin: sub-quota
+    interval: 30m
+    config:
+      subscriptions:
+        - { name: Provider A, url: http://127.0.0.1:4100/sub-quota/api/v1/client/subscribe }
+        - { name: Provider B, url: http://127.0.0.1:4100/sub-quota/clash/config, userAgent: mihomo }
+  adguard:
+    plugin: adguard
+    config: { url: http://127.0.0.1:4100/adguard, username: admin, password: "${secret:ADGUARD_PASSWORD}" }
+
+sections:
+  # Every source's alerts, as chips in the header; a click opens the full list. Nothing shows when there are none.
+  - title: Alerts
+    icon: "mdi:bell-alert#f87171"
+    source: alerts
+    placement: top
+
+  - title: Media
+    icon: "mdi:play-box-multiple-outline#e5a00d"
+    sections:
+      - title: Now Playing
+        hideWhen: empty
+        merge: true
+        tiles:
+          - { title: Plex, icon: "si:plex#e5a00d", source: plex, options: { view: sessions }, hideWhen: empty }
+          - { title: Streams, icon: "mdi:chart-areaspline#e5a00d", source: plex, options: { view: summary }, hideWhen: empty, graph: [Bandwidth] }
+      - title: Backlog
+        merge: true
+        tiles:
+          - { title: Pending requests, icon: "mdi:inbox-arrow-down#a78bfa", source: seerr, options: { stats: [pending] } }
+          - { title: Open issues, icon: "mdi:alert-circle-outline#a78bfa", source: seerr, options: { stats: [issues] } }
+          - { title: Missing movies, icon: "mdi:movie-open-outline#ffc230", source: radarr, options: { view: missing } }
+          - { title: Missing episodes, icon: "mdi:television-play#35c5f4", source: sonarr, options: { view: missing } }
+
+  - title: System
+    icon: "si:unraid#f15a2c"
+    sections:
+      - title: Host
+        merge: true
+        tiles:
+          - { title: Uptime, icon: "mdi:clock-outline#34d399", source: unraid, options: { metric: uptime } }
+          - { title: CPU, icon: "mdi:cpu-64-bit#38bdf8", source: unraid, options: { metric: cpu }, graph: true }
+          - { title: RAM, icon: "mdi:memory#818cf8", source: unraid, options: { metric: memory }, graph: [Used] }
+          - { title: Unraid, icon: "si:unraid#f15a2c", source: unraid, options: { metric: status } }
+      - title: Power
+        tiles:
+          - { title: UPS, icon: "mdi:battery-charging#fbbf24", source: ups, graph: [Load] }
+      - title: Storage
+        tiles:
+          - { title: Array, icon: "mdi:harddisk#fb923c", source: unraid, options: { metric: array } }
+          - { title: Cache, icon: "mdi:flash#facc15", source: unraid, options: { metric: pool, pool: cache } }
+      - title: Docker
+        merge: true
+        tiles:
+          - { title: Docker, icon: "si:docker#2496ed", source: docker }
+          - { title: Docker disk, icon: "mdi:database#2496ed", source: docker, options: { view: disk } }
+      - title: Network
+        tiles:
+          - { title: Router, icon: "si:openwrt#22c3e6", source: router, options: { view: wan }, graph: [Down, Up] }
+          - { title: Connections, icon: "mdi:lan-connect#38bdf8", source: router, options: { view: conntrack }, graph: [Active] }
+          - { title: Clash, icon: "mdi:cat#a78bfa", source: clash, graph: [Down, Up] }
+          - { title: VPN quota, icon: "mdi:vpn#2dd4bf", source: vpn }
+          - { title: AdGuard Home, icon: "si:adguard#68bc71", source: adguard, options: { period: today } }
+          - { title: SABnzbd, icon: "mdi:download-network#fcd34d", source: sabnzbd }
+          - { title: qBittorrent, icon: "si:qbittorrent#60a5fa", source: qbittorrent }

@@ -1,0 +1,8 @@
+{
+  "GET /api/items": {
+    "body": [
+      { "name": "first", "status": "ok" },
+      { "name": "second", "status": "degraded" }
+    ]
+  }
+}

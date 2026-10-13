@@ -1,0 +1,141 @@
+# yaml-language-server: $schema=./.schema/config.schema.json
+#
+# Demo dashboard. `npm run dev` serves it on http://localhost:3000 with every upstream mocked
+# (dev/mock-upstreams.js), so it runs without any real service.
+
+settings:
+  title: Homelab
+  theme: auto
+  accent: "#38bdf8"
+  defaultInterval: 30s
+  idleInterval: 5m
+
+# A source is one connection to a service, fetched once per interval no matter how many tiles use it.
+sources:
+  host:
+    plugin: glances
+    interval: 3s
+    config:
+      url: http://127.0.0.1:4100/glances
+
+  tower:
+    plugin: unraid
+    interval: 15s
+    config:
+      url: http://127.0.0.1:4100/unraid
+      apiKey: ${secret:UNRAID_API_KEY}
+
+  docker:
+    plugin: docker
+    config:
+      url: http://127.0.0.1:4100/docker
+      expected: [backup]
+      allowControl: true
+
+  missing:
+    name: Library
+    plugin: http-json
+    interval: 5m
+    config:
+      requests:
+        movies: { url: http://127.0.0.1:4100/http-json/radarr/api/v3/wanted/missing, query: { pageSize: 1 }, auth: { header: X-Api-Key, value: "${secret:RADARR_KEY}" } }
+        episodes: { url: http://127.0.0.1:4100/http-json/sonarr/api/v3/wanted/missing, query: { pageSize: 1 }, auth: { header: X-Api-Key, value: "${secret:SONARR_KEY}" } }
+
+  queue:
+    name: Downloads
+    plugin: http-json
+    interval: 5s
+    config:
+      url: http://127.0.0.1:4100/http-json/api/queue
+      alerts: 'paused ? [{ "id": "paused", "message": "Download queue is paused" }] : []'
+
+  router:
+    plugin: ssh
+    interval: 30s
+    config:
+      host: 127.0.0.1
+      port: 4122
+      username: demo
+      password: ${secret:ROUTER_PASSWORD}
+      commands:
+        conntrack: { run: cat /proc/sys/net/netfilter/nf_conntrack_count, parse: number, alert: { above: 60000, message: Connection table almost full } }
+        mem: { run: "awk '/MemTotal|MemAvailable/ {print $1 $2*1024}' /proc/meminfo", parse: kv }
+      follow: { command: logread -f, lines: 100 }
+
+pages:
+  - id: home
+    title: Home
+    sections:
+      # Every source's alerts as chips in the header; a click opens the full list. Nothing shows when there are none.
+      - title: Alerts
+        icon: mdi:bell-alert#f87171
+        source: alerts
+        placement: top
+
+      # A band: its groups sit side by side, each as wide as its tiles need.
+      - title: Library
+        icon: mdi:download-box#38bdf8
+        sections:
+          - title: Missing
+            merge: true                 # one card, a cell per tile
+            tiles:
+              - { title: Movies, icon: si:themoviedatabase, source: missing, options: { items: [{ label: Missing, value: movies.totalRecords }] } }
+              - { title: Episodes, icon: mdi:television-classic, source: missing, options: { items: [{ label: Missing, value: episodes.totalRecords }] } }
+          - title: Downloading
+            tiles:
+              - title: Queue
+                icon: mdi:download
+                source: queue
+                span: 2
+                options:
+                  list: { items: slots, title: name, subtitle: status, value: percentage, format: percent, badge: status, empty: Queue is empty }
+
+      - title: System
+        icon: mdi:server
+        sections:
+          - title: Host
+            tiles:
+              - { title: CPU, icon: mdi:cpu-64-bit, source: tower, options: { metric: cpu }, href: http://tower.example/Dashboard, graph: true }
+              - { title: RAM, icon: mdi:memory, source: tower, options: { metric: memory } }
+              - { title: GPU, icon: mdi:expansion-card#76b900, source: host, options: { metric: gpu }, span: 2, graph: [Load, Temp] }
+              - { title: Uptime, icon: mdi:clock-outline, source: tower, options: { metric: uptime } }
+          - title: Storage
+            tiles:
+              - { title: Array, icon: mdi:harddisk, source: tower, options: { metric: array } }
+              - { title: Cache, icon: mdi:flash, source: tower, options: { metric: pool, pool: cache } }
+              - { title: Disks, icon: mdi:harddisk-plus, source: host, options: { metric: fs }, span: 2 }
+
+      - title: Containers
+        icon: mdi:docker
+        sections:
+          - title: Docker
+            tiles:
+              - { title: Docker, icon: mdi:docker, source: docker }
+              - { title: Problems, icon: mdi:alert-circle-outline, source: docker, options: { view: list, show: problems }, span: 2 }
+              - { title: Disk usage, icon: mdi:database, source: docker, options: { view: disk } }
+          - title: Apps
+            tiles:
+              - { title: Media server, icon: di:jellyfin, href: http://media.example, container: media-server }
+              - { title: Backup, icon: mdi:backup-restore, href: http://backup.example, container: backup }
+              - { title: DNS, icon: di:adguard-home, href: http://dns.example, container: dns }
+
+      - title: Network
+        icon: mdi:lan
+        tiles:
+          - title: Router
+            icon: mdi:router-wireless
+            source: router
+            options:
+              view: stats
+              items:
+                - { command: conntrack, label: Connections, format: number, warn: 50000 }
+                - { command: mem, field: MemAvailable, label: Free RAM, format: bytes }
+          - { title: Router log, icon: mdi:text-box-outline, source: router, options: { view: log, lines: 12 }, span: full }
+
+  - id: system
+    title: Unraid
+    icon: mdi:nas
+    sections:
+      - title: Notifications
+        tiles:
+          - { title: Unread, icon: mdi:bell, source: tower, options: { metric: notifications }, span: full }

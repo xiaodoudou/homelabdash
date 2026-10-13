@@ -1,0 +1,33 @@
+{
+  "GET /api/4/cpu": {
+    "body": { "total": 23.4, "user": 15.1, "system": 6.2, "idle": 76.6, "iowait": 1.3, "cpucore": 16, "time_since_update": 10.02 }
+  },
+  "GET /api/4/mem": {
+    "body": { "total": 68719476736, "available": 41231686041, "percent": 40.0, "used": 27487790695, "free": 2147483648 }
+  },
+  "GET /api/4/load": {
+    "body": { "min1": 1.42, "min5": 1.18, "min15": 0.97, "cpucore": 16 }
+  },
+  "GET /api/4/uptime": {
+    "body": "12 days, 4:05:31"
+  },
+  "GET /api/4/gpu": {
+    "body": [
+      { "key": "gpu_id", "gpu_id": "nvidia0", "name": "Example GPU", "mem": 12.5, "proc": 34, "temperature": 92, "fan_speed": 70 }
+    ]
+  },
+  "GET /api/4/sensors": {
+    "body": [
+      { "label": "Package id 0", "unit": "C", "value": 52, "warning": 80, "critical": 100, "type": "temperature_core", "key": "label" },
+      { "label": "Composite", "unit": "C", "value": 41, "warning": 70, "critical": 80, "type": "temperature_core", "key": "label" },
+      { "label": "fan1", "unit": "R", "value": 1200, "warning": null, "critical": null, "type": "fan_speed", "key": "label" }
+    ]
+  },
+  "GET /api/4/fs": {
+    "body": [
+      { "device_name": "/dev/sda1", "fs_type": "ext4", "mnt_point": "/", "size": 500107862016, "used": 120259084288, "free": 379848777728, "percent": 24.0, "key": "mnt_point" },
+      { "device_name": "/dev/sda1", "fs_type": "ext4", "mnt_point": "/etc/hosts", "size": 500107862016, "used": 120259084288, "free": 379848777728, "percent": 24.0, "key": "mnt_point" },
+      { "device_name": "/dev/md1", "fs_type": "xfs", "mnt_point": "/mnt/data", "size": 8001563222016, "used": 7201406899814, "free": 800156322202, "percent": 90.0, "key": "mnt_point" }
+    ]
+  }
+}

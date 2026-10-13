@@ -1,0 +1,25 @@
+# yaml-language-server: $schema=./.schema/config.schema.json
+#
+# Starter config written on first start. Edit it while the dashboard is open: it reloads on save,
+# and a mistake shows up as a banner instead of breaking the page.
+#
+#   homelabdash validate        check this file (line numbers, unknown keys, plugin options)
+#   homelabdash schema          write .schema/config.schema.json for editor completion
+#   homelabdash plugin list     installed plugins; README of each in plugins/<id>/README.md
+
+settings:
+  title: Homelab
+
+# Uncomment to show containers. The docker socket must be mounted into the container.
+# sources:
+#   docker:
+#     plugin: docker
+
+sections:
+  - title: Alerts
+    source: alerts
+
+  - title: Links
+    icon: mdi:link-variant
+    tiles:
+      - { title: homelabdash, icon: mdi:github, href: https://github.com/xiaodoudou/homelabdash, description: Docs and plugins }

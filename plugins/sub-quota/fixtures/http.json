@@ -1,0 +1,65 @@
+{
+  "GET /api/v1/client/subscribe": {
+    "headers": {
+      "content-type": "text/yaml; charset=utf-8",
+      "subscription-userinfo": "upload=1073741824; download=29001613312; total=107374182400; expire=1893499200",
+      "profile-update-interval": "24"
+    },
+    "body": "proxies: []\nproxy-groups: []\nrules: []\n"
+  },
+  "GET /clash/config": {
+    "headers": {
+      "content-type": "application/octet-stream",
+      "subscription-userinfo": "upload=0;download=98784247808;total=107374182400;expire="
+    },
+    "body": "proxies: []\n"
+  },
+  "POST /ubus?call=session.login": {
+    "body": {
+      "jsonrpc": "2.0",
+      "id": 1,
+      "result": [
+        0,
+        {
+          "ubus_rpc_session": "0123456789abcdef0123456789abcdef",
+          "timeout": 600,
+          "expires": 600
+        }
+      ]
+    }
+  },
+  "POST /ubus?call=uci.get": {
+    "body": {
+      "jsonrpc": "2.0",
+      "id": 1,
+      "result": [
+        0,
+        {
+          "values": {
+            "cfg01b6bc": {
+              ".name": "cfg01b6bc",
+              ".type": "config_subscribe",
+              "name": "Provider A",
+              "enabled": "1",
+              "address": "https://sub-a.example/api/v1/client/subscribe?token=fixture-a"
+            },
+            "cfg02b6bc": {
+              ".name": "cfg02b6bc",
+              ".type": "config_subscribe",
+              "name": "Provider B",
+              "enabled": "1",
+              "address": "https://sub-b.example/clash/config?token=fixture-b"
+            },
+            "cfg03b6bc": {
+              ".name": "cfg03b6bc",
+              ".type": "config_subscribe",
+              "name": "Old provider",
+              "enabled": "0",
+              "address": "https://sub-c.example/sub?token=fixture-c"
+            }
+          }
+        }
+      ]
+    }
+  }
+}

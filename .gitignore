@@ -1,0 +1,28 @@
+node_modules/
+coverage/
+
+# Real config and state never go into the repository.
+/config/
+/data/
+.dev-data/
+secrets.yaml
+secrets.yml
+!examples/config/secrets.yaml
+!examples/showcase/secrets.yaml
+.env
+.env.*
+*.pem
+id_ed25519*
+id_rsa*
+**/fixtures/captured.json
+
+# Local list of personal strings for scripts/privacy-check.js.
+.privacy-denylist
+
+.schema/
+*.log
+.DS_Store
+Thumbs.db
+
+# The built page (npm run build).
+/dist/

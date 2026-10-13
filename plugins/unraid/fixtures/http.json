@@ -1,0 +1,109 @@
+{
+  "POST /graphql#Dashboard": {
+    "body": {
+      "data": {
+        "metrics": {
+          "cpu": {
+            "percentTotal": 7.5
+          },
+          "memory": {
+            "total": 68719476736,
+            "available": 51539607552,
+            "percentTotal": 25.0
+          }
+        },
+        "array": {
+          "state": "STARTED",
+          "capacity": {
+            "kilobytes": {
+              "free": "2000000000",
+              "used": "6000000000",
+              "total": "8000000000"
+            }
+          },
+          "caches": [
+            {
+              "name": "cache",
+              "fsSize": 1000000000,
+              "fsUsed": 250000000,
+              "fsFree": 750000000
+            }
+          ]
+        },
+        "notifications": {
+          "overview": {
+            "unread": {
+              "info": 1,
+              "warning": 1,
+              "alert": 1,
+              "total": 3
+            }
+          },
+          "list": [
+            {
+              "id": "abc:Docker_image_disk_utilization_1.notify",
+              "title": "Docker image disk utilization",
+              "subject": "Alert [TOWER] - Docker image disk utilization of 91%",
+              "description": "Docker utilization of image file",
+              "importance": "ALERT",
+              "link": "/Docker",
+              "timestamp": "2026-01-02T10:00:00.000Z"
+            },
+            {
+              "id": "abc:Parity_Check_2.notify",
+              "title": "Parity check",
+              "subject": "Notice [TOWER] - Parity check started",
+              "description": "Size: 8 TB",
+              "importance": "WARNING",
+              "link": "/Main",
+              "timestamp": "2026-01-01T20:00:00.000Z"
+            },
+            {
+              "id": "abc:Docker_image_disk_utilization_0.notify",
+              "title": "Docker image disk utilization",
+              "subject": "Warning [TOWER] - Docker image disk utilization of 85%",
+              "description": "Docker utilization of image file",
+              "importance": "WARNING",
+              "link": "/Docker",
+              "timestamp": "2026-01-01T12:00:00.000Z"
+            },
+            {
+              "id": "abc:Update_3.notify",
+              "title": "Update available",
+              "subject": "Notice [TOWER] - Version update",
+              "description": "A new version is available",
+              "importance": "INFO",
+              "link": "/Tools/Update",
+              "timestamp": "2026-01-01T08:00:00.000Z"
+            }
+          ]
+        },
+        "info": {
+          "os": {
+            "uptime": "2026-01-01T00:00:00.000Z"
+          }
+        }
+      }
+    }
+  },
+  "POST /graphql#Archive": {
+    "body": {
+      "data": {
+        "archiveNotification": {
+          "id": "abc:Parity_Check_2.notify"
+        }
+      }
+    }
+  },
+  "POST /graphql#ArchiveMany": {
+    "body": {
+      "data": {
+        "archiveNotifications": {
+          "unread": {
+            "total": 1
+          }
+        }
+      }
+    }
+  }
+}

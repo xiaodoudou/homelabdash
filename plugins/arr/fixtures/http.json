@@ -1,0 +1,123 @@
+{
+  "GET /api/v3/wanted/missing?pageSize=1": {
+    "body": {
+      "page": 1,
+      "pageSize": 1,
+      "sortKey": "movieMetadata.sortTitle",
+      "sortDirection": "descending",
+      "totalRecords": 17,
+      "records": [
+        {
+          "title": "Example Movie",
+          "originalTitle": "Example Movie",
+          "originalLanguage": { "id": 1, "name": "English" },
+          "alternateTitles": [],
+          "sortTitle": "example movie",
+          "sizeOnDisk": 0,
+          "status": "announced",
+          "year": 2026,
+          "path": "/movies/Example Movie (2026)",
+          "qualityProfileId": 1,
+          "hasFile": false,
+          "movieFileId": 0,
+          "monitored": true,
+          "minimumAvailability": "released",
+          "isAvailable": false,
+          "runtime": 100,
+          "tmdbId": 1001,
+          "titleSlug": "1001",
+          "genres": ["Drama"],
+          "tags": [],
+          "added": "2026-01-01T10:00:00Z",
+          "statistics": { "movieFileCount": 0, "sizeOnDisk": 0, "releaseGroups": [] },
+          "id": 101
+        }
+      ]
+    }
+  },
+  "GET /api/v3/queue/status": {
+    "body": { "totalCount": 3, "count": 3, "unknownCount": 0, "errors": true, "warnings": false, "unknownErrors": false, "unknownWarnings": false }
+  },
+  "GET /api/v3/health": {
+    "body": [
+      {
+        "source": "IndexerStatusCheck",
+        "type": "warning",
+        "message": "Indexers unavailable due to failures: Example Indexer",
+        "wikiUrl": "https://wiki.servarr.com/radarr/system#indexers-are-unavailable-due-to-failures"
+      },
+      {
+        "source": "DownloadClientCheck",
+        "type": "error",
+        "message": "Unable to communicate with Example Client.",
+        "wikiUrl": "https://wiki.servarr.com/radarr/system#unable-to-communicate-with-download-client"
+      },
+      {
+        "source": "UpdateCheck",
+        "type": "notice",
+        "message": "A new version is available",
+        "wikiUrl": ""
+      }
+    ]
+  },
+  "GET /api/v3/system/status": {
+    "body": {
+      "appName": "Radarr",
+      "instanceName": "Radarr",
+      "version": "6.0.0.10000",
+      "buildTime": "2026-01-01T00:00:00Z",
+      "isDebug": false,
+      "isProduction": true,
+      "isAdmin": false,
+      "isUserInteractive": true,
+      "startupPath": "/app/radarr/bin",
+      "appData": "/config",
+      "osName": "alpine",
+      "osVersion": "3.22.0",
+      "isNetCore": true,
+      "isLinux": true,
+      "isOsx": false,
+      "isWindows": false,
+      "isDocker": true,
+      "mode": "console",
+      "branch": "master",
+      "databaseType": "sqLite",
+      "authentication": "forms",
+      "migrationVersion": 240,
+      "urlBase": "",
+      "runtimeVersion": "8.0.0",
+      "runtimeName": "netcore",
+      "startTime": "2026-01-01T06:00:00Z",
+      "packageUpdateMechanism": "docker"
+    }
+  },
+  "GET /api/v1/wanted/missing?pageSize=1": {
+    "body": {
+      "page": 1,
+      "pageSize": 1,
+      "sortKey": "releaseDate",
+      "sortDirection": "descending",
+      "totalRecords": 5,
+      "records": [
+        {
+          "title": "Example Album",
+          "foreignAlbumId": "00000000-0000-0000-0000-000000000001",
+          "monitored": true,
+          "anyReleaseOk": true,
+          "profileId": 1,
+          "albumType": "Album",
+          "releaseDate": "2026-01-01T00:00:00Z",
+          "artistId": 3,
+          "statistics": { "trackFileCount": 0, "trackCount": 10, "totalTrackCount": 10, "sizeOnDisk": 0, "percentOfTracks": 0 },
+          "id": 55
+        }
+      ]
+    }
+  },
+  "GET /api/v1/queue/status": {
+    "body": { "totalCount": 0, "count": 0, "unknownCount": 0, "errors": false, "warnings": false, "unknownErrors": false, "unknownWarnings": false }
+  },
+  "GET /api/v1/health": {
+    "body": []
+  }
+}

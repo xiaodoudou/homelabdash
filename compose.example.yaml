@@ -1,0 +1,22 @@
+# docker compose -f compose.example.yaml up -d
+# On first start an empty ./config gets a starter homelabdash.yaml.
+services:
+  homelabdash:
+    image: ghcr.io/xiaodoudou/homelabdash:latest
+    container_name: homelabdash
+    restart: unless-stopped
+    # Must be able to write ./config (first start only) and ./data. Create both folders first.
+    user: "${UID:-1000}:${GID:-1000}"
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./config:/config
+      - ./data:/data
+      # Only for the docker plugin. Mounting it :ro does not limit the API; a socket proxy does.
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    # The image runs as a non-root user; this group lets it read the docker socket.
+    # Find the number with: stat -c %g /var/run/docker.sock
+    group_add:
+      - "${DOCKER_GID:-999}"
+    environment:
+      TZ: Etc/UTC

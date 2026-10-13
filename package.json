@@ -1,0 +1,72 @@
+{
+  "name": "homelabdash",
+  "version": "0.1.0",
+  "description": "Self-hosted homelab dashboard with Node plugins that people and coding agents can write, validate and test.",
+  "type": "module",
+  "license": "Apache-2.0",
+  "author": "Edouard Durand",
+  "homepage": "https://github.com/xiaodoudou/homelabdash",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xiaodoudou/homelabdash.git"
+  },
+  "bin": {
+    "homelabdash": "bin/homelabdash.js"
+  },
+  "exports": {
+    "./sdk": {
+      "types": "./sdk/index.d.ts"
+    },
+    "./testing": {
+      "types": "./sdk/testing.d.ts",
+      "default": "./sdk/testing.js"
+    }
+  },
+  "engines": {
+    "node": "^24.0.0"
+  },
+  "scripts": {
+    "start": "node bin/homelabdash.js serve",
+    "dev": "node dev/dev.js",
+    "dev:showcase": "node dev/dev.js examples/showcase",
+    "docs:screenshots": "node scripts/screenshots.js",
+    "mock": "node dev/mock-upstreams.js",
+    "test": "node --test --test-reporter=spec \"test/*.test.js\" \"plugins/**/*.test.js\"",
+    "test:frontend": "vitest run",
+    "lint": "eslint .",
+    "typecheck": "tsc -p jsconfig.json",
+    "privacy": "node scripts/privacy-check.js",
+    "check": "npm run lint && npm run typecheck && npm run privacy && npm test && npm run test:frontend",
+    "build": "vite build",
+    "prepare": "node scripts/prepare.js"
+  },
+  "dependencies": {
+    "@iconify-json/mdi": "^1.2.3",
+    "@iconify-json/simple-icons": "^1.2.0",
+    "ajv": "^8.20.0",
+    "ajv-formats": "^3.0.1",
+    "chokidar": "^5.0.0",
+    "express": "^5.3.0",
+    "jsonata": "^2.2.2",
+    "ssh2": "^1.17.0",
+    "ws": "^8.22.0",
+    "yaml": "^2.9.1"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.0.0",
+    "@types/express": "^5.0.0",
+    "@types/node": "^24.19.2",
+    "@types/ssh2": "^1.15.6",
+    "@types/ws": "^8.18.2",
+    "@vitejs/plugin-vue": "^6.0.10",
+    "@vue/test-utils": "^2.5.1",
+    "eslint": "^9.0.0",
+    "eslint-plugin-vue": "^10.11.1",
+    "globals": "^16.0.0",
+    "jsdom": "^30.1.2",
+    "typescript": "^5.9.0",
+    "vite": "^8.3.4",
+    "vitest": "^5.0.4",
+    "vue": "^3.5.44"
+  }
+}

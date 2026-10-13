@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<Container version="2">
+  <Name>homelabdash</Name>
+  <Repository>ghcr.io/xiaodoudou/homelabdash:latest</Repository>
+  <Registry>https://github.com/xiaodoudou/homelabdash/pkgs/container/homelabdash</Registry>
+  <Network>bridge</Network>
+  <Shell>sh</Shell>
+  <Privileged>false</Privileged>
+  <Support>https://github.com/xiaodoudou/homelabdash/issues</Support>
+  <Project>https://github.com/xiaodoudou/homelabdash</Project>
+  <Overview>Homelab dashboard with plugins written in plain Node.js. Live tiles over WebSocket, plugin-owned cron jobs, SSH and Docker events streaming, server-side secrets and alerts. Edit /config/homelabdash.yaml; it reloads on save.</Overview>
+  <Category>Tools: Status:Stable</Category>
+  <WebUI>http://[IP]:[PORT:3000]/</WebUI>
+  <Icon>https://raw.githubusercontent.com/xiaodoudou/homelabdash/main/web/favicon.svg</Icon>
+  <ExtraParams>--user 99:100 --group-add 281</ExtraParams>
+  <Config Name="Web UI" Target="3000" Default="3000" Mode="tcp" Description="Dashboard port" Type="Port" Display="always" Required="true" Mask="false">3000</Config>
+  <Config Name="Config" Target="/config" Default="/mnt/user/appdata/homelabdash" Mode="rw" Description="homelabdash.yaml, secrets.yaml, plugins/, icons/, custom.css" Type="Path" Display="always" Required="true" Mask="false">/mnt/user/appdata/homelabdash</Config>
+  <Config Name="Data" Target="/data" Default="/mnt/user/appdata/homelabdash/data" Mode="rw" Description="State written by the dashboard (alert dismissals, job results, icon cache)" Type="Path" Display="advanced" Required="true" Mask="false">/mnt/user/appdata/homelabdash/data</Config>
+  <Config Name="Docker socket" Target="/var/run/docker.sock" Default="/var/run/docker.sock" Mode="ro" Description="Needed by the docker plugin. --group-add in Extra Parameters must match the socket group (stat -c %g /var/run/docker.sock)." Type="Path" Display="advanced" Required="false" Mask="false">/var/run/docker.sock</Config>
+  <Config Name="TZ" Target="TZ" Default="Etc/UTC" Description="Time zone for cron schedules" Type="Variable" Display="advanced" Required="false" Mask="false">Etc/UTC</Config>
+</Container>

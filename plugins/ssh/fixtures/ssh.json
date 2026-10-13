@@ -1,0 +1,12 @@
+{
+  "SSH cat /proc/sys/net/netfilter/nf_conntrack_count": { "stdout": "61234\n" },
+  "SSH cut -d\" \" -f1-3 /proc/loadavg": { "stdout": "0.12 0.20 0.18\n" },
+  "SSH awk '/MemTotal|MemAvailable/ {print $1 $2*1024}' /proc/meminfo": { "stdout": "MemTotal:520093696\nMemAvailable:312475648\n" },
+  "SSH logread -f": {
+    "lines": [
+      "Thu Jan  1 10:00:00 2026 daemon.info dnsmasq[1]: query[A] example.org",
+      "Thu Jan  1 10:00:01 2026 daemon.warn odhcpd[2]: warning: no prefix",
+      "Thu Jan  1 10:00:02 2026 kern.err kernel: link down error on eth1"
+    ]
+  }
+}

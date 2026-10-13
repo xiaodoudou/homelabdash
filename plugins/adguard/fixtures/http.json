@@ -1,0 +1,60 @@
+{
+  "GET /control/stats": {
+    "body": {
+      "time_units": "hours",
+      "top_queried_domains": [
+        { "cdn.example": 4210 },
+        { "updates.example": 1880 },
+        { "mail.example": 960 }
+      ],
+      "top_clients": [
+        { "192.0.2.10": 8120 },
+        { "192.0.2.21": 2300 },
+        { "192.0.2.35": 410 }
+      ],
+      "top_blocked_domains": [
+        { "ads.tracker.example": 812 },
+        { "telemetry.example": 455 },
+        { "metrics.vendor.example": 230 },
+        { "pixel.example": 120 },
+        { "beacon.example": 64 },
+        { "analytics.example": 12 }
+      ],
+      "top_upstreams_responses": [
+        { "192.0.2.1:53": 9100 },
+        { "https://dns.example/dns-query": 120 }
+      ],
+      "top_upstreams_avg_time": [
+        { "https://dns.example/dns-query": 0.042 },
+        { "192.0.2.1:53": 0.0031 }
+      ],
+      "dns_queries": [410, 380, 512],
+      "blocked_filtering": [52, 40, 61],
+      "replaced_safebrowsing": [0, 1, 0],
+      "replaced_parental": [0, 0, 2],
+      "num_dns_queries": 12840,
+      "num_blocked_filtering": 1693,
+      "num_replaced_safebrowsing": 3,
+      "num_replaced_safesearch": 40,
+      "num_replaced_parental": 7,
+      "avg_processing_time": 0.0125
+    }
+  },
+  "GET /control/status": {
+    "body": {
+      "version": "v0.107.60",
+      "language": "",
+      "dns_addresses": ["127.0.0.1", "::1", "192.0.2.2"],
+      "dns_port": 53,
+      "http_port": 80,
+      "protection_disabled_duration": 0,
+      "start_time": 1767225600123.456,
+      "protection_enabled": true,
+      "dhcp_available": true,
+      "running": true
+    }
+  },
+  "POST /control/protection": {
+    "body": "OK"
+  }
+}

@@ -1,0 +1,3 @@
+#!/bin/sh
+# git runs this after the message is written and before the commit is made; the rules are in scripts/commitlint.js
+exec node "$(dirname "$0")/../scripts/commitlint.js" "$1"

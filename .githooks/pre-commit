@@ -1,0 +1,7 @@
+#!/bin/sh
+# Installed by `npm install` (scripts/prepare.js). Skip once with `git commit --no-verify` only if you know why.
+set -e
+node scripts/privacy-check.js --staged
+npx --no-install eslint .
+npm test --silent
+npm run test:frontend --silent

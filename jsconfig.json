@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "target": "es2023",
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
+    "lib": ["es2023", "dom", "dom.iterable"],
+    "checkJs": true,
+    "allowJs": true,
+    "noEmit": true,
+    "strict": true,
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "types": ["node"]
+  },
+  "include": ["bin/**/*.js", "src/**/*.js", "sdk/**/*", "plugins/**/*.js", "templates/**/*.js", "dev/**/*.js", "scripts/**/*.js", "test/**/*.js", "web/**/*.js", "web/**/*.d.ts", "vite.config.js", "vitest.config.js"],
+  "exclude": ["node_modules", "**/*.test.js", "test/fixtures"]
+}

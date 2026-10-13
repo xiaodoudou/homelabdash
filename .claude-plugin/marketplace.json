@@ -1,0 +1,12 @@
+{
+  "name": "homelabdash",
+  "description": "Skills for building and running dashboards with homelabdash.",
+  "owner": { "name": "Edouard Durand" },
+  "plugins": [
+    {
+      "name": "homelabdash",
+      "source": "./",
+      "description": "Write homelabdash plugins, edit dashboard configs, deploy and troubleshoot."
+    }
+  ]
+}

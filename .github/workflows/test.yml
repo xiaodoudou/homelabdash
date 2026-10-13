@@ -1,0 +1,90 @@
+name: Tests
+
+on:
+  push:
+    branches: [main, dev]
+  pull_request:
+  # the release workflow runs the same jobs before it publishes
+  workflow_call:
+
+jobs:
+  # The commit messages follow Conventional Commits (CONTRIBUTING.md): the commits of a pull request, the title of a pull request into main (it
+  # becomes the message of the squash commit there), and the commits of a push
+  commits:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+      - name: Commits of the pull request
+        if: github.event_name == 'pull_request'
+        run: node scripts/commitlint.js --range "$BASE..$HEAD"
+        env:
+          BASE: ${{ github.event.pull_request.base.sha }}
+          HEAD: ${{ github.event.pull_request.head.sha }}
+      - name: Title of the pull request into main
+        if: github.event_name == 'pull_request' && github.base_ref == 'main'
+        run: node scripts/commitlint.js --title "$TITLE"
+        env:
+          TITLE: ${{ github.event.pull_request.title }}
+      - name: Commits of the push
+        if: github.event_name == 'push'
+        run: |
+          if [ "$BEFORE" != "0000000000000000000000000000000000000000" ] && git cat-file -e "$BEFORE^{commit}" 2>/dev/null; then
+            node scripts/commitlint.js --range "$BEFORE..$AFTER"
+          else
+            echo "No earlier commit to compare with (a new branch, a tag or a forced push): nothing to check"
+          fi
+        env:
+          BEFORE: ${{ github.event.before }}
+          AFTER: ${{ github.sha }}
+
+  # lint, types, the privacy check, the server and plugin tests, the page tests and its build
+  test:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm run privacy
+      - run: npm test
+      - run: npm run test:frontend
+      - run: npm run build
+      - run: npm audit --omit=dev --audit-level=high
+
+  secrets:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - uses: gitleaks/gitleaks-action@v3
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  # the image builds, starts on the example config it writes on first run, and loads every builtin plugin
+  image:
+    runs-on: ubuntu-24.04
+    needs: test
+    steps:
+      - uses: actions/checkout@v7
+      - run: docker build -t homelabdash:ci .
+      - name: Starts and answers its health check
+        run: |
+          docker run -d --name hd -p 3000:3000 homelabdash:ci
+          for i in $(seq 1 30); do
+            if curl -fsS http://127.0.0.1:3000/api/health; then exit 0; fi
+            sleep 1
+          done
+          docker logs hd
+          exit 1
+      - name: Plugins load inside the image
+        run: docker exec hd homelabdash plugin list
