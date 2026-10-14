@@ -39,7 +39,15 @@ Only the `docker` plugin needs the Docker socket and `--group-add`. Mounting the
 
 ## Unraid
 
-Use the template in [`unraid/homelabdash.xml`](../../unraid/homelabdash.xml). Appdata belongs to `nobody:users`, so the container runs with `--user 99:100`, and `--group-add` has to match the Docker socket's group, which `stat -c %g /var/run/docker.sock` prints. Giving the container its own LAN address (br0 with a fixed IP) works like for any other container.
+Search for homelabdash in the Apps tab (Community Applications). The template lives in [xiaodoudou/unraid-templates](https://github.com/xiaodoudou/unraid-templates/blob/main/homelabdash/homelabdash.xml); if the Apps tab doesn't list it, load it by hand from the Unraid terminal:
+
+```sh
+curl -fsSL -o /boot/config/plugins/dockerMan/templates-user/my-homelabdash.xml   https://raw.githubusercontent.com/xiaodoudou/unraid-templates/main/homelabdash/homelabdash.xml
+```
+
+then go to Docker, Add Container, and pick homelabdash under Template.
+
+Appdata belongs to `nobody:users`, so the template runs the container with `--user 99:100`, and `--group-add` has to match the Docker socket's group, which `stat -c %g /var/run/docker.sock` prints. Giving the container its own LAN address (br0 with a fixed IP) works like for any other container.
 
 ## Behind a reverse proxy
 

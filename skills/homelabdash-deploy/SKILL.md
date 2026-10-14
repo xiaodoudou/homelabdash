@@ -21,7 +21,7 @@ docker run -d --name homelabdash -p 3000:3000 --user "$(stat -c %u:%g /srv/homel
   xiaodoudoufr/homelabdash:latest
 ```
 
-Unraid: template `unraid/homelabdash.xml`. Appdata is owned by `nobody:users`, so the template runs the container with `--user 99:100`; `--group-add` must match the docker socket group (`stat -c %g /var/run/docker.sock`, often 281 on Unraid). A dedicated LAN address (br0 with a fixed IP) works like any other container.
+Unraid: the template is `homelabdash/homelabdash.xml` in https://github.com/xiaodoudou/unraid-templates (Community Applications reads it from there; the README there shows how to load it by hand). Appdata is owned by `nobody:users`, so the template runs the container with `--user 99:100`; `--group-add` must match the docker socket group (`stat -c %g /var/run/docker.sock`, often 281 on Unraid). A dedicated LAN address (br0 with a fixed IP) works like any other container.
 
 Permissions:
 - The image runs as a non-root user. `/data` must be writable by the user it runs as; `/config` only needs to be writable for `plugin new` and the starter file.

@@ -4,6 +4,10 @@ Changes that people running homelabdash or writing plugins would notice. The for
 
 ## [Unreleased]
 
+### Changed
+
+- **The Unraid template moved** to [xiaodoudou/unraid-templates](https://github.com/xiaodoudou/unraid-templates), where Community Applications picks it up. It now has an icon and screenshots. [Deploying](docs/operations/DEPLOY.md#unraid) shows how to load it by hand.
+
 ## [0.1.0] - 2026-10-13
 
 The first public version.
