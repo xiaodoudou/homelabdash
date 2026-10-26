@@ -151,9 +151,11 @@ export function receive (msg) {
       if (msg.file === 'custom.js') location.reload()
       break
     }
-    case 'result':
-      waiting.get(msg.id)?.(msg)
+    case 'result': {
+      const done = waiting.get(msg.id)
       waiting.delete(msg.id)
+      if (typeof done === 'function') done(msg)
+    }
   }
 }
 
