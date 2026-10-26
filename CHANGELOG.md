@@ -11,6 +11,7 @@ Changes that people running homelabdash or writing plugins would notice. The for
 
 ### Changed
 
+- **Page tabs are easy to spot.** With several pages, the header shows them as tabs beside the title, the open one in full colour with an accent line under it. On a phone they take a row of their own, like a mobile tab bar.
 - **The Unraid template moved** to [xiaodoudou/unraid-templates](https://github.com/xiaodoudou/unraid-templates), where Community Applications picks it up. It now has an icon and screenshots. [Deploying](docs/operations/DEPLOY.md#unraid) shows how to load it by hand.
 
 ### Security
