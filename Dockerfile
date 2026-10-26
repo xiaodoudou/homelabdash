@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1
 
 # The page: built once with Vite, only its output goes into the image.
-FROM node:24-alpine AS page
+FROM node:26-alpine AS page
 WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm ci --ignore-scripts
@@ -9,7 +9,7 @@ COPY vite.config.js ./
 COPY web ./web
 RUN npm run build
 
-FROM node:24-alpine
+FROM node:26-alpine
 
 ENV NODE_ENV=production \
     HOMELABDASH_CONFIG=/config \
