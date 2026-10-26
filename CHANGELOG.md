@@ -4,6 +4,10 @@ Changes that people running homelabdash or writing plugins would notice. The for
 
 ## [Unreleased]
 
+### Added
+
+- **The Unraid status tile has links.** Clicking the unread count opens the Unraid dashboard, where the bell lists the notifications, and clicking the array state opens the Main tab.
+
 ### Changed
 
 - **The Unraid template moved** to [xiaodoudou/unraid-templates](https://github.com/xiaodoudou/unraid-templates), where Community Applications picks it up. It now has an icon and screenshots. [Deploying](docs/operations/DEPLOY.md#unraid) shows how to load it by hand.
