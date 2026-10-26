@@ -7,6 +7,10 @@ on:
   # the release workflow runs the same jobs before it publishes
   workflow_call:
 
+# every job only reads the repository; the release workflow, which calls this one, grants no more than that either
+permissions:
+  contents: read
+
 jobs:
   # The commit messages follow Conventional Commits (CONTRIBUTING.md): the commits of a pull request, the title of a pull request into main (it
   # becomes the message of the squash commit there), and the commits of a push
