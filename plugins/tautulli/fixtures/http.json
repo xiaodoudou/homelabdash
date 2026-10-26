@@ -116,5 +116,14 @@
         }
       }
     }
+  },
+  "GET /api/v2?cmd=terminate_session": {
+    "body": {
+      "response": {
+        "result": "success",
+        "message": null,
+        "data": null
+      }
+    }
   }
 }

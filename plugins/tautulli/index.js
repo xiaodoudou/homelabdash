@@ -22,6 +22,8 @@ function session (s) {
   const offset = num(s.view_offset)
   return {
     key: String(s.session_key ?? s.session_id),
+    // terminate_session takes either; the id is what Tautulli itself uses to stop a stream
+    stop: s.session_id ? { session_id: String(s.session_id) } : { session_key: String(s.session_key) },
     title: title(s),
     user: s.friendly_name || s.username || s.user || null,
     player: s.player || s.product || null,
@@ -38,7 +40,7 @@ export default {
   id: 'tautulli',
   name: 'Tautulli',
   version: '1.0.0',
-  description: 'Plex streams playing now, with progress, time left and transcode decision, from the Tautulli API',
+  description: 'Plex streams playing now, with progress, time left and transcode decision, from the Tautulli API; streams can be stopped from the dashboard',
   interval: '15s',
 
   config: {
@@ -47,7 +49,9 @@ export default {
     required: ['url', 'apiKey'],
     properties: {
       url: { type: 'string', format: 'uri', description: 'Tautulli address, e.g. http://tautulli.example:8181' },
-      apiKey: { type: 'string', description: 'Settings > Web Interface > API key; use ${secret:...}' }
+      apiKey: { type: 'string', description: 'Settings > Web Interface > API key; use ${secret:...}' },
+      allowControl: { type: 'boolean', default: false, description: 'Offer a Stop button on each stream (Tautulli terminate_session; Plex needs a Plex Pass for it)' },
+      stopMessage: { type: 'string', description: 'Message shown on the player when a stream is stopped from the dashboard' }
     }
   },
 
@@ -70,8 +74,8 @@ export default {
       ]
     },
     {
-      title: 'Now playing without user names',
-      config: { url: 'http://tautulli.example:8181', apiKey: '${secret:TAUTULLI_API_KEY}' },
+      title: 'Now playing without user names, with Stop buttons',
+      config: { url: 'http://tautulli.example:8181', apiKey: '${secret:TAUTULLI_API_KEY}', allowControl: true },
       options: { view: 'sessions', showUser: false }
     }
   ],
@@ -91,7 +95,7 @@ export default {
     }
   },
 
-  render (data, o) {
+  render (data, o, ctx) {
     if (o.view === 'summary') {
       return {
         type: 'stats',
@@ -117,9 +121,32 @@ export default {
           icon: s.state === 'paused' ? 'mdi:pause' : s.state === 'buffering' ? 'mdi:timer-sand' : 'mdi:play',
           progress: s.progress === null ? undefined : live ? { value: s.progress, max: 100, start: end - s.duration, end } : { value: s.progress, max: 100 },
           value: live ? end : s.remaining ?? undefined,
-          format: s.remaining === null ? undefined : live ? 'until' : 'clock'
+          format: s.remaining === null ? undefined : live ? 'until' : 'clock',
+          actions: ctx.config.allowControl ? [{ action: 'stop', title: 'Stop', confirm: 'Stop this stream?', input: s.stop }] : undefined
         }
       })
+    }
+  },
+
+  actions: {
+    stop: {
+      title: 'Stop',
+      input: {
+        type: 'object',
+        additionalProperties: false,
+        properties: { session_id: { type: 'string' }, session_key: { type: 'string' } }
+      },
+      async run (ctx, input) {
+        if (!ctx.config.allowControl) throw new Error('stopping streams is off for this source (set allowControl: true)')
+        if (!input.session_id && !input.session_key) throw new Error('no session to stop')
+        const res = await ctx.http.json(`${ctx.config.url.replace(/\/+$/, '')}/api/v2`, {
+          query: { apikey: ctx.config.apiKey, cmd: 'terminate_session', ...input, message: ctx.config.stopMessage }
+        })
+        const r = res?.response
+        if (r?.result !== 'success') throw new Error(`Tautulli could not stop the stream: ${r?.message || 'unexpected response'}`)
+        ctx.refresh()
+        return { ok: true }
+      }
     }
   }
 }
