@@ -26,6 +26,8 @@ homelabdash holds the API keys and passwords of your services, and with the acti
 
 Buttons that change something upstream (starting or stopping a container, pausing downloads, approving a request, turning off AdGuard protection) stay hidden until a flag in that source's settings turns them on. Archiving an Unraid notification is the one exception: it's on by default, and `notifications.archive: false` turns it off.
 
+With a password set, 20 refused logins within a minute get an address refused for the rest of that minute, whether it comes in over HTTP or the WebSocket. Every address is also capped at 1200 requests a minute, far more than a page load needs.
+
 POST requests have to send JSON. Both POST requests and the WebSocket are refused when the browser's `Origin` doesn't match the `Host` (or `X-Forwarded-Host`) the server sees, so another site open in your browser can't act on the dashboard.
 
 Each plugin runs in a worker thread, so one that hangs or crashes doesn't take the server down with it. That isn't a sandbox, though. A plugin can do whatever Node.js can do inside the container, so only install plugins you've read.

@@ -14,6 +14,7 @@ Changes that people running homelabdash or writing plugins would notice. The for
 
 ### Security
 
+- **Password guessing is slowed down.** With `settings.auth` set, 20 refused logins within a minute get an address refused for the rest of that minute, over HTTP and the WebSocket alike. Every address is also capped at 1200 requests a minute. See [Deploying](docs/operations/DEPLOY.md#a-password).
 - **Two dependencies are patched against advisories published after 0.1.0.** body-parser 2.4.0 fixes a denial of service through a compressed request body, and fast-uri 3.1.9 fixes how some URLs are parsed while the config is validated.
 
 ## [0.1.0] - 2026-10-13

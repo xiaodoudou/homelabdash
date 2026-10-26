@@ -140,7 +140,7 @@ settings:
   auth: { type: basic, username: me, password: "${secret:DASH_PASSWORD}" }
 ```
 
-That's one shared password, which the browser asks for. It's fine on a LAN but not enough on the internet, and it should always go over TLS.
+That's one shared password, which the browser asks for. It's fine on a LAN but not enough on the internet, and it should always go over TLS. After 20 refused logins within a minute, an address gets turned away until that minute is up, even with the right password. Behind a reverse proxy, everyone shares the proxy's address, so someone guessing at the password locks everyone else out for that minute too.
 
 Whatever you choose, `/api/health` stays open for health checks.
 

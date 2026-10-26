@@ -4,8 +4,10 @@ import fs from 'node:fs'
 import crypto from 'node:crypto'
 import { fileURLToPath } from 'node:url'
 import express from 'express'
+import { rateLimit } from 'express-rate-limit'
 import { WebSocketServer } from 'ws'
 import { HttpStatusError } from '../runtime/runtime.js'
+import { LoginThrottle } from './throttle.js'
 
 const ROOT = fileURLToPath(new URL('../../', import.meta.url))
 // The page built by `npm run build` from web/; its assets carry a content hash in their names.
@@ -18,9 +20,18 @@ const DIST_DIR = path.join(ROOT, 'dist')
 export function createServer (core) {
   const app = express()
   app.disable('x-powered-by')
+  const logins = new LoginThrottle()
 
   app.get('/api/health', (_req, res) => res.json(core.health()))
-  app.use((req, res, next) => checkAuth(core, req) ? next() : deny(core, res))
+  // Generous on purpose: a page load fetches every icon, and the browsers behind one reverse proxy share its address.
+  app.use(rateLimit({ windowMs: 60_000, limit: 1200, standardHeaders: 'draft-8', legacyHeaders: false, validate: { xForwardedForHeader: false } }))
+  app.use((req, res, next) => {
+    const from = req.socket.remoteAddress ?? ''
+    if (logins.blocked(from)) return res.status(429).set('Retry-After', '60').json({ error: 'too many failed logins, try again in a minute' })
+    if (checkAuth(core, req)) return next()
+    logins.fail(from)
+    deny(core, res)
+  })
   app.use(express.json({ limit: '256kb' }))
   app.use('/api', (req, res, next) => {
     if (req.method !== 'POST') return next()
@@ -92,14 +103,17 @@ export function createServer (core) {
   const hub = createHub(core)
   server.on('upgrade', (req, socket, head) => {
     if (new URL(req.url ?? '/', 'http://x').pathname !== '/api/ws') return socket.destroy()
-    if (!sameOrigin(req) || !checkAuth(core, req)) {
-      socket.write('HTTP/1.1 403 Forbidden\r\n\r\n')
-      return socket.destroy()
+    const from = req.socket.remoteAddress ?? ''
+    if (logins.blocked(from)) return refuse(socket, '429 Too Many Requests')
+    if (!checkAuth(core, req)) {
+      logins.fail(from)
+      return refuse(socket, '403 Forbidden')
     }
+    if (!sameOrigin(req)) return refuse(socket, '403 Forbidden')
     hub.wss.handleUpgrade(req, socket, head, ws => hub.wss.emit('connection', ws, req))
   })
   server.on('close', () => hub.close())
-  return { app, server, hub }
+  return { app, server, hub, logins }
 }
 
 /**
@@ -197,11 +211,17 @@ function checkAuth (core, req) {
   const auth = core.config?.settings.auth ?? core.lastAuth
   if (!auth || auth.type === 'none') return true
   if (auth.type === 'header') return !!req.headers[auth.header.toLowerCase()]
-  const m = /^Basic\s+(.+)$/i.exec(req.headers.authorization ?? '')
+  const m = /^Basic\s+(\S+)$/i.exec(req.headers.authorization ?? '')
   if (!m) return false
   const given = Buffer.from(m[1], 'base64')
   const want = Buffer.from(`${auth.username}:${auth.password}`)
   return given.length === want.length && crypto.timingSafeEqual(given, want)
+}
+
+/** @param {import('node:stream').Duplex} socket @param {string} status */
+function refuse (socket, status) {
+  socket.write(`HTTP/1.1 ${status}\r\n\r\n`)
+  socket.destroy()
 }
 
 /** @param {import('../core.js').Homelabdash} core @param {express.Response} res */
