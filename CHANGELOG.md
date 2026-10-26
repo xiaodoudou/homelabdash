@@ -12,6 +12,10 @@ Changes that people running homelabdash or writing plugins would notice. The for
 
 - **The Unraid template moved** to [xiaodoudou/unraid-templates](https://github.com/xiaodoudou/unraid-templates), where Community Applications picks it up. It now has an icon and screenshots. [Deploying](docs/operations/DEPLOY.md#unraid) shows how to load it by hand.
 
+### Security
+
+- **Two dependencies are patched against advisories published after 0.1.0.** body-parser 2.4.0 fixes a denial of service through a compressed request body, and fast-uri 3.1.9 fixes how some URLs are parsed while the config is validated.
+
 ## [0.1.0] - 2026-10-13
 
 The first public version.
