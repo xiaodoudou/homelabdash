@@ -6,6 +6,7 @@ Changes that people running homelabdash or writing plugins would notice. The for
 
 ### Added
 
+- **Home Assistant plugin.** Show lights, switches, sensors, thermostats and people as rows or numbers, a summary of the home, and the updates waiting to be installed. Tiles follow state changes live over Home Assistant's WebSocket API, and with `allowControl` lights, switches, fans, input booleans and automations get a button to turn them on or off. See [its README](plugins/homeassistant/README.md).
 - **The Unraid status tile has links.** Clicking the unread count opens the Unraid dashboard, where the bell lists the notifications, and clicking the array state opens the Main tab.
 
 ### Changed

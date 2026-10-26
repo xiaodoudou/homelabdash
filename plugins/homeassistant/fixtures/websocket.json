@@ -1,0 +1,43 @@
+{
+  "WS /api/websocket": {
+    "messages": [
+      { "type": "auth_required", "ha_version": "2026.10.1" },
+      { "type": "auth_ok", "ha_version": "2026.10.1" },
+      {
+        "id": 1,
+        "type": "result",
+        "success": true,
+        "result": [
+          { "entity_id": "light.kitchen", "state": "on", "attributes": { "friendly_name": "Kitchen" } },
+          { "entity_id": "light.living_room", "state": "off", "attributes": { "friendly_name": "Living room" } },
+          { "entity_id": "person.alex", "state": "home", "attributes": { "friendly_name": "alex" } }
+        ]
+      },
+      { "id": 2, "type": "result", "success": true, "result": null },
+      {
+        "id": 2,
+        "type": "event",
+        "event": {
+          "event_type": "state_changed",
+          "data": {
+            "entity_id": "light.kitchen",
+            "old_state": { "entity_id": "light.kitchen", "state": "on", "attributes": { "friendly_name": "Kitchen" } },
+            "new_state": { "entity_id": "light.kitchen", "state": "off", "attributes": { "friendly_name": "Kitchen" } }
+          }
+        }
+      },
+      {
+        "id": 2,
+        "type": "event",
+        "event": {
+          "event_type": "state_changed",
+          "data": {
+            "entity_id": "light.living_room",
+            "old_state": { "entity_id": "light.living_room", "state": "off", "attributes": { "friendly_name": "Living room" } },
+            "new_state": { "entity_id": "light.living_room", "state": "on", "attributes": { "friendly_name": "Living room" } }
+          }
+        }
+      }
+    ]
+  }
+}

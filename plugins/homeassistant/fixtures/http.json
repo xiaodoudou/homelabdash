@@ -1,0 +1,20 @@
+{
+  "GET /api/states": {
+    "body": [
+      { "entity_id": "light.kitchen", "state": "on", "attributes": { "friendly_name": "Kitchen", "brightness": 180, "color_mode": "brightness", "supported_color_modes": ["brightness"] }, "last_changed": "2026-10-26T07:12:04.000000+00:00", "last_updated": "2026-10-26T07:12:04.000000+00:00" },
+      { "entity_id": "light.living_room", "state": "off", "attributes": { "friendly_name": "Living room", "supported_color_modes": ["color_temp"] }, "last_changed": "2026-10-25T22:40:11.000000+00:00", "last_updated": "2026-10-25T22:40:11.000000+00:00" },
+      { "entity_id": "light.garage", "state": "unavailable", "attributes": { "friendly_name": "Garage" }, "last_changed": "2026-10-24T09:00:00.000000+00:00", "last_updated": "2026-10-24T09:00:00.000000+00:00" },
+      { "entity_id": "switch.coffee_machine", "state": "on", "attributes": { "friendly_name": "Coffee machine", "icon": "mdi:coffee-maker" }, "last_changed": "2026-10-26T06:30:00.000000+00:00", "last_updated": "2026-10-26T06:30:00.000000+00:00" },
+      { "entity_id": "sensor.outdoor_temperature", "state": "12.46", "attributes": { "friendly_name": "Outdoor temperature", "unit_of_measurement": "°C", "device_class": "temperature", "state_class": "measurement" }, "last_changed": "2026-10-26T07:15:00.000000+00:00", "last_updated": "2026-10-26T07:15:00.000000+00:00" },
+      { "entity_id": "sensor.living_room_humidity", "state": "48", "attributes": { "friendly_name": "Living room humidity", "unit_of_measurement": "%", "device_class": "humidity", "state_class": "measurement" }, "last_changed": "2026-10-26T07:10:00.000000+00:00", "last_updated": "2026-10-26T07:10:00.000000+00:00" },
+      { "entity_id": "climate.living_room", "state": "heat", "attributes": { "friendly_name": "Living room thermostat", "hvac_modes": ["off", "heat"], "current_temperature": 20.5, "temperature": 21 }, "last_changed": "2026-10-26T05:00:00.000000+00:00", "last_updated": "2026-10-26T07:14:00.000000+00:00" },
+      { "entity_id": "person.alex", "state": "home", "attributes": { "friendly_name": "alex" }, "last_changed": "2026-10-25T18:20:00.000000+00:00", "last_updated": "2026-10-25T18:20:00.000000+00:00" },
+      { "entity_id": "media_player.living_room_tv", "state": "unavailable", "attributes": { "friendly_name": "Living room TV" }, "last_changed": "2026-10-25T23:00:00.000000+00:00", "last_updated": "2026-10-25T23:00:00.000000+00:00" },
+      { "entity_id": "update.home_assistant_core_update", "state": "on", "attributes": { "friendly_name": "Home Assistant Core Update", "title": "Home Assistant Core", "installed_version": "2026.10.1", "latest_version": "2026.10.3", "release_url": "https://release-notes.example/core/2026.10.3", "auto_update": false, "in_progress": false }, "last_changed": "2026-10-24T20:00:00.000000+00:00", "last_updated": "2026-10-24T20:00:00.000000+00:00" },
+      { "entity_id": "update.esphome_update", "state": "on", "attributes": { "friendly_name": "ESPHome Update", "title": "ESPHome", "installed_version": "2026.9.2", "latest_version": "2026.10.0", "release_url": null, "auto_update": false, "in_progress": false }, "last_changed": "2026-10-22T10:00:00.000000+00:00", "last_updated": "2026-10-22T10:00:00.000000+00:00" },
+      { "entity_id": "update.hacs_update", "state": "off", "attributes": { "friendly_name": "HACS Update", "title": "HACS", "installed_version": "2.0.5", "latest_version": "2.0.5" }, "last_changed": "2026-10-20T10:00:00.000000+00:00", "last_updated": "2026-10-20T10:00:00.000000+00:00" }
+    ]
+  },
+  "POST /api/services/light/toggle": { "body": [] },
+  "POST /api/services/switch/toggle": { "body": [] }
+}

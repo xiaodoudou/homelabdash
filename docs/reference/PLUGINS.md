@@ -11,6 +11,7 @@ Each plugin's folder has a README with its settings, its display options and an 
 | [arr](../../plugins/arr) | missing items, download queue with errors and warnings, health issues of Radarr, Sonarr, Lidarr or Readarr | each health check | | 1m |
 | [docker](../../plugins/docker) | running, stopped, unhealthy and missing containers, a list of them, disk usage | an expected container not running, an unhealthy one | start, stop and restart on list rows (`allowControl`) | 1m, plus Docker events live |
 | [glances](../../plugins/glances) | CPU, memory, load, GPU, sensors, disks, uptime | GPU temperature, sensors past their critical value | | 10s |
+| [homeassistant](../../plugins/homeassistant) | entities (lights, switches, sensors, thermostats, people) as rows or numbers; lights on, people at home, pending updates | updates waiting, one alert for all of them | turn lights, switches, fans, input booleans and automations on and off (`allowControl`) | 1m, plus state changes live |
 | [http-json](../../plugins/http-json) | any JSON API: one or several requests, values picked and computed with JSONata | whatever its `alerts` expression returns | | 30s |
 | [mihomo](../../plugins/mihomo) | current node of a proxy group, connections, live traffic | | | 15s, plus live traffic |
 | [npm](../../plugins/npm) | Nginx Proxy Manager proxy hosts and certificates | certificates expired or about to expire | | 5m |
