@@ -33,6 +33,8 @@ export interface ListAction {
   action: string
   title: string
   input?: unknown
+  /** For actions that are hard to undo: the first click shows this question on the button, a second click runs it. */
+  confirm?: string
 }
 
 export interface ListItem {

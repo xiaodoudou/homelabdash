@@ -5,6 +5,7 @@ import { fmt, relative } from '../../format.js'
 import CountDown from './CountDown.vue'
 import TimeBar from './TimeBar.vue'
 import ProgressBar from './ProgressBar.vue'
+import ActionButton from '../ActionButton.vue'
 
 const props = defineProps({
   view: { type: Object, required: true },
@@ -106,15 +107,13 @@ const glyph = icon => ({ '--icon': `url('/icons/${icon.replace(':', '/')}.svg')`
           v-if="it.actions?.length"
           class="v-row-actions"
         >
-          <button
+          <ActionButton
             v-for="a in it.actions"
             :key="actionKey(ctx.tileId, a.action, a.input)"
-            class="btn-mini"
+            :action="a"
             :disabled="ctx.pending.has(actionKey(ctx.tileId, a.action, a.input))"
-            @click.prevent="ctx.onAction(a.action, a.input)"
-          >
-            {{ a.title }}
-          </button>
+            @run="ctx.onAction(a.action, a.input)"
+          />
         </span>
       </li>
     </ul>

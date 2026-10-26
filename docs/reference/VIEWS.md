@@ -4,7 +4,7 @@
 
 Plugins don't draw anything themselves. `render(data, options)` returns a view, a plain object of one of the types below, and the page draws it. Each view is checked against a schema on every render, so an unknown key or a wrong type puts an error on the tile rather than drawing it blank. The types are in [`sdk/index.d.ts`](../../sdk/index.d.ts) and the schemas in [`src/views/schema.js`](../../src/views/schema.js).
 
-Every view type accepts `actions`, buttons under the tile written as `[{ action, title, input? }]`, where `action` names one of the plugin's actions. Only return the buttons that make sense right now: Pause while running, Resume while paused.
+Every view type accepts `actions`, buttons under the tile written as `[{ action, title, input?, confirm? }]`, where `action` names one of the plugin's actions. Only return the buttons that make sense right now: Pause while running, Resume while paused. For an action that's hard to undo, `confirm` holds a question such as "Stop this stream?": the first click shows it on the button in red, and only a second click within four seconds runs the action.
 
 ## stats
 
@@ -56,7 +56,7 @@ Rows with a title, a line of detail and an optional value on the right.
 | `badge` | `{ text, tone? }`, a small pill before the title |
 | `tone` | a colored dot at the start of the row; the alerts list uses it for severity |
 | `progress` | `{ value, max? }` draws a bar under the title. With `start` and `end` (epoch milliseconds) the bar fills by time, in the browser, between two fetches |
-| `actions` | buttons on the row, `[{ action, title, input? }]` |
+| `actions` | buttons on the row, `[{ action, title, input?, confirm? }]` |
 
 ## progress
 

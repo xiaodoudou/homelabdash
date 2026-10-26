@@ -261,6 +261,7 @@ a.v-stat:hover .v-stat-value { color: var(--accent); }
 .btn-mini { font-size: 12px; padding: 3px 10px; border-radius: 6px; border: 0; background: var(--stat); color: var(--text-2); cursor: pointer; white-space: nowrap; }
 .btn-mini:hover { color: var(--text); }
 .btn-mini:disabled { opacity: .5; cursor: progress; }
+.btn-mini.is-confirm { background: color-mix(in srgb, var(--error) 26%, transparent); color: var(--text); }
 
 /* progress */
 .v-progress { display: flex; flex-direction: column; gap: 14px; }
