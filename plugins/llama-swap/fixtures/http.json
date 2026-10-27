@@ -1,0 +1,96 @@
+{
+  "GET /running": {
+    "body": {
+      "running": [
+        {
+          "model": "example-coder-32b",
+          "state": "ready",
+          "ttl": 900,
+          "name": "",
+          "description": ""
+        }
+      ]
+    }
+  },
+  "GET /metrics": {
+    "headers": {
+      "content-type": "text/plain"
+    },
+    "body": "# HELP llamaswap_cpu_util_percent CPU\nllamaswap_cpu_util_percent{core=\"0\"} 10\nllamaswap_cpu_util_percent{core=\"1\"} 20\nllamaswap_cpu_util_percent{core=\"2\"} 30\nllamaswap_cpu_util_percent{core=\"3\"} 40\nllamaswap_memory_total_bytes 6.5741520896e+10\nllamaswap_memory_used_bytes 1.6567500800e+10\nllamaswap_memory_free_bytes 5896142848\nllamaswap_load_average{interval=\"1m\"} 1.01\nllamaswap_load_average{interval=\"5m\"} 0.92\nllamaswap_gpu_temperature_celsius{id=\"0\",name=\"NVIDIA GeForce RTX 3090\"} 87\nllamaswap_gpu_util_percent{id=\"0\",name=\"NVIDIA GeForce RTX 3090\"} 84\nllamaswap_gpu_memory_used_bytes{id=\"0\",name=\"NVIDIA GeForce RTX 3090\"} 13281263616\nllamaswap_gpu_memory_total_bytes{id=\"0\",name=\"NVIDIA GeForce RTX 3090\"} 2.5769803776e+10\nllamaswap_gpu_power_draw_watts{id=\"0\",name=\"NVIDIA GeForce RTX 3090\"} 341.39\nllamaswap_gpu_fan_speed_percent{id=\"0\",name=\"NVIDIA GeForce RTX 3090\"} 98\nllamaswap_gpu_temperature_celsius{id=\"1\",name=\"NVIDIA GeForce RTX 3090\"} 74\nllamaswap_gpu_util_percent{id=\"1\",name=\"NVIDIA GeForce RTX 3090\"} 87\nllamaswap_gpu_memory_used_bytes{id=\"1\",name=\"NVIDIA GeForce RTX 3090\"} 13006536704\nllamaswap_gpu_memory_total_bytes{id=\"1\",name=\"NVIDIA GeForce RTX 3090\"} 2.5769803776e+10\nllamaswap_gpu_power_draw_watts{id=\"1\",name=\"NVIDIA GeForce RTX 3090\"} 345.37\nllamaswap_gpu_fan_speed_percent{id=\"1\",name=\"NVIDIA GeForce RTX 3090\"} 94\n"
+  },
+  "GET /api/metrics/activity": {
+    "body": {
+      "data": [
+        {
+          "id": 86,
+          "timestamp": "2026-10-27T17:05:09Z",
+          "src": "ip:client",
+          "model": "example-coder-32b",
+          "req_path": "/v1/chat/completions",
+          "resp_content_type": "text/event-stream",
+          "resp_status_code": 200,
+          "tokens": {
+            "cache_tokens": 2000,
+            "draft_tokens": 0,
+            "draft_acc_tokens": 0,
+            "input_tokens": 1167,
+            "output_tokens": 508,
+            "prompt_per_second": 776.53,
+            "tokens_per_second": 52.9135
+          },
+          "duration_ms": 11197,
+          "has_capture": false,
+          "metadata": {}
+        },
+        {
+          "id": 85,
+          "timestamp": "2026-10-27T17:04:58Z",
+          "src": "ip:client",
+          "model": "example-coder-32b",
+          "req_path": "/v1/chat/completions",
+          "resp_content_type": "text/event-stream",
+          "resp_status_code": 200,
+          "tokens": {
+            "cache_tokens": 2000,
+            "draft_tokens": 0,
+            "draft_acc_tokens": 0,
+            "input_tokens": 19,
+            "output_tokens": 183,
+            "prompt_per_second": 67.23,
+            "tokens_per_second": 57.6955
+          },
+          "duration_ms": 3516,
+          "has_capture": false,
+          "metadata": {}
+        },
+        {
+          "id": 84,
+          "timestamp": "2026-10-27T17:00:29Z",
+          "src": "ip:client",
+          "model": "example-coder-32b",
+          "req_path": "/v1/chat/completions",
+          "resp_content_type": "text/event-stream",
+          "resp_status_code": 500,
+          "tokens": {
+            "cache_tokens": 2000,
+            "draft_tokens": 0,
+            "draft_acc_tokens": 0,
+            "input_tokens": 26,
+            "output_tokens": 0,
+            "prompt_per_second": null,
+            "tokens_per_second": null
+          },
+          "duration_ms": 120,
+          "has_capture": false,
+          "metadata": {}
+        }
+      ]
+    }
+  },
+  "POST /api/models/unload/example-coder-32b": {
+    "body": "OK"
+  },
+  "GET /unload": {
+    "body": "OK"
+  }
+}
