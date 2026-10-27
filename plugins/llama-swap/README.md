@@ -24,13 +24,13 @@ sections:
 
 | | |
 |---|---|
-| `model` (default) | the loaded model (or "none loaded", or its state while it starts), and the generation and prompt speed of the last request in tokens per second; both read "idle" once `idleAfter` seconds pass without a request. With several models loaded (llama-swap groups), it reads "2 models" with their names |
+| `model` (default) | the loaded model (or "none loaded", or its state while it starts), the generation and prompt speed of the last request in tokens per second, and Active, the requests running now; the speeds read "running" while a request runs and "idle" once `idleAfter` seconds pass without one. With several models loaded (llama-swap groups), it reads "2 models" with their names |
 | `models` | one row per loaded model: its state, when it unloads, and the speed of its own last request |
 | `gpu` | one GPU (`gpu: 0`, `1`...): load, VRAM in use as a share of the card (warning from 90%) with the GB beside its label, power draw, temperature |
 | `host` | average CPU over all cores, RAM in use as a share with the GB beside its label, 1-minute load average |
 | `activity` | the last requests, newest first: model, tokens out and in, speed; a failed one is marked |
 
-Speeds come from llama-swap's activity log, which records each request once it has finished. A request still streaming shows up when it ends.
+Speeds come from llama-swap's activity log, which records each request once it has finished. Requests still running come from its event stream (`/api/events`, the one its own Activity page uses), followed while the dashboard is open. That stream says how many bytes each request has streamed, not how many tokens, so while requests run Generation is their byte rate divided by the bytes per token the model was seen to stream in finished requests: an estimate, live about once a second. Until a model has finished one request with the dashboard open, it reads running. Some backends, vLLM among them, give llama-swap token counts but no speeds: generation is then the output tokens over the request's duration, a slight underestimate since that time includes reading the prompt, and the Prompt stat is left out.
 
 A tile can take a status dot from a model, `status: { source: ai, key: my-model }`: up while it's loaded and ready.
 
