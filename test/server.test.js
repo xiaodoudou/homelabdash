@@ -40,9 +40,16 @@ sections:
       - { id: log, source: router, options: { view: log } }
 ${extra}`
 
+// Ports fetch() refuses to call (the "bad ports" of the Fetch standard); Windows hands them out from 1024 up.
+const FETCH_BLOCKED = new Set([1719, 1720, 1723, 2049, 3659, 4045, 4190, 5060, 5061, 6000, 6566, 6665, 6666, 6667, 6668, 6669, 6679, 6697, 10080])
+
 async function boot () {
-  app = new Homelabdash({ configDir, dataDir, port: 0, host: '127.0.0.1', log: quiet })
-  await app.start()
+  for (;;) {
+    app = new Homelabdash({ configDir, dataDir, port: 0, host: '127.0.0.1', log: quiet })
+    await app.start()
+    if (!FETCH_BLOCKED.has(Number(app.port))) break
+    await app.stop()
+  }
   base = `http://127.0.0.1:${app.port}`
 }
 
