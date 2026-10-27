@@ -26,8 +26,8 @@ sections:
 |---|---|
 | `model` (default) | the loaded model (or "none loaded", or its state while it starts), and the generation and prompt speed of the last request in tokens per second; both read "idle" once `idleAfter` seconds pass without a request. With several models loaded (llama-swap groups), it reads "2 models" with their names |
 | `models` | one row per loaded model: its state, when it unloads, and the speed of its own last request |
-| `gpu` | one GPU (`gpu: 0`, `1`...): load, VRAM in use as a share of the card (warning from 90%) and in GB, power draw, temperature |
-| `host` | average CPU over all cores, RAM in use, 1-minute load average |
+| `gpu` | one GPU (`gpu: 0`, `1`...): load, VRAM in use as a share of the card (warning from 90%) with the GB beside its label, power draw, temperature |
+| `host` | average CPU over all cores, RAM in use as a share with the GB beside its label, 1-minute load average |
 | `activity` | the last requests, newest first: model, tokens out and in, speed; a failed one is marked |
 
 Speeds come from llama-swap's activity log, which records each request once it has finished. A request still streaming shows up when it ends.

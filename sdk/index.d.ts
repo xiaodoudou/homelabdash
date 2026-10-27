@@ -26,6 +26,8 @@ export interface StatItem {
   /** Colour the value directly (for text values such as "yes" / "down"); warn/crit thresholds win for numbers. */
   tone?: Tone
   href?: string
+  /** Short text beside the label, such as "12.4 / 24.0 GB" under a percentage: two readings in one stat. */
+  detail?: string | null
 }
 
 export interface ListAction {

@@ -111,8 +111,7 @@ export default {
       type: 'stats',
       items: [
         { label: 'Load', value: g.util, format: 'percent' },
-        { label: 'VRAM', value: g.memUsed !== null && g.memTotal ? (g.memUsed / g.memTotal) * 100 : null, format: 'percent', warn: 90, crit: 97 },
-        { label: 'Used', value: g.memUsed, format: 'bytes' },
+        { label: 'VRAM', value: g.memUsed !== null && g.memTotal ? (g.memUsed / g.memTotal) * 100 : null, format: 'percent', warn: 90, crit: 97, detail: g.memUsed !== null && g.memTotal ? `${(g.memUsed / 2 ** 30).toFixed(1)} / ${(g.memTotal / 2 ** 30).toFixed(1)} GB` : null },
         { label: 'Power', value: g.power, format: 'number', unit: 'W' },
         { label: 'Temp', value: g.temp, format: 'temperature', warn: 80, crit: 90 }
       ]

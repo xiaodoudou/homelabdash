@@ -45,7 +45,8 @@ export const VIEW_SCHEMAS = /** @type {Record<string, object>} */ ({
             crit: num,
             invert: { type: 'boolean' },
             tone: { anyOf: [tone, { type: 'null' }] },
-            href: str
+            href: str,
+            detail: { type: ['string', 'null'], description: 'Short text beside the label, such as "12.4 / 24.0 GB" under a percentage' }
           }
         }
       }

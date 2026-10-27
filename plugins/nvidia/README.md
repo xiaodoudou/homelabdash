@@ -38,7 +38,7 @@ restrict,command="nvidia-smi --query-gpu=index,name,utilization.gpu,memory.used,
 
 ## Options
 
-`view`: `gpu` (default) shows one GPU (`gpu: 0`, `1`...) as Load, VRAM (share of the card in use, warning from 90%), Used, Power and Temp; `list` shows one row per GPU with its load as a bar, VRAM, power, temperature and fan.
+`view`: `gpu` (default) shows one GPU (`gpu: 0`, `1`...) as Load, VRAM (share of the card in use, warning from 90%, with the GB beside the label), Power and Temp; `list` shows one row per GPU with its load as a bar, VRAM, power, temperature and fan.
 
 ## Config
 

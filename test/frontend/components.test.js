@@ -152,3 +152,15 @@ describe('action buttons', () => {
     expect(onAction).not.toHaveBeenCalled()
   })
 })
+
+describe('stat detail', () => {
+  it('draws the detail beside the label, and the layout makes room for it', async () => {
+    const { cellNeed } = await import('../../web/src/arrange.js')
+    const item = { label: 'VRAM', value: 52, format: 'percent', detail: '12.4 / 24.0 GB' }
+    const w = mount(StatsView, { props: { view: { type: 'stats', items: [item] }, ctx: ctx({ titles: ['GPU0'] }) } })
+    expect(w.find('.v-stat-label').text()).toBe('VRAM12.4 / 24.0 GB')
+    expect(w.find('.v-stat-detail').text()).toBe('12.4 / 24.0 GB')
+    const m = { value: 20, family: 'sans-serif', cellPad: 12 }
+    expect(cellNeed(item, false, /** @type {any} */ (m))).toBeGreaterThanOrEqual(cellNeed({ ...item, detail: undefined }, false, /** @type {any} */ (m)))
+  })
+})

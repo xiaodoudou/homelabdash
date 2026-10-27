@@ -26,8 +26,9 @@ test('after idleAfter without a request, the speeds read idle; with nothing load
 
 test('each GPU, and the host, from the gauges of /metrics', async () => {
   const r = await runPlugin(import.meta.dirname, { config, tiles: [{ id: 'g1', options: { view: 'gpu', gpu: 1 } }, { id: 'host', options: { view: 'host' } }, { id: 'g9', options: { view: 'gpu', gpu: 9 } }] })
-  assert.deepEqual(r.views.g1.view?.items.map((/** @type {any} */ i) => [i.label, i.value]), [['Load', 87], ['VRAM', (13006536704 / 25769803776) * 100], ['Used', 13006536704], ['Power', 345.37], ['Temp', 74]])
-  assert.deepEqual(r.views.host.view?.items.map((/** @type {any} */ i) => [i.label, i.value]), [['CPU', 25], ['RAM', 16567500800], ['Load', 1.01]])
+  assert.deepEqual(r.views.g1.view?.items.map((/** @type {any} */ i) => [i.label, i.value]), [['Load', 87], ['VRAM', (13006536704 / 25769803776) * 100], ['Power', 345.37], ['Temp', 74]])
+  assert.equal(r.views.g1.view?.items[1].detail, '12.1 / 24.0 GB')
+  assert.deepEqual(r.views.host.view?.items.map((/** @type {any} */ i) => [i.label, i.value, i.detail]), [['CPU', 25, undefined], ['RAM', (16567500800 / 65741520896) * 100, '15.4 / 61.2 GB'], ['Load', 1.01, undefined]])
   assert.match(r.views.g9.view?.text, /No GPU 9 \(llama-swap reports 0, 1\)/)
 })
 

@@ -72,6 +72,11 @@ function request (a) {
   }
 }
 
+/** "12.4 / 24.0 GB", in GiB like nvidia-smi and the OS report memory @param {number | null | undefined} used @param {number | null | undefined} total */
+const amounts = (used, total) => used != null && total ? `${(used / 2 ** 30).toFixed(1)} / ${(total / 2 ** 30).toFixed(1)} GB` : null
+/** @param {number | null | undefined} used @param {number | null | undefined} total */
+const share = (used, total) => used != null && total ? (used / total) * 100 : null
+
 /** @param {any} data @param {any} req @param {any} ctx */
 const isFresh = (data, req, ctx) => !!req.time && data.at - Date.parse(req.time) < ctx.config.idleAfter * 1000
 
@@ -152,8 +157,7 @@ export default {
           type: 'stats',
           items: [
             { label: 'Load', value: g.util ?? null, format: 'percent' },
-            { label: 'VRAM', value: g.memUsed != null && g.memTotal ? (g.memUsed / g.memTotal) * 100 : null, format: 'percent', warn: 90, crit: 97 },
-            { label: 'Used', value: g.memUsed ?? null, format: 'bytes' },
+            { label: 'VRAM', value: share(g.memUsed, g.memTotal), format: 'percent', warn: 90, crit: 97, detail: amounts(g.memUsed, g.memTotal) },
             { label: 'Power', value: g.power ?? null, format: 'number', unit: 'W' },
             { label: 'Temp', value: g.temp ?? null, format: 'temperature', warn: 80, crit: 90 }
           ]
@@ -164,7 +168,7 @@ export default {
           type: 'stats',
           items: [
             { label: 'CPU', value: data.host.cpu, format: 'percent', warn: 85, crit: 95 },
-            { label: 'RAM', value: data.host.memUsed, format: 'bytes' },
+            { label: 'RAM', value: share(data.host.memUsed, data.host.memTotal), format: 'percent', warn: 90, crit: 97, detail: amounts(data.host.memUsed, data.host.memTotal) },
             { label: 'Load', value: data.host.load, format: 'number' }
           ]
         }

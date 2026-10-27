@@ -7,7 +7,8 @@ const ssh = { host: 'gpu.example', username: 'monitor', privateKeyPath: 'ssh/gpu
 
 test('one GPU as numbers, over SSH', async () => {
   const r = await runPlugin(import.meta.dirname, { config: ssh, options: { gpu: 1 } })
-  assert.deepEqual(r.view.items.map((/** @type {any} */ i) => [i.label, i.value]), [['Load', 0], ['VRAM', (404 / 24576) * 100], ['Used', 404 * 1024 * 1024], ['Power', 22.1], ['Temp', 41]])
+  assert.deepEqual(r.view.items.map((/** @type {any} */ i) => [i.label, i.value]), [['Load', 0], ['VRAM', (404 / 24576) * 100], ['Power', 22.1], ['Temp', 41]])
+  assert.equal(r.view.items[1].detail, '0.4 / 24.0 GB')
 })
 
 test('without a host it runs nvidia-smi in the container', async () => {
@@ -21,7 +22,7 @@ test('without a host it runs nvidia-smi in the container', async () => {
 test('what a card does not report stays empty instead of failing', async () => {
   const fixtures = { [`SSH ${QUERY}`]: { stdout: '0, Tesla T4, 5, 100, 15360, [N/A], [N/A], 50, [Not Supported], P0\n' } }
   const r = await runPlugin(import.meta.dirname, { config: ssh, fixtures })
-  assert.deepEqual(r.view.items.map((/** @type {any} */ i) => i.value), [5, (100 / 15360) * 100, 100 * 1024 * 1024, null, 50])
+  assert.deepEqual(r.view.items.map((/** @type {any} */ i) => i.value), [5, (100 / 15360) * 100, null, 50])
 })
 
 test('a GPU that does not exist, and nvidia-smi failing, are explained', async () => {

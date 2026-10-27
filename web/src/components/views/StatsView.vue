@@ -58,7 +58,10 @@ const style = computed(() => ({ '--scols': props.ctx.stats?.cols ?? props.view.i
       <span
         v-if="!hide"
         class="v-stat-label"
-      >{{ c.it.label }}</span>
+      >{{ c.it.label }}<span
+        v-if="c.it.detail"
+        class="v-stat-detail"
+      >{{ c.it.detail }}</span></span>
       <SparkLine
         v-if="c.series"
         :series="c.series"
