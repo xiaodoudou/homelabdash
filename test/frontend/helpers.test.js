@@ -11,6 +11,8 @@ describe('formats', () => {
     expect(fmt(250 * 1024 ** 3, 'bytes')).toBe('250 GB')
     expect(fmt(1_800_000, 'byterate')).toBe('1.72 MB/s')
     expect(fmt(null)).toBe('-')
+    expect(fmt(null, 'number', 'tok/s')).toBe('-- tok/s')
+    expect(valueParts('-- tok/s', 'number', 'tok/s')).toEqual([{ text: '--', unit: false }, { text: 'tok/s', unit: true }])
   })
 
   it('durations drop seconds past ten minutes, clocks always show hours', () => {

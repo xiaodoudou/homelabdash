@@ -326,7 +326,7 @@ export default {
               title: r.model,
               subtitle: [r.state, active ? `${active} running` : null, r.ttl ? `unloads after ${Math.round(r.ttl / 60)} min idle` : null].filter(Boolean).join(', '),
               icon: r.state === 'ready' ? 'mdi:brain' : 'mdi:timer-sand',
-              value: speeds.length ? rate(speeds.reduce((/** @type {number} */ a, /** @type {number} */ b) => a + b, 0)) : active ? 'running' : fresh && last.gen !== null ? rate(last.gen) : 'idle',
+              value: speeds.length ? rate(speeds.reduce((/** @type {number} */ a, /** @type {number} */ b) => a + b, 0)) : active ? '-- tok/s' : fresh && last.gen !== null ? rate(last.gen) : 'idle',
               format: 'text',
               actions: ctx.config.allowControl ? [{ action: 'unload', title: 'Unload', confirm: `Unload ${r.model}?`, input: { model: r.model } }] : undefined
             }
@@ -354,9 +354,9 @@ export default {
               : { label: loaded?.state && loaded.state !== 'ready' ? loaded.state : 'Model', value: loaded ? loaded.model : 'none loaded', format: 'text' },
             active && liveGen !== null
               ? { label: 'Generation', value: liveGen, format: 'number', unit: 'tok/s' }
-              : fresh && !active ? { label: 'Generation', value: last.gen, format: 'number', unit: 'tok/s' } : { label: 'Generation', value: active ? 'running' : 'idle', format: 'text' },
+              : fresh && !active ? { label: 'Generation', value: last.gen, format: 'number', unit: 'tok/s' } : active ? { label: 'Generation', value: null, format: 'number', unit: 'tok/s' } : { label: 'Generation', value: 'idle', format: 'text' },
             // a backend that reports no prompt speed (vLLM) gets no Prompt stat rather than an empty one
-            ...(!fresh ? [{ label: 'Prompt', value: active ? 'running' : 'idle', format: 'text' }] : last.prompt !== null ? [{ label: 'Prompt', value: last.prompt, format: 'number', unit: 'tok/s' }] : []),
+            ...(last && last.prompt === null ? [] : active ? [{ label: 'Prompt', value: null, format: 'number', unit: 'tok/s' }] : fresh ? [{ label: 'Prompt', value: last.prompt, format: 'number', unit: 'tok/s' }] : [{ label: 'Prompt', value: 'idle', format: 'text' }]),
             { label: 'Active', value: active, format: 'number' }
           ]
         }

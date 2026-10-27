@@ -86,12 +86,12 @@ test('a vLLM backend reports no speed: generation is estimated from tokens and d
   assert.equal(r.data.requests[0].cached, null, 'the -1 placeholders are read as unknown')
 })
 
-test('the stream follows requests in flight: Active counts them and the speeds read running', async () => {
+test('the stream follows requests in flight: Active counts them and unknown speeds stay empty', async () => {
   const r = await runPlugin(import.meta.dirname, { config, fixtures: fixturesAt(600), stream: true })
   const last = r.updates.at(-1)
   assert.deepEqual(last?.data.inflight.map((/** @type {any} */ q) => q.id), ['2'], 'the snapshot, then upserts, then a removal')
   const view = last?.derived.views.tile.view
-  assert.deepEqual(view.items.map((/** @type {any} */ i) => [i.label, i.value]), [['Model', 'example-coder-32b'], ['Generation', 'running'], ['Prompt', 'running'], ['Active', 1]])
+  assert.deepEqual(view.items.map((/** @type {any} */ i) => [i.label, i.value]), [['Model', 'example-coder-32b'], ['Generation', null], ['Prompt', null], ['Active', 1]])
 })
 
 test('while a request runs, the speed is the byte rate over the bytes per token learned from finished requests', async () => {
