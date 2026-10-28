@@ -18,7 +18,8 @@ const ctx = useViewContext(() => props.tile, () => props.groupTitle)
 
 <template>
   <div
-    :class="['mpanel', { 'is-list': st?.view?.type === 'list', 'is-single': st?.view?.type === 'stats' && st.view.items.length === 1 }]"
+    :class="['mpanel', { 'is-list': st?.view?.type === 'list' }]"
+    :style="{ '--cells': st?.view?.type === 'stats' ? st.view.items.length : 2 }"
     :data-cell="tile.id"
   >
     <header class="tile-head">

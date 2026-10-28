@@ -24,6 +24,9 @@ const status = {
   }
 }
 
+// "45%": the share of the row a tile or group takes, used as given instead of the width worked out from its content.
+const width = { type: 'string', pattern: '^(100|[1-9][0-9]?(\\.[0-9]+)?)%$', description: 'Share of the row, such as 45%; unset tiles and groups share the rest' }
+
 export const tileSchema = {
   type: 'object',
   additionalProperties: false,
@@ -42,6 +45,7 @@ export const tileSchema = {
     container: { type: 'string', description: 'Shorthand for status: { source: <docker source>, key: <container> }' },
     status,
     span: { anyOf: [{ type: 'integer', minimum: 1, maximum: 12 }, { const: 'full' }] },
+    width,
     hideWhen: { enum: ['never', 'empty', 'error'] },
     graph: {
       description: 'Keep an hour of history and draw it: true for every numeric stat, or the labels to graph',
@@ -62,6 +66,7 @@ const sectionBase = {
     hideWhen: { enum: ['never', 'empty'] },
     collapsed: { type: 'boolean' },
     merge: { type: 'boolean', description: 'Show the tiles as one card: a cell per tile with its icon, first value and title' },
+    width,
     layout: {
       type: 'object',
       additionalProperties: false,

@@ -84,9 +84,10 @@ A section holds `tiles`, or groups under `sections`, or just a `source` for one 
 |---|---|
 | `title`, `icon` | heading of the section |
 | `tiles` | the tiles, laid out by content width (see [Concepts](../start/CONCEPTS.md#how-a-page-is-laid-out)) |
-| `sections` | groups, side by side under this heading; a group has `title`, `icon`, `tiles`, `merge`, `hideWhen`, `layout` |
+| `sections` | groups, side by side under this heading; a group has `title`, `icon`, `tiles`, `merge`, `width`, `hideWhen`, `layout` |
 | `source`, `options` | shorthand for one full-width tile of that source |
 | `merge` | `true` draws the tiles as one card ([merged cards](../start/CONCEPTS.md#merged-cards)); works on groups too |
+| `width` | on a group, its share of the row, such as `45%`; see [Setting widths](#setting-widths) |
 | `placement` | `top` puts the section in the header as chips that open a list (meant for alerts); top-level sections only |
 | `hideWhen` | `empty` hides the section when none of its tiles has anything to show; the default is `empty` for a section with groups and for the alerts section, `never` otherwise (groups included) |
 | `layout` | `{ columns: 4 }` or `{ minTileWidth: 220 }` for a plain grid instead of content widths, `gap` in pixels |
@@ -116,8 +117,28 @@ tiles:
 | `status` | `{ source, key }`: status dot from any plugin that provides one |
 | `graph` | `true` graphs every number of the tile for the last hour, or a list of stat labels such as `[Down, Up]` |
 | `span` | `2` to `12` to widen the tile, `full` for the whole row |
+| `width` | its share of the row, such as `30%`, used as given; see [Setting widths](#setting-widths) |
 | `hideWhen` | `empty` hides it when it has nothing to show (no stream playing, all zero), `error` hides it while it fails |
 | `id` | a fixed id keeps the tile's graph history when you rename it, and lets the API refer to it by name |
+
+### Setting widths
+
+By default each tile and group is as wide as its numbers need, and the page shares out what is left. When you would rather decide, give a group or a tile a `width` in percent of the row:
+
+```yaml
+sections:
+  - title: System
+    sections:
+      - { title: Unraid, merge: true, width: 55%, tiles: [...] }
+      - { title: AI system, merge: true, width: 25%, tiles: [...] }
+      - { title: Power, width: 20%, tiles: [...] }
+```
+
+- Groups and tiles with a width keep it. The ones without share the rest of the row.
+- Neighbours with a width stay on one row as long as they add up to 100% or less.
+- A width is rounded to the page's columns: 24 on a wide screen, so steps of about 4%. On a phone, where everything stacks, it is ignored.
+- Inside a group with a width, its tiles share that width. Within a tile, the numbers share spare room evenly.
+- A width narrower than the numbers need cuts them off at the edge, so leave a little room.
 
 ## Icons
 

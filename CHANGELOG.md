@@ -4,6 +4,15 @@ Changes that people running homelabdash or writing plugins would notice. The for
 
 ## [Unreleased]
 
+### Added
+
+- **Set the width of a group or a tile.** `width: 45%` gives it that share of the row, and groups with a width stay on one row while they add up to 100%. Without one, tiles keep sizing themselves from their numbers. See [Setting widths](docs/reference/CONFIG.md#setting-widths).
+
+### Fixed
+
+- **The numbers of a tile share its width evenly again.** 0.3.1 gave spare room to every number but the last, so cells came out uneven. In a merged card, spare room now goes to each panel by how many numbers it holds, so a one-number panel no longer grows as much as a four-number one.
+- **Rows keep the order of the config.** When two arrangements filled the page equally well, a group could drop to the next row although it fit on the one before.
+
 ## [0.3.1] - 2026-10-28
 
 ### Fixed
