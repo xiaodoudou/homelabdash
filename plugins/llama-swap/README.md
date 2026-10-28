@@ -30,7 +30,9 @@ sections:
 | `host` | average CPU over all cores, RAM in use as a share with the GB beside its label, 1-minute load average |
 | `activity` | the last requests, newest first: model, tokens out and in, speed; a failed one is marked |
 
-Speeds come from llama-swap's activity log, which records each request once it has finished. Requests still running come from its event stream (`/api/events`, the one its own Activity page uses), followed while the dashboard is open. That stream says how many bytes each request has streamed, not how many tokens, so while requests run Generation is their byte rate divided by the bytes per token the model was seen to stream in finished requests: an estimate, live about once a second. Until a model has finished one request with the dashboard open, it reads -- tok/s. Some backends, vLLM among them, give llama-swap token counts but no speeds: generation is then the output tokens over the request's duration, a slight underestimate since that time includes reading the prompt, and the Prompt stat is left out.
+Finished requests come from llama-swap's activity log, with the speeds the backend reported. vLLM reports none, so for it the plugin divides the output tokens by the request's duration, which undercounts a little because that time includes reading the prompt, and leaves the Prompt stat out.
+
+Running requests come from llama-swap's event stream (`/api/events`, which its own Activity page uses) while the dashboard is open. The stream counts bytes, not tokens. Each finished request tells the plugin how many bytes that model sends per token, and the live speed is the byte rate divided by that, updated about once a second. Until a model has finished one request, it reads -- tok/s.
 
 A tile can take a status dot from a model, `status: { source: ai, key: my-model }`: up while it's loaded and ready.
 

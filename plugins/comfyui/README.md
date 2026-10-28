@@ -1,6 +1,6 @@
 # comfyui
 
-Whether [ComfyUI](https://github.com/comfyanonymous/ComfyUI) is generating, how many jobs wait, how long the last ones took, whether any failed, and its VRAM. It reads `/queue`, `/history` and `/system_stats`; with `allowControl` it can also interrupt the running job and free the VRAM, and it never queues anything. What people generate stays private: no prompt, workflow or file name reaches the dashboard, only counts, durations and the error of a failed job.
+Whether [ComfyUI](https://github.com/comfyanonymous/ComfyUI) is generating, how many jobs wait, how long the last ones took, whether any failed, and its VRAM. It reads `/queue`, `/history` and `/system_stats`; with `allowControl` it can also interrupt the running job and free the VRAM, and it never queues anything. No prompt, workflow or file name reaches the dashboard, only counts, durations and the error of a failed job.
 
 ```yaml
 sources:

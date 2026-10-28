@@ -28,13 +28,13 @@ The plugin only ever runs this one command:
 nvidia-smi --query-gpu=index,name,utilization.gpu,memory.used,memory.total,power.draw,power.limit,temperature.gpu,fan.speed,pstate --format=csv,noheader,nounits
 ```
 
-So the key can be locked to it. On the GPU machine, give a user without sudo this line in `~/.ssh/authorized_keys` (one line, with the dashboard's public key at the end):
+so the key can be locked to it. Set up the account as the [ssh plugin](../ssh/README.md#an-account-that-can-only-do-this) explains, with this line in its `~/.ssh/authorized_keys` (one line, with the dashboard's public key at the end):
 
 ```text
 restrict,command="nvidia-smi --query-gpu=index,name,utilization.gpu,memory.used,memory.total,power.draw,power.limit,temperature.gpu,fan.speed,pstate --format=csv,noheader,nounits" ssh-ed25519 AAAA... homelabdash
 ```
 
-`command=` runs that query whatever the client asks for, and `restrict` turns off shells, port forwarding and the rest. Someone who got the dashboard's key could read your GPU load, and nothing else. Set `hostFingerprint` too, or let the first connection pin the host key.
+Whatever a client asks for, that key gets the GPU readings and nothing more. Set `hostFingerprint` too, or let the first connection pin the host key.
 
 ## Options
 

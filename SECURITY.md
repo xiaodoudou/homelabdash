@@ -32,7 +32,7 @@ POST requests have to send JSON. Both POST requests and the WebSocket are refuse
 
 Each plugin runs in a worker thread, so one that hangs or crashes doesn't take the server down with it. That isn't a sandbox, though. A plugin can do whatever Node.js can do inside the container, so only install plugins you've read.
 
-For SSH, the first key a host presents is pinned in `/data`, and a different key later is refused; set `hostFingerprint` to pin it from the start. The image itself runs as a non-root user.
+For SSH, the first key a host presents is pinned in `/data`, and a different key later is refused; set `hostFingerprint` to pin it from the start. The dashboard's own SSH keys sit in the config folder, so give each one an account with no sudo and a forced command, as the [ssh plugin](plugins/ssh/README.md#an-account-that-can-only-do-this) shows: a leaked key then runs that one read and nothing else. The image itself runs as a non-root user.
 
 ## What it doesn't do
 
