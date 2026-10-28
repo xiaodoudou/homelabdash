@@ -116,3 +116,51 @@ describe('TopChips', () => {
     expect(w.findAll('.top-panel .v-row')).toHaveLength(5)
   })
 })
+
+describe('action buttons', () => {
+  const view = { type: 'list', items: [{ title: 'Movie', actions: [{ action: 'stop', title: 'Stop', confirm: 'Stop this stream?', input: { id: 'a' } }, { action: 'pause', title: 'Pause', input: { id: 'a' } }] }] }
+
+  it('a plain action runs on the first click', async () => {
+    const onAction = vi.fn()
+    const w = mount(ListView, { props: { view, ctx: ctx({ onAction }) } })
+    await w.findAll('.btn-mini')[1].trigger('click')
+    expect(onAction).toHaveBeenCalledWith('pause', { id: 'a' })
+  })
+
+  it('an action with confirm asks on the button first, and runs on the second click', async () => {
+    const onAction = vi.fn()
+    const w = mount(ListView, { props: { view, ctx: ctx({ onAction }) } })
+    const stop = () => w.findAll('.btn-mini')[0]
+    await stop().trigger('click')
+    expect(onAction).not.toHaveBeenCalled()
+    expect(stop().text()).toBe('Stop this stream?')
+    expect(stop().classes()).toContain('is-confirm')
+    await stop().trigger('click')
+    expect(onAction).toHaveBeenCalledWith('stop', { id: 'a' })
+    expect(stop().text()).toBe('Stop')
+  })
+
+  it('the question goes away by itself after four seconds', async () => {
+    vi.useFakeTimers()
+    const onAction = vi.fn()
+    const w = mount(ListView, { props: { view, ctx: ctx({ onAction }) } })
+    await w.findAll('.btn-mini')[0].trigger('click')
+    vi.advanceTimersByTime(4000)
+    await nextTick()
+    expect(w.findAll('.btn-mini')[0].text()).toBe('Stop')
+    await w.findAll('.btn-mini')[0].trigger('click')
+    expect(onAction).not.toHaveBeenCalled()
+  })
+})
+
+describe('stat detail', () => {
+  it('draws the detail beside the label, and the layout makes room for it', async () => {
+    const { cellNeed } = await import('../../web/src/arrange.js')
+    const item = { label: 'VRAM', value: 52, format: 'percent', detail: '12.4 / 24.0 GB' }
+    const w = mount(StatsView, { props: { view: { type: 'stats', items: [item] }, ctx: ctx({ titles: ['GPU0'] }) } })
+    expect(w.find('.v-stat-label').text()).toBe('VRAM12.4 / 24.0 GB')
+    expect(w.find('.v-stat-detail').text()).toBe('12.4 / 24.0 GB')
+    const m = { value: 20, family: 'sans-serif', cellPad: 12 }
+    expect(cellNeed(item, false, /** @type {any} */ (m))).toBeGreaterThanOrEqual(cellNeed({ ...item, detail: undefined }, false, /** @type {any} */ (m)))
+  })
+})

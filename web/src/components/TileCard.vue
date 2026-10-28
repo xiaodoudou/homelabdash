@@ -6,6 +6,7 @@ import AppIcon from './AppIcon.vue'
 import TileError from './TileError.vue'
 import ViewRenderer from './views/ViewRenderer.vue'
 import WidgetHost from './views/WidgetHost.vue'
+import ActionButton from './ActionButton.vue'
 
 const props = defineProps({
   tile: { type: Object, required: true },
@@ -125,15 +126,13 @@ const cls = computed(() => ['tile', spanClass.value, props.tile.kind === 'link' 
       v-if="st?.view?.actions?.length"
       class="tile-actions"
     >
-      <button
+      <ActionButton
         v-for="a in st.view.actions"
         :key="a.action"
-        class="btn-mini"
+        :action="a"
         :disabled="pending.has(actionKey(tile.id, a.action, a.input))"
-        @click="runAction(tile.id, a.action, a.input)"
-      >
-        {{ a.title }}
-      </button>
+        @run="runAction(tile.id, a.action, a.input)"
+      />
     </footer>
   </article>
 </template>

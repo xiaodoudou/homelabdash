@@ -3,5 +3,6 @@
 set -e
 node scripts/privacy-check.js --staged
 npx --no-install eslint .
+npm run typecheck --silent
 npm test --silent
 npm run test:frontend --silent

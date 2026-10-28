@@ -4,6 +4,28 @@ Changes that people running homelabdash or writing plugins would notice. The for
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-10-28
+
+### Added
+
+- **An AI server on the dashboard: llama-swap, nvidia and comfyui plugins.** llama-swap shows the loaded model, how fast it generates (live while a request runs, estimated from the bytes it streams), how many requests are running, and the GPU, CPU and memory gauges it reports; it never loads a model. nvidia reads each GPU from `nvidia-smi`, over an SSH key that can be locked to that one command. comfyui shows whether it is generating, the queue and the last jobs, and alerts on failed ones, without showing prompts or images. With `allowControl`, llama-swap can unload a model and comfyui can interrupt a job or free its VRAM.
+- **Home Assistant plugin.** Lights, switches, sensors, thermostats and people as rows or numbers, a summary of the home, and the updates waiting to be installed. Tiles follow state changes live over Home Assistant's WebSocket API, and with `allowControl` lights, switches, fans, input booleans and automations get an on and off button. See [its README](plugins/homeassistant/README.md).
+- **Stop a Plex stream from the dashboard.** With `allowControl: true` on a Tautulli source, each stream playing now gets a Stop button, and `stopMessage` sets what the viewer sees on their player. See [its README](plugins/tautulli/README.md).
+- **Buttons that are hard to undo ask first.** A plugin can give a button a `confirm` question: the first click shows it on the button in red, and only a second click within four seconds runs it. Stop on Plex streams and the unload buttons use it.
+- **A stat can show two readings.** An item's `detail` is drawn beside its label, so VRAM reads 52% with 12.4 / 24.0 GB next to it, and a missing number keeps its unit (-- tok/s). See [Views](docs/reference/VIEWS.md).
+- **The Unraid status tile has links.** The unread count opens the Unraid dashboard, where the bell lists the notifications, and the array state opens the Main tab.
+
+### Changed
+
+- **Page tabs are easy to spot.** With several pages, the header shows the tabs beside the title, the open one in full colour with an accent line under it, and on a phone they get a row of their own.
+- **The Unraid template moved** to [xiaodoudou/unraid-templates](https://github.com/xiaodoudou/unraid-templates), where Community Applications picks it up, and gained an icon and screenshots. [Deploying](docs/operations/DEPLOY.md#unraid) shows how to load it by hand.
+
+### Security
+
+- **Password guessing is slowed down.** With `settings.auth` set, 20 refused logins within a minute get an address turned away for the rest of that minute, over HTTP and the WebSocket alike, and every address is capped at 1200 requests a minute. See [Deploying](docs/operations/DEPLOY.md#a-password).
+- **SSH keys of the dashboard get their own guide.** [The ssh plugin](plugins/ssh/README.md#an-account-that-can-only-do-this) explains how to give each key an account with no sudo and a forced command, so a leaked key can only run that one read.
+- **Two dependencies are patched** against advisories published after 0.1.0: body-parser 2.4.0 fixes a denial of service through a compressed request body, and fast-uri 3.1.9 fixes how some URLs are parsed while the config is validated.
+
 ## [0.1.0] - 2026-10-13
 
 The first public version.
@@ -25,5 +47,6 @@ The first public version.
 - **Coding agents get skills.** The repository is a Claude Code plugin marketplace with skills to write plugins, edit the config and deploy, and `AGENTS.md` describes the code for any agent.
 - **A showcase runs on fake services.** `npm run dev:showcase` starts a full homelab against recorded responses, and `npm run docs:screenshots` takes the documentation pictures from it.
 
-[Unreleased]: https://github.com/xiaodoudou/homelabdash/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/xiaodoudou/homelabdash/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/xiaodoudou/homelabdash/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/xiaodoudou/homelabdash/releases/tag/v0.1.0

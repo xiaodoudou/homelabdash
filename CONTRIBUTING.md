@@ -12,7 +12,7 @@ cd homelabdash
 npm install
 ```
 
-The first `npm install` also builds the page into `dist/` and points git at `.githooks/`, where the `pre-commit` hook runs the privacy check, lint and the tests, and `commit-msg` checks your message (see [Commit messages](#commit-messages)).
+The first `npm install` also builds the page into `dist/` and points git at `.githooks/`, where the `pre-commit` hook runs the privacy check, lint, the typecheck and the tests, and `commit-msg` checks your message (see [Commit messages](#commit-messages)).
 
 Then list your own personal strings in `.privacy-denylist` at the root (it's gitignored, one per line), such as your domain, your LAN prefix and your user name. The privacy check refuses any commit that contains one of them.
 
@@ -171,4 +171,4 @@ A release is a tag on `main`. Any change worth mentioning gets a line under **Un
    git push origin dev
    ```
 
-Pushing the tag starts `.github/workflows/release.yml`. It first checks that the tag names the version in `package.json` and sits on `main`, runs the same jobs as every push, pushes the image to Docker Hub as `xiaodoudoufr/homelabdash` for amd64 and arm64 (logging in with the `DOCKERHUB_TOKEN` repository secret), and finally creates the GitHub release with generated notes. If a step fails the rest don't run, so a red build never gets published. A prerelease tag such as `v0.3.0-rc.1` only gets its own image tag, and the release is marked as a prerelease.
+Pushing the tag starts `.github/workflows/release.yml`. It first checks that the tag names the version in `package.json`, sits on `main` and has a section in `CHANGELOG.md`. Then it runs the same jobs as every push, pushes the image to Docker Hub as `xiaodoudoufr/homelabdash` for amd64 and arm64 (logging in with the `DOCKERHUB_TOKEN` repository secret), and finally creates the GitHub release. Its notes are that changelog section, which `node scripts/release-notes.js 0.2.0` prints if you want to read them first, followed by the notes GitHub generates. If a step fails the rest don't run, so a red build never gets published. A prerelease tag such as `v0.3.0-rc.1` only gets its own image tag, and the release is marked as a prerelease.

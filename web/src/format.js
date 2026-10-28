@@ -58,7 +58,7 @@ export function relative (t) {
  * @param {string} [unit]
  */
 export function fmt (value, format, unit) {
-  if (value === null || value === undefined || value === '') return '-'
+  if (value === null || value === undefined || value === '') return unit ? `-- ${unit}` : '-'
   const n = typeof value === 'number' ? value : Number(value)
   const num = typeof value === 'number' || (typeof value === 'string' && value.trim() !== '' && !Number.isNaN(n))
   let out

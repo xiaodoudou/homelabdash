@@ -119,6 +119,7 @@ export default {
   },
 
   render (data, o, ctx) {
+    const base = ctx.config.url.replace(/\/+$/, '')
     const pct = (/** @type {number | null} */ used, /** @type {number | null} */ total) => used != null && total ? (used / total) * 100 : null
     switch (o.metric) {
       case 'cpu':
@@ -156,7 +157,6 @@ export default {
       case 'uptime':
         return { type: 'stats', items: [{ label: 'Uptime', value: data.bootedAt, format: 'since' }] }
       case 'notifications': {
-        const base = ctx.config.url.replace(/\/+$/, '')
         return {
           type: 'list',
           empty: 'No unread notifications',
@@ -175,8 +175,9 @@ export default {
         return {
           type: 'stats',
           items: [
-            { label: 'Array', value: data.array.state ? data.array.state.toLowerCase() : null, format: 'text' },
-            { label: 'Unread', value: data.unread.total, format: 'number', warn: 1, crit: data.unread.alert ? data.unread.total : undefined }
+            { label: 'Array', value: data.array.state ? data.array.state.toLowerCase() : null, format: 'text', href: `${base}/Main` },
+            // Unraid has no page for unread notifications: they open from the bell in the header of its dashboard
+            { label: 'Unread', value: data.unread.total, format: 'number', warn: 1, crit: data.unread.alert ? data.unread.total : undefined, href: `${base}/Dashboard` }
           ]
         }
     }

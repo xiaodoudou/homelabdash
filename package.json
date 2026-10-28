@@ -1,6 +1,6 @@
 {
   "name": "homelabdash",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Self-hosted homelab dashboard with Node plugins that people and coding agents can write, validate and test.",
   "type": "module",
   "license": "Apache-2.0",
@@ -47,6 +47,7 @@
     "ajv-formats": "^3.0.1",
     "chokidar": "^5.0.0",
     "express": "^5.3.0",
+    "express-rate-limit": "^8.7.1",
     "jsonata": "^2.2.2",
     "ssh2": "^1.17.0",
     "ws": "^8.22.0",

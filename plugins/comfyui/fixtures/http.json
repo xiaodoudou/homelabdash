@@ -1,0 +1,241 @@
+{
+  "GET /queue": {
+    "body": {
+      "queue_running": [
+        [
+          13,
+          "p13",
+          {},
+          {},
+          [
+            "9"
+          ]
+        ]
+      ],
+      "queue_pending": [
+        [
+          14,
+          "p14",
+          {},
+          {},
+          [
+            "9"
+          ]
+        ],
+        [
+          15,
+          "p15",
+          {},
+          {},
+          [
+            "9"
+          ]
+        ]
+      ]
+    }
+  },
+  "GET /history": {
+    "body": {
+      "a1b2-12": {
+        "prompt": [
+          12,
+          "p12",
+          {
+            "3": {
+              "class_type": "KSampler",
+              "inputs": {}
+            }
+          },
+          {},
+          [
+            "9"
+          ]
+        ],
+        "outputs": {
+          "9": {
+            "images": [
+              {
+                "filename": "out_0.png",
+                "subfolder": "",
+                "type": "output"
+              },
+              {
+                "filename": "out_1.png",
+                "subfolder": "",
+                "type": "output"
+              }
+            ]
+          }
+        },
+        "status": {
+          "status_str": "success",
+          "completed": true,
+          "messages": [
+            [
+              "execution_start",
+              {
+                "prompt_id": "p12",
+                "timestamp": 1793119940000
+              }
+            ],
+            [
+              "execution_cached",
+              {
+                "nodes": [],
+                "prompt_id": "p12",
+                "timestamp": 1793119940005
+              }
+            ],
+            [
+              "execution_success",
+              {
+                "prompt_id": "p12",
+                "timestamp": 1793119982500
+              }
+            ]
+          ]
+        },
+        "meta": {}
+      },
+      "a1b2-11": {
+        "prompt": [
+          11,
+          "p11",
+          {
+            "3": {
+              "class_type": "KSampler",
+              "inputs": {}
+            }
+          },
+          {},
+          [
+            "9"
+          ]
+        ],
+        "outputs": {},
+        "status": {
+          "status_str": "error",
+          "completed": false,
+          "messages": [
+            [
+              "execution_start",
+              {
+                "prompt_id": "p11",
+                "timestamp": 1793119800000
+              }
+            ],
+            [
+              "execution_cached",
+              {
+                "nodes": [],
+                "prompt_id": "p11",
+                "timestamp": 1793119800005
+              }
+            ],
+            [
+              "execution_error",
+              {
+                "prompt_id": "p11",
+                "node_id": "3",
+                "node_type": "KSampler",
+                "exception_message": "Allocation on device \nwith more lines",
+                "exception_type": "torch.OutOfMemoryError",
+                "timestamp": 1793119803200
+              }
+            ]
+          ]
+        },
+        "meta": {}
+      },
+      "a1b2-10": {
+        "prompt": [
+          10,
+          "p10",
+          {
+            "3": {
+              "class_type": "KSampler",
+              "inputs": {}
+            }
+          },
+          {},
+          [
+            "9"
+          ]
+        ],
+        "outputs": {
+          "9": {
+            "images": [
+              {
+                "filename": "out_0.png",
+                "subfolder": "",
+                "type": "output"
+              }
+            ]
+          }
+        },
+        "status": {
+          "status_str": "success",
+          "completed": true,
+          "messages": [
+            [
+              "execution_start",
+              {
+                "prompt_id": "p10",
+                "timestamp": 1793119600000
+              }
+            ],
+            [
+              "execution_cached",
+              {
+                "nodes": [],
+                "prompt_id": "p10",
+                "timestamp": 1793119600005
+              }
+            ],
+            [
+              "execution_success",
+              {
+                "prompt_id": "p10",
+                "timestamp": 1793119661000
+              }
+            ]
+          ]
+        },
+        "meta": {}
+      }
+    }
+  },
+  "GET /system_stats": {
+    "body": {
+      "system": {
+        "os": "posix",
+        "ram_total": 68388200448,
+        "ram_free": 41000000000,
+        "comfyui_version": "0.3.70",
+        "python_version": "3.12.3",
+        "pytorch_version": "2.8.0+cu128",
+        "embedded_python": false,
+        "argv": [
+          "main.py"
+        ]
+      },
+      "devices": [
+        {
+          "name": "cuda:0 NVIDIA GeForce RTX 3090 : cudaMallocAsync",
+          "type": "cuda",
+          "index": 0,
+          "vram_total": 25769803776,
+          "vram_free": 9663676416,
+          "torch_vram_total": 0,
+          "torch_vram_free": 0
+        }
+      ]
+    }
+  },
+  "POST /interrupt": {
+    "body": ""
+  },
+  "POST /free": {
+    "body": ""
+  }
+}

@@ -40,7 +40,7 @@ templates/plugin/      scaffold for `plugin new`
 examples/config/       commented demo config used by `npm run dev`
 examples/showcase/     full homelab used by `npm run dev:showcase` and the screenshots
 dev/                   mock-upstreams.js (every service from fixtures, HTTP/SSH/TCP), dev.js
-scripts/               privacy-check.js, commitlint.js, screenshots.js, prepare.js
+scripts/               privacy-check.js, commitlint.js, release-notes.js, screenshots.js, prepare.js
 test/frontend/         page tests (Vitest)
 docs/                  start/, reference/, operations/, extending/, contributing/ (map in docs/README.md)
 ```

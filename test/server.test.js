@@ -40,9 +40,16 @@ sections:
       - { id: log, source: router, options: { view: log } }
 ${extra}`
 
+// Ports fetch() refuses to call (the "bad ports" of the Fetch standard); Windows hands them out from 1024 up.
+const FETCH_BLOCKED = new Set([1719, 1720, 1723, 2049, 3659, 4045, 4190, 5060, 5061, 6000, 6566, 6665, 6666, 6667, 6668, 6669, 6679, 6697, 10080])
+
 async function boot () {
-  app = new Homelabdash({ configDir, dataDir, port: 0, host: '127.0.0.1', log: quiet })
-  await app.start()
+  for (;;) {
+    app = new Homelabdash({ configDir, dataDir, port: 0, host: '127.0.0.1', log: quiet })
+    await app.start()
+    if (!FETCH_BLOCKED.has(Number(app.port))) break
+    await app.stop()
+  }
   base = `http://127.0.0.1:${app.port}`
 }
 
@@ -218,4 +225,18 @@ test('basic auth protects pages, API and WebSocket but not the health check', as
   const ok = client(auth)
   await ok.opened
   ok.ws.close()
+
+  // the refusals above count too: start from zero
+  app.http?.logins.fails.clear()
+  const wrong = { authorization: 'Basic ' + Buffer.from('me:guess').toString('base64') }
+  for (let i = 0; i < 19; i++) assert.equal((await api('/api/dashboard', { headers: wrong })).status, 401)
+  assert.equal((await api('/api/dashboard', { headers: auth })).status, 200, 'still under the limit')
+  assert.equal((await api('/api/dashboard', { headers: wrong })).status, 401)
+  const refused = await api('/api/dashboard', { headers: auth })
+  assert.equal(refused.status, 429, 'after 20 refused logins the address is refused, right password or not')
+  assert.equal(refused.headers.get('retry-after'), '60')
+  const throttled = new WebSocket(`${base.replace('http', 'ws')}/api/ws`, { headers: auth })
+  await assert.rejects(new Promise((resolve, reject) => { throttled.once('open', resolve); throttled.once('error', reject) }), /429/)
+  app.http?.logins.fails.clear()
+  assert.equal((await api('/api/dashboard', { headers: auth })).status, 200)
 })
