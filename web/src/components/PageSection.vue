@@ -11,6 +11,16 @@ const props = defineProps({ section: { type: Object, required: true } })
 const hidden = computed(() => props.section.hideWhen === 'empty' && !visibleTiles(props.section).length)
 const grid = computed(() => isGrid(props.section))
 const gridTiles = computed(() => props.section.tiles.filter((/** @type {any} */ t) => !isHidden(t)))
+/** The section's groups in the rows fit.js planned (each row still wraps on its own); one row until then. */
+const rows = computed(() => {
+  const all = sectionGroups(props.section)
+  const plan = layout.rows[props.section.id]
+  if (!plan) return [all]
+  const out = plan.map(ids => all.filter((/** @type {any} */ g) => ids.includes(g.id)))
+  const rest = all.filter((/** @type {any} */ g) => !plan.some(ids => ids.includes(g.id)))
+  if (rest.length) out.push(rest)
+  return out.filter(r => r.length)
+})
 const gridStyle = computed(() => {
   const l = props.section.layout ?? {}
   return {
@@ -50,13 +60,19 @@ const gridStyle = computed(() => {
     <div
       v-else
       class="groups"
-      :style="{ '--page-cols': layout.C }"
+      :data-groups="section.id"
     >
-      <TileGroup
-        v-for="g in sectionGroups(section)"
-        :key="g.id"
-        :group="g"
-      />
+      <div
+        v-for="(row, i) in rows"
+        :key="i"
+        class="group-row"
+      >
+        <TileGroup
+          v-for="g in row"
+          :key="g.id"
+          :group="g"
+        />
+      </div>
     </div>
   </section>
 </template>

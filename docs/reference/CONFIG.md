@@ -117,13 +117,13 @@ tiles:
 | `status` | `{ source, key }`: status dot from any plugin that provides one |
 | `graph` | `true` graphs every number of the tile for the last hour, or a list of stat labels such as `[Down, Up]` |
 | `span` | `2` to `12` to widen the tile, `full` for the whole row |
-| `width` | its share of the row, such as `30%`, used as given; see [Setting widths](#setting-widths) |
+| `width` | its share of its group's row, such as `30%`; see [Setting widths](#setting-widths) |
 | `hideWhen` | `empty` hides it when it has nothing to show (no stream playing, all zero), `error` hides it while it fails |
 | `id` | a fixed id keeps the tile's graph history when you rename it, and lets the API refer to it by name |
 
 ### Setting widths
 
-By default each tile and group is as wide as its numbers need, and the page shares out what is left. When you would rather decide, give a group or a tile a `width` in percent of the row:
+By default each group is as wide as its numbers need, and every row is filled by sharing out what is left. When you would rather decide, give a group a `width` in percent of the row:
 
 ```yaml
 sections:
@@ -134,11 +134,11 @@ sections:
       - { title: Power, width: 20%, tiles: [...] }
 ```
 
-- Groups and tiles with a width keep it. The ones without share the rest of the row.
+- Groups with a width keep it. The ones without share the rest of the row.
 - Neighbours with a width stay on one row as long as they add up to 100% or less.
-- A width is rounded to the page's columns: 24 on a wide screen, so steps of about 4%. On a phone, where everything stacks, it is ignored.
-- Inside a group with a width, its tiles share that width. Within a tile, the numbers share spare room evenly.
-- When a width is narrower than the numbers need, they wrap onto more rows (four as 2x2), the panels with the most numbers first. Only what still does not fit is cut off.
+- On a tile, `width` is its share of its group's row of tiles, not of the page.
+- On a phone, where everything stacks, widths are ignored.
+- When a group is narrower than its numbers need, they wrap onto more rows (four as 2x2, three as 2+1), and the panels of a merged card move under each other if that is still not enough. Nothing is cut off.
 
 ## Icons
 

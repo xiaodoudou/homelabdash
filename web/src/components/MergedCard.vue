@@ -1,6 +1,6 @@
 <script setup>
 import { computed } from 'vue'
-import { tiles as states, layout } from '../store.js'
+import { tiles as states } from '../store.js'
 import { compactCell } from '../views.js'
 import MergedCell from './MergedCell.vue'
 import MergedPanel from './MergedPanel.vue'
@@ -24,7 +24,6 @@ const key = computed(() => `${props.group.id}:merged`)
   <article
     class="tile tile-merged"
     :data-tile="key"
-    :style="{ gridColumn: layout.tiles[key] }"
   >
     <template
       v-for="(t, i) in tiles"

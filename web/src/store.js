@@ -40,13 +40,10 @@ export const minute = ref(0)
 /** @type {Map<string, any>} tile definitions from /api/dashboard, by id */
 export const defs = new Map()
 
-/** Every column, group and tile position the layout computed; see arrange.js. */
+/** What the layout decided from the page as drawn (fit.js): the rows of each section and the stat columns of each tile. */
 export const layout = reactive({
-  C: 24,
-  /** @type {Record<string, string>} */
-  groups: {},
-  /** @type {Record<string, string>} */
-  tiles: {},
+  /** @type {Record<string, string[][]>} per section, the group ids of each row */
+  rows: {},
   /** @type {Record<string, { cols: number, wrapped: boolean }>} */
   stats: {}
 })

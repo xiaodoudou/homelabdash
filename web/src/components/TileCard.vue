@@ -1,6 +1,6 @@
 <script setup>
 import { computed } from 'vue'
-import { tiles, pending, layout, refresh, runAction, actionKey } from '../store.js'
+import { tiles, pending, refresh, runAction, actionKey } from '../store.js'
 import { useViewContext } from './context.js'
 import AppIcon from './AppIcon.vue'
 import TileError from './TileError.vue'
@@ -17,6 +17,8 @@ const st = computed(() => tiles.get(props.tile.id))
 const ctx = useViewContext(() => props.tile, () => props.groupTitle)
 const failed = computed(() => !!st.value?.error && !st.value.view)
 const empty = computed(() => !!st.value?.view && st.value.view.type === 'list' && !st.value.view.items.length)
+// `width: 30%` and `span: 2` reach the layout as variables; theme.css turns them into the card's share and least width.
+const style = computed(() => ({ ...(props.tile.width ? { '--pct': props.tile.width } : {}), ...(props.tile.span > 1 ? { '--span': props.tile.span } : {}) }))
 const spanClass = computed(() => props.tile.span === 'full' ? 'span-full' : props.tile.span > 1 ? `span-${props.tile.span}` : '')
 const cls = computed(() => ['tile', spanClass.value, props.tile.kind === 'link' && 'tile-link', failed.value && 'is-error', empty.value && 'is-empty'])
 </script>
@@ -26,7 +28,7 @@ const cls = computed(() => ['tile', spanClass.value, props.tile.kind === 'link' 
     v-if="tile.bare"
     :class="['tile', 'bare', spanClass]"
     :data-tile="tile.id"
-    :style="{ gridColumn: layout.tiles[tile.id] }"
+    :style="tile.width ? { '--pct': tile.width } : undefined"
   >
     <div
       v-if="st?.loading || !st"
@@ -51,7 +53,7 @@ const cls = computed(() => ['tile', spanClass.value, props.tile.kind === 'link' 
     :class="cls"
     :data-tile="tile.id"
     :data-plugin="tile.plugin ?? ''"
-    :style="{ gridColumn: layout.tiles[tile.id] }"
+    :style="style"
   >
     <header class="tile-head">
       <AppIcon :icon="tile.icon" />

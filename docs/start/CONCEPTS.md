@@ -28,7 +28,7 @@ A tile with an `href` and no source is just a link. Any tile can also carry a st
 
 A page is a list of sections. A section holds tiles, or groups (`sections:` inside a section, one level deep), which sit side by side under the section title, each with a small heading of its own.
 
-There are no column counts to set. Each tile is as wide as its content needs, so a tile with four numbers is wider than a link, and a number's width comes from the widest value its format can take, which keeps tiles from jumping when a value goes from 9 to 10. The tiles of a row share whatever width is left, lists getting a bigger share, and while the page is open a tile's width only ever grows. `span: 2` widens a tile, `span: full` gives it the whole row.
+There are no column counts to set. The browser draws each group as wide as its content, so a tile with four numbers is wider than a link, and numbers keep room for their widest value (100%, 888.8 GB) so tiles do not jump when a value goes from 9 to 10. The page then cuts the groups into rows as evenly as it can, in the order of the config, and each row is filled exactly: the groups of a row share what is left. A group that is too narrow for its numbers wraps them onto more rows (four as 2x2) rather than cutting them off. While the page is open a row only changes when a group grows. `width: 45%` sets a group's share yourself ([Setting widths](../reference/CONFIG.md#setting-widths)), `span: 2` makes a tile at least twice as wide as a small one, and `span: full` gives it the whole row.
 
 A section with `layout: { columns: 4 }` or `layout: { minTileWidth: 220 }` switches to a plain grid instead.
 
