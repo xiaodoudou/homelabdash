@@ -1,7 +1,7 @@
 {
   "name": "homelabdash",
   "description": "Skills to configure, extend and run homelabdash: write plugins with fixtures and tests, edit the dashboard config, migrate from gethomepage, deploy with Docker or Unraid.",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "author": { "name": "Edouard Durand" },
   "homepage": "https://github.com/xiaodoudou/homelabdash",
   "repository": "https://github.com/xiaodoudou/homelabdash",
