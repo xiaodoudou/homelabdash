@@ -149,7 +149,7 @@ function createHub (core) {
     alive.add(ws)
     ws.on('pong', () => alive.add(ws))
     const graphed = Object.values(core.config?.tiles ?? {}).filter(t => t.graph).map(t => t.id)
-    ws.send(JSON.stringify({ type: 'hello', version: core.version, tiles: core.runtime.snapshot(), history: core.runtime.history.dump(graphed), configErrors: core.configErrors }))
+    ws.send(JSON.stringify({ type: 'hello', version: core.version, release: core.release, tiles: core.runtime.snapshot(), history: core.runtime.history.dump(graphed), configErrors: core.configErrors }))
     updateActive()
     ws.on('close', updateActive)
     ws.on('message', async (raw) => {

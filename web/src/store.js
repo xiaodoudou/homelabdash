@@ -56,6 +56,8 @@ let ws = null
 let retry = 0
 let seq = 0
 let lastSeen = 0
+/** @type {string | undefined} the release of the server this page was loaded from */
+let release
 /** @type {Map<number, (msg: any) => void>} */
 const waiting = new Map()
 /** @type {ReturnType<typeof setTimeout> | undefined} */
@@ -124,6 +126,9 @@ function connect () {
 export function receive (msg) {
   switch (msg.type) {
     case 'hello':
+      // After an update the server runs another release: load its page instead of keeping this one.
+      if (release && msg.release && msg.release !== release) return location.reload()
+      release ??= msg.release
       tiles.clear()
       for (const t of msg.tiles) tiles.set(t.id, t)
       history.clear()

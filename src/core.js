@@ -38,6 +38,8 @@ export class Homelabdash {
     this.dataDir = o.dataDir ? path.resolve(o.dataDir) : null
     this.log = o.log ?? createLogger()
     this.version = 0
+    /** The homelabdash release; a page built for another one reloads itself. */
+    this.release = pkg.version
     /** @type {import('./config/load.js').Config | null} */
     this.config = null
     /** @type {import('./config/load.js').ConfigError[]} */

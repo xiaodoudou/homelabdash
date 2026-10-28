@@ -49,6 +49,18 @@ describe('store', () => {
     expect(s.state.version).toBe(before + 1)
   })
 
+  it('a hello from another release reloads the page, so an update brings its new page code', async () => {
+    const s = await fresh()
+    const reload = vi.fn()
+    vi.stubGlobal('location', { ...location, reload })
+    s.receive({ type: 'hello', version: 1, release: '1.0.0', tiles: [] })
+    s.receive({ type: 'hello', version: 1, release: '1.0.0', tiles: [] })
+    expect(reload).not.toHaveBeenCalled()
+    s.receive({ type: 'hello', version: 1, release: '1.0.1', tiles: [] })
+    expect(reload).toHaveBeenCalledOnce()
+    vi.unstubAllGlobals()
+  })
+
   it('graph points: one per step, the newest of a step wins, old points leave the window', async () => {
     const s = await fresh()
     s.addPoints('a', { CPU: [100_000, 1] })
