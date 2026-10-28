@@ -4,7 +4,7 @@
 
 > A self-hosted dashboard for your homelab, where every tile comes from a small Node.js plugin
 
-[![License](https://img.shields.io/badge/License-Apache%202.0-blue?style=flat-square)](LICENSE) [![Node](https://img.shields.io/badge/Node-24-339933?style=flat-square)](#try-it-in-five-minutes) [![Vue](https://img.shields.io/badge/Page-Vue%203%20%2B%20Vite-42b883?style=flat-square)](docs/contributing/ARCHITECTURE.md) [![Docker](https://img.shields.io/badge/Docker-amd64%20%7C%20arm64-2496ED?style=flat-square)](docs/operations/DEPLOY.md) [![Plugins](https://img.shields.io/badge/Plugins-20%20builtin-orange?style=flat-square)](docs/reference/PLUGINS.md) [![Tests](https://img.shields.io/badge/Tests-contract%20%7C%20unit%20%7C%20integration-brightgreen?style=flat-square)](docs/contributing/TESTING.md)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue?style=flat-square)](LICENSE) [![Node](https://img.shields.io/badge/Node-26-339933?style=flat-square)](#try-it-in-five-minutes) [![Vue](https://img.shields.io/badge/Page-Vue%203%20%2B%20Vite-42b883?style=flat-square)](docs/contributing/ARCHITECTURE.md) [![Docker](https://img.shields.io/badge/Docker-amd64%20%7C%20arm64-2496ED?style=flat-square)](docs/operations/DEPLOY.md) [![Plugins](https://img.shields.io/badge/Plugins-20%20builtin-orange?style=flat-square)](docs/reference/PLUGINS.md) [![Tests](https://img.shields.io/badge/Tests-contract%20%7C%20unit%20%7C%20integration-brightgreen?style=flat-square)](docs/contributing/TESTING.md)
 
 You list your services in one YAML file and homelabdash keeps a page of live numbers about them: what Plex is playing, what the arrs are missing, how full the array is, what the router is pushing. Each service is read by a plugin, and a plugin is one JavaScript file you can write in an afternoon, or ask a coding agent to write.
 
@@ -18,7 +18,7 @@ The server polls each service on its own interval and pushes what changed to the
 
 ## Try it in five minutes
 
-For a quick look you need [Node.js](https://nodejs.org/) 24 and git. The showcase runs against fake services, so you don't need any of them:
+For a quick look you need [Node.js](https://nodejs.org/) 26 and git. The showcase runs against fake services, so you don't need any of them:
 
 ```sh
 git clone https://github.com/xiaodoudou/homelabdash.git

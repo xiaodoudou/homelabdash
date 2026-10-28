@@ -2,7 +2,7 @@
 
 # Architecture
 
-homelabdash runs on Node.js 24. The server and the plugins are plain JavaScript modules with JSDoc types checked by TypeScript, on Express 5 and `ws`, and have no build step: the files in the repository are the ones that run. The page is Vue 3, built by Vite from `web/` into `dist/` with `npm run build`, which `npm install` runs once and the Dockerfile runs in a stage of its own.
+homelabdash runs on Node.js 26. The server and the plugins are plain JavaScript modules with JSDoc types checked by TypeScript, on Express 5 and `ws`, and have no build step: the files in the repository are the ones that run. The page is Vue 3, built by Vite from `web/` into `dist/` with `npm run build`, which `npm install` runs once and the Dockerfile runs in a stage of its own.
 
 ## Where things are
 

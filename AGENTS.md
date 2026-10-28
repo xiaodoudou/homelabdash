@@ -1,6 +1,6 @@
 # homelabdash for coding agents
 
-Self-hosted dashboard. Node.js 24 (ESM, plain JavaScript with JSDoc types), Express 5 and `ws` on the server; the page is Vue 3 built by Vite. The server and plugins have no build step: what is in the repo is what runs. The page is built from `web/` into `dist/` by `npm run build` (run once by `npm install`, and by the Dockerfile).
+Self-hosted dashboard. Node.js 26 (ESM, plain JavaScript with JSDoc types), Express 5 and `ws` on the server; the page is Vue 3 built by Vite. The server and plugins have no build step: what is in the repo is what runs. The page is built from `web/` into `dist/` by `npm run build` (run once by `npm install`, and by the Dockerfile).
 
 ## Commands
 

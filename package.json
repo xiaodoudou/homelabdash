@@ -1,6 +1,6 @@
 {
   "name": "homelabdash",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "Self-hosted homelab dashboard with Node plugins that people and coding agents can write, validate and test.",
   "type": "module",
   "license": "Apache-2.0",
@@ -23,7 +23,7 @@
     }
   },
   "engines": {
-    "node": "^24.0.0"
+    "node": "^26.0.0"
   },
   "scripts": {
     "start": "node bin/homelabdash.js serve",
@@ -56,7 +56,7 @@
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "@types/express": "^5.0.0",
-    "@types/node": "^24.19.2",
+    "@types/node": "^26.6.5",
     "@types/ssh2": "^1.15.6",
     "@types/ws": "^8.18.2",
     "@vitejs/plugin-vue": "^6.0.10",

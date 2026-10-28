@@ -4,6 +4,12 @@ Changes that people running homelabdash or writing plugins would notice. The for
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-10-28
+
+### Changed
+
+- **homelabdash runs on Node.js 26.** The Docker image is built on `node:26-alpine`. Running from source now needs Node.js 26.
+
 ## [0.2.1] - 2026-10-28
 
 ### Changed
@@ -54,7 +60,8 @@ The first public version.
 - **Coding agents get skills.** The repository is a Claude Code plugin marketplace with skills to write plugins, edit the config and deploy, and `AGENTS.md` describes the code for any agent.
 - **A showcase runs on fake services.** `npm run dev:showcase` starts a full homelab against recorded responses, and `npm run docs:screenshots` takes the documentation pictures from it.
 
-[Unreleased]: https://github.com/xiaodoudou/homelabdash/compare/v0.2.1...HEAD
+[Unreleased]: https://github.com/xiaodoudou/homelabdash/compare/v0.3.0...HEAD
+[0.3.0]: https://github.com/xiaodoudou/homelabdash/compare/v0.2.1...v0.3.0
 [0.2.1]: https://github.com/xiaodoudou/homelabdash/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/xiaodoudou/homelabdash/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/xiaodoudou/homelabdash/releases/tag/v0.1.0

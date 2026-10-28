@@ -4,7 +4,7 @@
 
 ## Setting up
 
-You need Node.js 24 and git.
+You need Node.js 26 and git.
 
 ```sh
 git clone https://github.com/xiaodoudou/homelabdash.git
@@ -46,7 +46,7 @@ The pictures in `docs/ui/` come from the showcase, through `npm run docs:screens
 `.github/workflows/test.yml` runs on every push to `main` and `dev` and on every pull request:
 
 - the commit messages, and the title of a pull request into `main`;
-- lint, typecheck, the privacy check, the server, plugin and page tests, the build of the page and `npm audit` of the runtime dependencies, on Node 24;
+- lint, typecheck, the privacy check, the server, plugin and page tests, the build of the page and `npm audit` of the runtime dependencies, on Node 26;
 - a secrets scan of the history (gitleaks);
 - the Docker image: it builds, starts, answers its health check and loads every plugin.
 

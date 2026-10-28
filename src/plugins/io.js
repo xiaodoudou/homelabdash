@@ -648,8 +648,9 @@ function createTcp (fixtures) {
         const socket = net.connect({ host, port, timeout: o.timeout ?? 5000 }, () => socket.write(payload))
         const finish = () => { socket.destroy(); resolve(Buffer.concat(chunks)) }
         socket.on('data', d => {
-          chunks.push(d)
-          size += d.length
+          const b = typeof d === 'string' ? Buffer.from(d) : d
+          chunks.push(b)
+          size += b.length
           const text = o.until ? Buffer.concat(chunks).toString('latin1') : ''
           if ((o.maxBytes && size >= o.maxBytes) || (typeof o.until === 'string' && text.includes(o.until)) || (o.until instanceof RegExp && o.until.test(text))) finish()
         })
