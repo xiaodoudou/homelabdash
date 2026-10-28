@@ -4,6 +4,8 @@ Changes that people running homelabdash or writing plugins would notice. The for
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-10-28
+
 ### Added
 
 - **An AI server on the dashboard: llama-swap, nvidia and comfyui plugins.** llama-swap shows the loaded model, how fast it generates (live while a request runs, estimated from the bytes it streams), how many requests are running, and the GPU, CPU and memory gauges it reports; it never loads a model. nvidia reads each GPU from `nvidia-smi`, over an SSH key that can be locked to that one command. comfyui shows whether it is generating, the queue and the last jobs, and alerts on failed ones, without showing prompts or images. With `allowControl`, llama-swap can unload a model and comfyui can interrupt a job or free its VRAM.
@@ -45,5 +47,6 @@ The first public version.
 - **Coding agents get skills.** The repository is a Claude Code plugin marketplace with skills to write plugins, edit the config and deploy, and `AGENTS.md` describes the code for any agent.
 - **A showcase runs on fake services.** `npm run dev:showcase` starts a full homelab against recorded responses, and `npm run docs:screenshots` takes the documentation pictures from it.
 
-[Unreleased]: https://github.com/xiaodoudou/homelabdash/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/xiaodoudou/homelabdash/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/xiaodoudou/homelabdash/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/xiaodoudou/homelabdash/releases/tag/v0.1.0
