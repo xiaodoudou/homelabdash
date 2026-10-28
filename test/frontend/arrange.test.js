@@ -71,6 +71,16 @@ describe('arrange', () => {
     expect(Object.values(run(sections, states, 390).groups).every(g => g.endsWith('span 2'))).toBe(true)
   })
 
+  it('a merged card too narrow for its panels wraps the widest one first, and on a phone each panel on its own', () => {
+    const sections = [{ id: 's', tiles: [], groups: [{ id: 'a', width: 25, merge: true, tiles: [{ id: 'x', graph: true }, { id: 'y', graph: true }] }] }]
+    const states = { x: stats(1), y: stats(4) }
+    const narrow = run(sections, states, 1600)
+    expect(narrow.stats.y).toEqual({ cols: 2, wrapped: true })
+    expect(narrow.stats.x).toEqual({ cols: 1, wrapped: false })
+    const wide = arrange({ sections, width: 1600, metrics: m, tile: id => states[id], def: () => undefined, hidden: () => false, widths: new Map(), phone: true })
+    expect(wide.stats.y.wrapped).toBe(false)
+  })
+
   it('wraps a tile\'s stats into balanced rows when one row does not fit', () => {
     expect(statColumns([100, 100, 100, 100], 1000, m)).toEqual({ cols: 4, wrapped: false })
     expect(statColumns([100, 100, 100, 100], 330, m)).toEqual({ cols: 2, wrapped: true })

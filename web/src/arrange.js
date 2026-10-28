@@ -4,7 +4,7 @@ import { hidesLabel, compactCell, sectionGroups, isGrid } from './views.js'
 
 /**
  * @typedef {{ value: number, gap: number, padX: number, cellPad: number, family: string }} Metrics
- * @typedef {{ key: string, need: number, cells: number[] | null, flex: number, span: number, start: boolean, fixed: number }} Box
+ * @typedef {{ key: string, need: number, cells: number[] | null, flex: number, span: number, start: boolean, fixed: number, members?: any[] }} Box
  * @typedef {{ C: number, groups: Record<string, string>, tiles: Record<string, string>, stats: Record<string, { cols: number, wrapped: boolean }> }} Arrangement
  */
 
@@ -58,10 +58,10 @@ export function cellNeed (it, hideLabel, m) {
  * Lays out every section of a page on the page's shared columns: how many columns, where each group and tile starts and
  * how wide it is, and how many stat columns each tile gets. Tile widths come from the shape of their views (never their
  * live values) and only ever grow, through `widths`, so rows do not jitter while the page is open.
- * @param {{ sections: any[], width: number, metrics: Metrics, tile: (id: string) => any, def: (id: string) => any, hidden: (t: any) => boolean, widths: Map<string, number> }} o
+ * @param {{ sections: any[], width: number, metrics: Metrics, tile: (id: string) => any, def: (id: string) => any, hidden: (t: any) => boolean, widths: Map<string, number>, phone?: boolean }} o
  * @returns {Arrangement}
  */
-export function arrange ({ sections, width: W, metrics: m, tile, def, hidden, widths }) {
+export function arrange ({ sections, width: W, metrics: m, tile, def, hidden, widths, phone = false }) {
   const C = W >= 1400 ? 24 : W >= 960 ? 12 : W >= 600 ? 6 : 2
   const unit = (W + m.gap) / C
   const width = (/** @type {number} */ span) => span * unit - m.gap
@@ -96,7 +96,7 @@ export function arrange ({ sections, width: W, metrics: m, tile, def, hidden, wi
     const need = members.reduce((sum, t) => sum + mergedCellNeed(t, compact), 0) + (members.length - 1) * (compact ? 33 : 41) + 2 * m.padX + 2
     // A card holding a list takes spare width first, like a list tile; a row of plain numbers takes it last.
     const flex = members.some(t => tile(t.id)?.view?.type === 'list') ? 1.5 : compact ? 0.6 : 1
-    return grown({ key, need, cells: null, flex, span: 1, start: false, fixed: span })
+    return { ...grown({ key, need, cells: null, flex, span: 1, start: false, fixed: span }), members: compact ? undefined : members }
   }
 
   /** Width one panel of a merged card needs, without the card padding. @param {any} t @param {boolean} compact */
@@ -113,6 +113,39 @@ export function arrange ({ sections, width: W, metrics: m, tile, def, hidden, wi
     // The heading (icon, gap, title) has to fit too, or a panel holding one number cuts its title short.
     const head = 20 + 10 + textWidth(title, `550 13.5px ${m.family}`) + 4
     return Math.max(head, view.items.reduce((/** @type {number} */ a, /** @type {any} */ it) => a + cellNeed(it, false, m), 0) + m.cellPad * (2 * view.items.length - 1))
+  }
+
+  /**
+   * Stat columns of the panels of a merged card: while the panels do not fit its width, one of them wraps its numbers
+   * into balanced rows (4 as 2x2, 3 as 2+1). On a phone the panels stack, so each only has to fit the card on its own.
+   * @param {any[]} members @param {number} w
+   */
+  const panelColumns = (members, w) => {
+    // a few pixels to spare: the measured text is a close estimate of what the browser draws
+    const inner = w - 2 * m.padX - 2 - 8
+    const panels = members.map(t => {
+      const view = tile(t.id)?.view
+      const head = 20 + 10 + textWidth(String(def(t.id)?.title ?? t.title ?? ''), `550 13.5px ${m.family}`) + 4
+      const cells = view?.type === 'stats' ? view.items.map((/** @type {any} */ it) => cellNeed(it, false, m)) : null
+      return { id: t.id, cells, cols: cells?.length ?? 0, head, other: cells ? 0 : mergedCellNeed(t, false) }
+    })
+    const row = (/** @type {typeof panels[0]} */ p) => {
+      if (!p.cells) return p.other
+      if (p.cols === p.cells.length) return Math.max(p.head, p.cells.reduce((/** @type {number} */ a, /** @type {number} */ b) => a + b, 0) + m.cellPad * (2 * p.cols - 1))
+      return Math.max(p.head, [...p.cells].sort((a, b) => b - a).slice(0, p.cols).reduce((a, b) => a + b, 0) + 16 * (p.cols - 1))
+    }
+    const fits = () => phone
+      ? panels.every(p => row(p) <= inner)
+      : panels.reduce((a, p) => a + row(p), 0) + (panels.length - 1) * 41 <= inner
+    while (!fits()) {
+      const open = panels.filter(p => p.cells && p.cols > 1 && (!phone || row(p) > inner))
+      if (!open.length) break
+      // the panel with the most columns first, then the widest: every panel breaks a little before one breaks a lot
+      const p = open.reduce((a, b) => (b.cols > a.cols || (b.cols === a.cols && row(b) > row(a)) ? b : a))
+      const n = /** @type {number[]} */ (p.cells).length
+      p.cols = Math.min(p.cols - 1, Math.ceil(n / Math.ceil(n / (p.cols - 1))))
+    }
+    for (const p of panels) if (p.cells) out.stats[p.id] = { cols: p.cols, wrapped: p.cols < p.cells.length }
   }
 
   /** @param {Box} b */
@@ -163,6 +196,7 @@ export function arrange ({ sections, width: W, metrics: m, tile, def, hidden, wi
       for (const t of g.tiles) {
         out.tiles[t.key] = t.start ? `1 / span ${t.span}` : `span ${t.span}`
         if (t.cells) out.stats[t.key] = statColumns(t.cells, width(t.span), m)
+        if (t.members) panelColumns(t.members, width(t.span))
       }
     }
   }
