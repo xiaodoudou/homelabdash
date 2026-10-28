@@ -117,6 +117,8 @@ export async function startMocks (o = {}) {
   }
   /** @type {Set<NodeJS.Timeout>} */
   const ticks = new Set()
+  // Every plugin that runs commands over SSH (ssh, nvidia) is answered by this one server.
+  const sshFixtures = Object.assign({}, ...Object.values(fixtures))
   const sshServer = new ssh2.Server({ hostKeys: [hostKey] }, client => {
     client.on('authentication', ctx => ctx.accept())
     client.on('ready', () => {
@@ -126,7 +128,7 @@ export async function startMocks (o = {}) {
           const stream = acceptExec()
           let f
           try {
-            f = findFixture(fixtures.ssh, 'SSH', info.command)
+            f = findFixture(sshFixtures, 'SSH', info.command)
           } catch (err) {
             stream.stderr.write(/** @type {Error} */ (err).message + '\n')
             stream.exit(127)
