@@ -138,7 +138,7 @@ sections:
 - Neighbours with a width stay on one row as long as they add up to 100% or less.
 - A width is rounded to the page's columns: 24 on a wide screen, so steps of about 4%. On a phone, where everything stacks, it is ignored.
 - Inside a group with a width, its tiles share that width. Within a tile, the numbers share spare room evenly.
-- A width narrower than the numbers need cuts them off at the edge, so leave a little room.
+- When a width is narrower than the numbers need, they wrap onto more rows (four as 2x2), the panels with the most numbers first. Only what still does not fit is cut off.
 
 ## Icons
 

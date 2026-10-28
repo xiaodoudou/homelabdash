@@ -338,8 +338,9 @@ a.mcell:hover .mcell-title { color: var(--text-2); }
 .icon-lg { width: 30px; height: 30px; }
 .tile-merged:has(.mpanel) { align-items: stretch; }
 .tile-merged:not(:has(.mpanel)) { gap: 16px; }
-/* spare width goes to a panel by its count of numbers, so its cells stay even; a set width too narrow cuts it off */
-.mpanel { display: flex; flex: var(--cells, 1) 1 auto; flex-direction: column; gap: 12px; min-width: 0; overflow: hidden; }
+/* spare width goes to a panel by its count of numbers, so its cells stay even; what still does not fit is cut off,
+   with room left for the dot at the end of a graph */
+.mpanel { display: flex; flex: var(--cells, 1) 1 auto; flex-direction: column; gap: 12px; min-width: 0; overflow: clip; overflow-clip-margin: 8px; }
 .mpanel.is-list { flex: 2 1 0; }
 /* a phone has no room for cells side by side: panels stack, single values pair up two by two */
 @media (max-width: 640px) {

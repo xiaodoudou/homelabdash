@@ -28,7 +28,8 @@ function relayout () {
     tile: id => tiles.get(id),
     def: id => defs.get(id),
     hidden: isHidden,
-    widths
+    widths,
+    phone: state.phone
   }))
 }
 
