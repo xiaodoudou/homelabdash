@@ -4,7 +4,7 @@ import { hidesLabel, compactCell, sectionGroups, isGrid } from './views.js'
 
 /**
  * @typedef {{ value: number, gap: number, padX: number, cellPad: number, family: string }} Metrics
- * @typedef {{ key: string, need: number, cells: number[] | null, flex: number, span: number, start: boolean }} Box
+ * @typedef {{ key: string, need: number, cells: number[] | null, flex: number, span: number, start: boolean, fixed: number }} Box
  * @typedef {{ C: number, groups: Record<string, string>, tiles: Record<string, string>, stats: Record<string, { cols: number, wrapped: boolean }> }} Arrangement
  */
 
@@ -65,6 +65,8 @@ export function arrange ({ sections, width: W, metrics: m, tile, def, hidden, wi
   const C = W >= 1400 ? 24 : W >= 960 ? 12 : W >= 600 ? 6 : 2
   const unit = (W + m.gap) / C
   const width = (/** @type {number} */ span) => span * unit - m.gap
+  // `width: 45%` as columns; a phone stacks everything, so it keeps its own layout there.
+  const fixed = (/** @type {number | null | undefined} */ pct) => pct && C > 2 ? Math.min(C, Math.max(1, Math.round(pct * C / 100))) : 0
   /** @type {Arrangement} */
   const out = { C, groups: {}, tiles: {}, stats: {} }
 
@@ -85,31 +87,32 @@ export function arrange ({ sections, width: W, metrics: m, tile, def, hidden, wi
       need = Math.max(190, shown.reduce((a, b) => a + b, 0) + m.cellPad * (2 * shown.length - 1) + 2 * m.padX + 2)
     } else if (view?.type === 'list') { need = 340; flex = 1.5 } else if (view?.type === 'progress') { need = 320; flex = 1.5 } else if (view?.type === 'text') need = 260
     if (typeof t.span === 'number' && t.span > 1) need = Math.max(need, t.span * 220)
-    return grown({ key: t.id, need, cells, flex, span: 1, start: false })
+    return grown({ key: t.id, need, cells, flex, span: 1, start: false, fixed: fixed(t.width) })
   }
 
-  /** @param {string} key @param {any[]} members @returns {Box} */
-  const mergedBox = (key, members) => {
+  /** @param {string} key @param {any[]} members @param {number} span @returns {Box} */
+  const mergedBox = (key, members, span) => {
     const compact = members.every(t => compactCell(tile(t.id)?.view, t))
     const need = members.reduce((sum, t) => sum + mergedCellNeed(t, compact), 0) + (members.length - 1) * (compact ? 33 : 41) + 2 * m.padX + 2
     // A card holding a list takes spare width first, like a list tile; a row of plain numbers takes it last.
     const flex = members.some(t => tile(t.id)?.view?.type === 'list') ? 1.5 : compact ? 0.6 : 1
-    return grown({ key, need, cells: null, flex, span: 1, start: false })
+    return grown({ key, need, cells: null, flex, span: 1, start: false, fixed: span })
   }
 
-  /** Width one cell of a merged card needs, without the card padding. @param {any} t @param {boolean} compact */
+  /** Width one panel of a merged card needs, without the card padding. @param {any} t @param {boolean} compact */
   const mergedCellNeed = (t, compact) => {
     const view = tile(t.id)?.view
+    const title = String(def(t.id)?.title ?? t.title ?? '')
     if (compact) {
       const value = view ? cellNeed(view.items[0], true, m) : 56
-      return 30 + 14 + Math.max(value, textWidth(String(def(t.id)?.title ?? t.title ?? ''), `400 12.5px ${m.family}`)) + 4
+      return 30 + 14 + Math.max(value, textWidth(title, `400 12.5px ${m.family}`)) + 4
     }
     if (!view) return 150
     if (view.type === 'list') return 340
-    // The heading (icon, gap, title) has to fit too, or a one-number panel cuts its title short.
-    const head = 20 + 10 + textWidth(String(def(t.id)?.title ?? t.title ?? ''), `550 13.5px ${m.family}`) + 4
-    if (view.type === 'stats') return Math.max(head, view.items.reduce((/** @type {number} */ a, /** @type {any} */ it) => a + cellNeed(it, false, m), 0) + m.cellPad * (2 * view.items.length - 1))
-    return 260
+    if (view.type !== 'stats') return 260
+    // The heading (icon, gap, title) has to fit too, or a panel holding one number cuts its title short.
+    const head = 20 + 10 + textWidth(title, `550 13.5px ${m.family}`) + 4
+    return Math.max(head, view.items.reduce((/** @type {number} */ a, /** @type {any} */ it) => a + cellNeed(it, false, m), 0) + m.cellPad * (2 * view.items.length - 1))
   }
 
   /** @param {Box} b */
@@ -121,22 +124,23 @@ export function arrange ({ sections, width: W, metrics: m, tile, def, hidden, wi
 
   for (const s of sections) {
     if (isGrid(s)) continue
-    /** @type {{ id: string, span: number, tiles: Box[] }[]} */
+    /** @type {{ id: string, span: number, fixed: number, tiles: Box[] }[]} */
     const groups = sectionGroups(s).flatMap((/** @type {any} */ g) => {
       const shown = g.tiles.filter((/** @type {any} */ t) => !hidden(t))
       if (!shown.length && g.hideWhen === 'empty') return []
-      const boxes = g.merge && shown.length ? [mergedBox(`${g.id}:merged`, shown)] : shown.map((/** @type {any} */ t) => tileBox(t, g.title))
-      return [{ id: g.id, span: 0, tiles: boxes }]
+      const boxes = g.merge && shown.length ? [mergedBox(`${g.id}:merged`, shown, fixed(g.width))] : shown.map((/** @type {any} */ t) => tileBox(t, g.title))
+      return [{ id: g.id, span: 0, fixed: fixed(g.width), tiles: boxes }]
     })
     for (const g of groups) {
       for (const t of g.tiles) {
-        t.span = t.need === Infinity
+        t.span = t.fixed || (t.need === Infinity
           ? C
-          : C <= 2 ? (t.need <= 240 ? 1 : 2) : Math.min(C, Math.max(1, Math.ceil((t.need + m.gap) / unit)))
+          : C <= 2 ? (t.need <= 240 ? 1 : 2) : Math.min(C, Math.max(1, Math.ceil((t.need + m.gap) / unit))))
       }
+      if (g.fixed) fitGroup(g.tiles, g.fixed)
       g.span = Math.max(1, g.tiles.reduce((a, t) => a + t.span, 0))
     }
-    for (const [a, b] of plan(groups.map(g => Math.min(C, g.span)), C)) {
+    for (const [a, b] of plan(groups.map(g => Math.min(C, g.span)), C, groups.map(g => !!g.fixed))) {
       const row = groups.slice(a, b)
       if (row.length === 1 && row[0].span > C) {
         const g = row[0]
@@ -163,6 +167,21 @@ export function arrange ({ sections, width: W, metrics: m, tile, def, hidden, wi
     }
   }
   return out
+
+  /**
+   * Makes the tiles of a group with a set width fill exactly that many columns, then holds them there.
+   * @param {Box[]} boxes @param {number} span
+   */
+  function fitGroup (boxes, span) {
+    const free = boxes.filter(t => !t.fixed)
+    while (boxes.reduce((n, t) => n + t.span, 0) > span) {
+      const widest = free.reduce((a, t) => (t.span > (a?.span ?? 1) ? t : a), /** @type {Box | undefined} */ (undefined))
+      if (!widest) break
+      widest.span--
+    }
+    fill(boxes, span, width)
+    for (const t of boxes) t.fixed = t.span
+  }
 }
 
 /**

@@ -58,6 +58,19 @@ describe('arrange', () => {
     expect(card('A long panel title')).toBeGreaterThan(card('A'))
   })
 
+  it('a width in percent becomes columns, used as given, and the tiles of the group share them', () => {
+    const sections = [{ id: 's', tiles: [], groups: [
+      { id: 'a', width: 45, merge: true, tiles: [{ id: 'x', graph: true }, { id: 'y', graph: true }] },
+      { id: 'b', width: 30, tiles: [{ id: 'p' }, { id: 'q' }] },
+      { id: 'c', width: 25, tiles: [{ id: 'r' }] }
+    ] }]
+    const states = { x: stats(1), y: stats(4), p: stats(2), q: stats(1), r: stats(4) }
+    const out = run(sections, states, 1600)
+    expect(out.groups).toEqual({ a: '1 / span 11', b: 'span 7', c: 'span 6' })
+    expect(out.tiles['a:merged']).toBe('1 / span 11')
+    expect(Object.values(run(sections, states, 390).groups).every(g => g.endsWith('span 2'))).toBe(true)
+  })
+
   it('wraps a tile\'s stats into balanced rows when one row does not fit', () => {
     expect(statColumns([100, 100, 100, 100], 1000, m)).toEqual({ cols: 4, wrapped: false })
     expect(statColumns([100, 100, 100, 100], 330, m)).toEqual({ cols: 2, wrapped: true })

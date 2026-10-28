@@ -187,7 +187,7 @@ a.tile-title:hover { color: var(--accent); }
 @keyframes shimmer { to { background-position: -200% 0; } }
 
 /* stats: one row of cells; the page sets --scols and .is-wrapped when the tile is too narrow (phone) */
-.v-stats { flex: 1; display: grid; grid-template-columns: var(--stracks, repeat(var(--scols, 1), minmax(max-content, 1fr))); }
+.v-stats { flex: 1; display: grid; grid-template-columns: repeat(var(--scols, 1), minmax(max-content, 1fr)); }
 .v-stat { display: flex; flex-direction: column; gap: 2px; min-width: 0; padding: 0 var(--cell-pad); border-left: 1px solid var(--line); }
 .v-stat:first-child { padding-left: 0; border-left: 0; }
 .v-stats.is-wrapped { gap: 14px 16px; }
@@ -338,10 +338,9 @@ a.mcell:hover .mcell-title { color: var(--text-2); }
 .icon-lg { width: 30px; height: 30px; }
 .tile-merged:has(.mpanel) { align-items: stretch; }
 .tile-merged:not(:has(.mpanel)) { gap: 16px; }
-.mpanel { display: flex; flex: 1 1 auto; flex-direction: column; gap: 12px; min-width: 0; }
+/* spare width goes to a panel by its count of numbers, so its cells stay even; a set width too narrow cuts it off */
+.mpanel { display: flex; flex: var(--cells, 1) 1 auto; flex-direction: column; gap: 12px; min-width: 0; overflow: hidden; }
 .mpanel.is-list { flex: 2 1 0; }
-/* a single number does not stretch while a neighbour has columns to spread */
-.tile-merged:has(.mpanel:not(.is-single)) .mpanel.is-single { flex-grow: 0; }
 /* a phone has no room for cells side by side: panels stack, single values pair up two by two */
 @media (max-width: 640px) {
   .tile-merged:has(.mpanel) { flex-direction: column; gap: 14px; }

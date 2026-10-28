@@ -55,6 +55,7 @@ export const ALERTS_SOURCE = 'alerts'
  * @property {Record<string, any>} options
  * @property {{ source: string, key: string } | null} status
  * @property {number | 'full'} span
+ * @property {number | null} width share of the row in percent, from `width: 45%`
  * @property {'never'|'empty'|'error'} hideWhen
  * @property {boolean} bare
  * @property {true | string[] | null} graph stats whose history is kept and drawn
@@ -68,6 +69,7 @@ export const ALERTS_SOURCE = 'alerts'
  * @property {'never'|'empty'} hideWhen
  * @property {'page'|'top'} placement
  * @property {boolean} merge
+ * @property {number | null} width share of the row in percent, from `width: 45%`
  * @property {boolean} collapsed
  * @property {{ minTileWidth?: number, columns?: number, gap?: number }} layout
  * @property {string[]} tiles tile ids
@@ -401,6 +403,7 @@ function normalize (raw, fail) {
           options: t.options ?? {},
           status: null,
           span: t.span ?? 1,
+          width: percent(t.width),
           hideWhen: t.hideWhen ?? 'never',
           bare: !!t.bare,
           graph: t.graph === true ? true : Array.isArray(t.graph) ? t.graph : null,
@@ -426,6 +429,7 @@ function normalize (raw, fail) {
         hideWhen: sec.hideWhen ?? (sec.source === ALERTS_SOURCE || groups.length ? 'empty' : 'never'),
         placement: sec.placement ?? 'page',
         merge: !!sec.merge,
+        width: percent(sec.width),
         collapsed: !!sec.collapsed,
         layout: sec.layout ?? {},
         tiles: ids,
@@ -462,6 +466,11 @@ function normalize (raw, fail) {
   }
 
   return { settings, sources, pages, tiles }
+}
+
+/** "45%" as 45; the schema has already checked its form. @param {string | undefined} v */
+function percent (v) {
+  return v ? Number.parseFloat(v) : null
 }
 
 /** @param {string} id @param {any} def @param {Path} p @returns {SourceDef} */

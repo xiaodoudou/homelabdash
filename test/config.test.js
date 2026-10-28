@@ -160,3 +160,21 @@ test('bands hold groups one level deep; ids and error paths include the group', 
   assert.deepEqual(band.groups.map((/** @type {any} */ g) => g.id), ['library.missing', 'library.downloading'])
   assert.deepEqual(band.groups[0].tiles, ['home.library.missing.movies'])
 })
+
+test('a width is a share of the row in percent, on a group or a tile', () => {
+  const dir = tempConfig({
+    'homelabdash.yaml': [
+      'sources: { c: { plugin: counter } }',
+      'sections:',
+      '  - title: Row',
+      '    sections:',
+      '      - { title: Wide, width: 62.5%, tiles: [{ title: A, source: c, width: 100% }] }',
+      '      - { title: Bad, width: 0%, tiles: [{ title: B, source: c, width: 45 }] }'
+    ].join('\n')
+  })
+  const r = loadConfig(dir)
+  assert.deepEqual(r.errors.map(e => `${e.line} ${e.path}`), ['6 sections[0].sections[1].width', '6 sections[0].sections[1].tiles[0].width'])
+  const [wide] = /** @type {any} */ (r.draft).pages[0].sections[0].groups
+  assert.equal(wide.width, 62.5)
+  assert.equal(/** @type {any} */ (r.draft).tiles[wide.tiles[0]].width, 100)
+})
