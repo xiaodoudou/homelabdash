@@ -4,6 +4,13 @@ Changes that people running homelabdash or writing plugins would notice. The for
 
 ## [Unreleased]
 
+## [0.3.1] - 2026-10-28
+
+### Fixed
+
+- **No more empty space at the end of a card.** Spare width used to collect after a tile's last number. It now spreads between the numbers, and a single number in a merged card stays as narrow as it needs.
+- **Titles in merged cards are no longer cut short.** A panel holding one number, such as CPU, is always wide enough for its title, so it no longer reads "C...".
+
 ## [0.3.0] - 2026-10-28
 
 ### Changed
@@ -60,7 +67,8 @@ The first public version.
 - **Coding agents get skills.** The repository is a Claude Code plugin marketplace with skills to write plugins, edit the config and deploy, and `AGENTS.md` describes the code for any agent.
 - **A showcase runs on fake services.** `npm run dev:showcase` starts a full homelab against recorded responses, and `npm run docs:screenshots` takes the documentation pictures from it.
 
-[Unreleased]: https://github.com/xiaodoudou/homelabdash/compare/v0.3.0...HEAD
+[Unreleased]: https://github.com/xiaodoudou/homelabdash/compare/v0.3.1...HEAD
+[0.3.1]: https://github.com/xiaodoudou/homelabdash/compare/v0.3.0...v0.3.1
 [0.3.0]: https://github.com/xiaodoudou/homelabdash/compare/v0.2.1...v0.3.0
 [0.2.1]: https://github.com/xiaodoudou/homelabdash/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/xiaodoudou/homelabdash/compare/v0.1.0...v0.2.0

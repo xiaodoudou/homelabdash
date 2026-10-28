@@ -106,7 +106,9 @@ export function arrange ({ sections, width: W, metrics: m, tile, def, hidden, wi
     }
     if (!view) return 150
     if (view.type === 'list') return 340
-    if (view.type === 'stats') return view.items.reduce((/** @type {number} */ a, /** @type {any} */ it) => a + cellNeed(it, false, m), 0) + m.cellPad * (2 * view.items.length - 1)
+    // The heading (icon, gap, title) has to fit too, or a one-number panel cuts its title short.
+    const head = 20 + 10 + textWidth(String(def(t.id)?.title ?? t.title ?? ''), `550 13.5px ${m.family}`) + 4
+    if (view.type === 'stats') return Math.max(head, view.items.reduce((/** @type {number} */ a, /** @type {any} */ it) => a + cellNeed(it, false, m), 0) + m.cellPad * (2 * view.items.length - 1))
     return 260
   }
 
