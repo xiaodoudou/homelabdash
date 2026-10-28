@@ -10,7 +10,12 @@ const action = {
   type: 'object',
   additionalProperties: false,
   required: ['action', 'title'],
-  properties: { action: { type: 'string' }, title: { type: 'string' }, input: {} }
+  properties: {
+    action: { type: 'string' },
+    title: { type: 'string' },
+    input: {},
+    confirm: { type: 'string', description: 'Asked on the button after a first click; only a second click runs the action' }
+  }
 }
 /** Buttons under a tile; the plugin decides which to show from its config and the current data. */
 const actions = { type: 'array', items: action }

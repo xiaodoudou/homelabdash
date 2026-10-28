@@ -4,7 +4,7 @@
 
 > A self-hosted dashboard for your homelab, where every tile comes from a small Node.js plugin
 
-[![License](https://img.shields.io/badge/License-Apache%202.0-blue?style=flat-square)](LICENSE) [![Node](https://img.shields.io/badge/Node-24-339933?style=flat-square)](#try-it-in-five-minutes) [![Vue](https://img.shields.io/badge/Page-Vue%203%20%2B%20Vite-42b883?style=flat-square)](docs/contributing/ARCHITECTURE.md) [![Docker](https://img.shields.io/badge/Docker-amd64%20%7C%20arm64-2496ED?style=flat-square)](docs/operations/DEPLOY.md) [![Plugins](https://img.shields.io/badge/Plugins-16%20builtin-orange?style=flat-square)](docs/reference/PLUGINS.md) [![Tests](https://img.shields.io/badge/Tests-contract%20%7C%20unit%20%7C%20integration-brightgreen?style=flat-square)](docs/contributing/TESTING.md)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue?style=flat-square)](LICENSE) [![Node](https://img.shields.io/badge/Node-24-339933?style=flat-square)](#try-it-in-five-minutes) [![Vue](https://img.shields.io/badge/Page-Vue%203%20%2B%20Vite-42b883?style=flat-square)](docs/contributing/ARCHITECTURE.md) [![Docker](https://img.shields.io/badge/Docker-amd64%20%7C%20arm64-2496ED?style=flat-square)](docs/operations/DEPLOY.md) [![Plugins](https://img.shields.io/badge/Plugins-17%20builtin-orange?style=flat-square)](docs/reference/PLUGINS.md) [![Tests](https://img.shields.io/badge/Tests-contract%20%7C%20unit%20%7C%20integration-brightgreen?style=flat-square)](docs/contributing/TESTING.md)
 
 You list your services in one YAML file and homelabdash keeps a page of live numbers about them: what Plex is playing, what the arrs are missing, how full the array is, what the router is pushing. Each service is read by a plugin, and a plugin is one JavaScript file you can write in an afternoon, or ask a coding agent to write.
 
@@ -77,6 +77,7 @@ The API key goes in `config/secrets.yaml` as `UNRAID_API_KEY: ...` and never rea
 | [arr](plugins/arr) | Missing items, queue and health of Radarr, Sonarr, Lidarr or Readarr |
 | [docker](plugins/docker) | Container states kept live by Docker events, status dots, disk usage, optional start and stop |
 | [glances](plugins/glances) | CPU, memory, load, GPU, sensors, disks and uptime |
+| [homeassistant](plugins/homeassistant) | Lights, switches, sensors and people from Home Assistant, live, with optional on and off buttons; pending updates |
 | [http-json](plugins/http-json) | Any JSON API, several requests merged, JSONata for values |
 | [mihomo](plugins/mihomo) | Current proxy node, connections and live traffic of mihomo (Clash Meta) |
 | [npm](plugins/npm) | Nginx Proxy Manager hosts and certificates about to expire |

@@ -48,3 +48,18 @@ test('an API error fails the fetch', async () => {
   const fixtures = { 'GET /api/v2?cmd=get_activity': { body: { response: { result: 'error', message: 'Invalid apikey', data: {} } } } }
   await assert.rejects(runPlugin(import.meta.dirname, { config, fixtures }), /Invalid apikey/)
 })
+
+test('with allowControl each stream gets a Stop button that asks first', async () => {
+  const off = await runPlugin(import.meta.dirname, { config })
+  assert.ok(off.view.items.every((/** @type {any} */ i) => !i.actions), 'no button unless allowControl is set')
+  const on = await runPlugin(import.meta.dirname, { config: { ...config, allowControl: true } })
+  assert.deepEqual(on.view.items[0].actions, [{ action: 'stop', title: 'Stop', confirm: 'Stop this stream?', input: { session_id: 'a1b2c3d4e5f6g7h8i9j0k1l2' } }])
+})
+
+test('Stop calls terminate_session, and only when allowed', async () => {
+  const ok = await runPlugin(import.meta.dirname, { config: { ...config, allowControl: true, stopMessage: 'Bedtime' }, action: 'stop', input: { session_id: 'a1b2c3d4e5f6g7h8i9j0k1l2' } })
+  assert.deepEqual(ok.result, { ok: true })
+  await assert.rejects(runPlugin(import.meta.dirname, { config, action: 'stop', input: { session_id: 'x' } }), /allowControl/)
+  const fixtures = { 'GET /api/v2?cmd=terminate_session': { body: { response: { result: 'error', message: 'Plex Pass required', data: null } } } }
+  await assert.rejects(runPlugin(import.meta.dirname, { config: { ...config, allowControl: true }, fixtures, action: 'stop', input: { session_key: '12' } }), /could not stop the stream: Plex Pass required/)
+})

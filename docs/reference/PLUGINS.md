@@ -11,6 +11,7 @@ Each plugin's folder has a README with its settings, its display options and an 
 | [arr](../../plugins/arr) | missing items, download queue with errors and warnings, health issues of Radarr, Sonarr, Lidarr or Readarr | each health check | | 1m |
 | [docker](../../plugins/docker) | running, stopped, unhealthy and missing containers, a list of them, disk usage | an expected container not running, an unhealthy one | start, stop and restart on list rows (`allowControl`) | 1m, plus Docker events live |
 | [glances](../../plugins/glances) | CPU, memory, load, GPU, sensors, disks, uptime | GPU temperature, sensors past their critical value | | 10s |
+| [homeassistant](../../plugins/homeassistant) | entities (lights, switches, sensors, thermostats, people) as rows or numbers; lights on, people at home, pending updates | updates waiting, one alert for all of them | turn lights, switches, fans, input booleans and automations on and off (`allowControl`) | 1m, plus state changes live |
 | [http-json](../../plugins/http-json) | any JSON API: one or several requests, values picked and computed with JSONata | whatever its `alerts` expression returns | | 30s |
 | [mihomo](../../plugins/mihomo) | current node of a proxy group, connections, live traffic | | | 15s, plus live traffic |
 | [npm](../../plugins/npm) | Nginx Proxy Manager proxy hosts and certificates | certificates expired or about to expire | | 5m |
@@ -20,7 +21,7 @@ Each plugin's folder has a README with its settings, its display options and an 
 | [seerr](../../plugins/seerr) | request and issue counts, pending requests | pending requests, open issues | approve and decline (`allowApprove`) | 1m |
 | [ssh](../../plugins/ssh) | results of commands run over SSH (number, text, key=value, JSON), a log followed live | per command: above, below, match, failed | | 1m, plus the log live |
 | [sub-quota](../../plugins/sub-quota) | traffic used, quota and expiry of proxy subscriptions | usage over a percentage, expiry close | | 30m |
-| [tautulli](../../plugins/tautulli) | Plex streams playing now with a live countdown; stream, transcode and bandwidth counts | | | 15s |
+| [tautulli](../../plugins/tautulli) | Plex streams playing now with a live countdown; stream, transcode and bandwidth counts | | stop a stream, after a second click to confirm (`allowControl`) | 15s |
 | [unraid](../../plugins/unraid) | CPU, memory, array, pools, uptime, notifications | Unraid notifications | Archive on notification alerts (`notifications.archive`, on by default) | 15s |
 
 A source's `interval` overrides the default. Alerts reach the page through the builtin `alerts` source (see [Concepts](../start/CONCEPTS.md#alerts)).

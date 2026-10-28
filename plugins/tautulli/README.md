@@ -23,6 +23,8 @@ sections:
 |---|---|---|
 | `url` | required | Tautulli address |
 | `apiKey` | required | Settings > Web Interface > API key, sent as the `apikey` query parameter |
+| `allowControl` | `false` | offer a Stop button on each stream |
+| `stopMessage` | none | message the viewer sees on their player when a stream is stopped from the dashboard |
 
 ## Options
 
@@ -32,6 +34,8 @@ sections:
 - `summary`: stats Streams, Transcodes, Bandwidth.
 
 `showUser` (default `true`): set `false` to keep user names off a shared screen.
+
+With `allowControl: true`, each stream gets a Stop button. The first click turns it into "Stop this stream?", and a second click within four seconds stops it through Tautulli's `terminate_session`. Plex only stops streams for a server whose owner has Plex Pass; without it, the button reports Tautulli's error.
 
 ## Notes
 

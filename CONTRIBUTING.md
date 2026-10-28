@@ -12,7 +12,7 @@ cd homelabdash
 npm install
 ```
 
-The first `npm install` also builds the page into `dist/` and points git at `.githooks/`, where the `pre-commit` hook runs the privacy check, lint and the tests, and `commit-msg` checks your message (see [Commit messages](#commit-messages)).
+The first `npm install` also builds the page into `dist/` and points git at `.githooks/`, where the `pre-commit` hook runs the privacy check, lint, the typecheck and the tests, and `commit-msg` checks your message (see [Commit messages](#commit-messages)).
 
 Then list your own personal strings in `.privacy-denylist` at the root (it's gitignored, one per line), such as your domain, your LAN prefix and your user name. The privacy check refuses any commit that contains one of them.
 
