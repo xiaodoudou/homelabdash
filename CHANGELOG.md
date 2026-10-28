@@ -4,6 +4,10 @@ Changes that people running homelabdash or writing plugins would notice. The for
 
 ## [Unreleased]
 
+### Changed
+
+- **homelabdash runs on Node.js 26.** The Docker image is built on `node:26-alpine`. Running from source now needs Node.js 26.
+
 ## [0.2.1] - 2026-10-28
 
 ### Changed

@@ -4,7 +4,7 @@
 
 ## Look at it first
 
-With Node.js 24 and git:
+With Node.js 26 and git:
 
 ```sh
 git clone https://github.com/xiaodoudou/homelabdash.git

@@ -8,7 +8,7 @@ npm test                # the server and plugin tests, about 20 seconds
 npm run test:frontend   # the page tests, a few seconds
 ```
 
-`npm run check` has to pass before a commit. CI runs the same on Node 24, and also builds the page, scans the history for secrets and smoke-tests the Docker image.
+`npm run check` has to pass before a commit. CI runs the same on Node 26, and also builds the page, scans the history for secrets and smoke-tests the Docker image.
 
 ## What the tests cover
 

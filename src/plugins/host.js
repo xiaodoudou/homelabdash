@@ -101,7 +101,8 @@ export class PluginHost extends EventEmitter {
         }
       })
       worker.on('error', (err) => {
-        if (!ready) { clearTimeout(timer); reject(new PluginError(err.message)) } else this.emit('log', 'error', null, `worker error: ${err.message}`)
+        const message = err instanceof Error ? err.message : String(err)
+        if (!ready) { clearTimeout(timer); reject(new PluginError(message)) } else this.emit('log', 'error', null, `worker error: ${message}`)
       })
       worker.on('exit', (code) => {
         if (this.worker !== worker) return
