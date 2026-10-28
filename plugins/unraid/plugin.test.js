@@ -22,6 +22,11 @@ test('one fetch feeds several tiles', async () => {
   assert.equal(r.views.status.view?.items[0].value, 'started')
 })
 
+test('the status view links the array to the Main tab and unread notifications to the dashboard', async () => {
+  const r = await runPlugin(import.meta.dirname, { config: { ...config, url: 'http://tower.example/' }, tiles: [{ id: 'status' }] })
+  assert.deepEqual(r.views.status.view?.items.map((/** @type {any} */ i) => i.href), ['http://tower.example/Main', 'http://tower.example/Dashboard'])
+})
+
 test('notifications from WARNING up become alerts, repeats grouped by title', async () => {
   const r = await runPlugin(import.meta.dirname, { config })
   assert.deepEqual(r.alerts.map(a => a.severity), ['error', 'warning'])

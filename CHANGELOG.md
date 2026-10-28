@@ -4,9 +4,18 @@ Changes that people running homelabdash or writing plugins would notice. The for
 
 ## [Unreleased]
 
+### Added
+
+- **The Unraid status tile has links.** Clicking the unread count opens the Unraid dashboard, where the bell lists the notifications, and clicking the array state opens the Main tab.
+
 ### Changed
 
 - **The Unraid template moved** to [xiaodoudou/unraid-templates](https://github.com/xiaodoudou/unraid-templates), where Community Applications picks it up. It now has an icon and screenshots. [Deploying](docs/operations/DEPLOY.md#unraid) shows how to load it by hand.
+
+### Security
+
+- **Password guessing is slowed down.** With `settings.auth` set, 20 refused logins within a minute get an address refused for the rest of that minute, over HTTP and the WebSocket alike. Every address is also capped at 1200 requests a minute. See [Deploying](docs/operations/DEPLOY.md#a-password).
+- **Two dependencies are patched against advisories published after 0.1.0.** body-parser 2.4.0 fixes a denial of service through a compressed request body, and fast-uri 3.1.9 fixes how some URLs are parsed while the config is validated.
 
 ## [0.1.0] - 2026-10-13
 

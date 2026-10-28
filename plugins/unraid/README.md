@@ -25,7 +25,7 @@ Create the key in Settings > Management Access > API Keys with read access to in
 
 ## Options
 
-`metric`: `status` (default: array state + unread count), `cpu`, `memory`, `array`, `pool` (with `pool: <name>`), `uptime`, `notifications` (list with Archive buttons).
+`metric`: `status` (default: array state + unread count; the state opens the Main tab, and the count opens the Unraid dashboard, whose bell lists the notifications), `cpu`, `memory`, `array`, `pool` (with `pool: <name>`), `uptime`, `notifications` (list with Archive buttons).
 
 ## Config
 
