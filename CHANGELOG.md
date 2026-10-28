@@ -4,6 +4,14 @@ Changes that people running homelabdash or writing plugins would notice. The for
 
 ## [Unreleased]
 
+## [0.5.0] - 2026-10-28
+
+### Changed
+
+- **Rows fill the page exactly.** The browser now sizes each card from its content and every row shares out what is left, instead of rounding cards up to 24 columns, so cards no longer end on an empty block. Rows still keep the order of the config, and only change while the page is open when a card grows.
+- **Cards wrap rather than cut.** A card too narrow for its numbers puts them on more rows (four as 2x2, three as 2+1), and the panels of a merged card move under each other if that is not enough, at any screen width.
+- **A tile's `width` is a share of its group's row** of tiles, no longer of the page. A group's `width` is unchanged.
+
 ## [0.4.2] - 2026-10-28
 
 ### Fixed
@@ -90,7 +98,8 @@ The first public version.
 - **Coding agents get skills.** The repository is a Claude Code plugin marketplace with skills to write plugins, edit the config and deploy, and `AGENTS.md` describes the code for any agent.
 - **A showcase runs on fake services.** `npm run dev:showcase` starts a full homelab against recorded responses, and `npm run docs:screenshots` takes the documentation pictures from it.
 
-[Unreleased]: https://github.com/xiaodoudou/homelabdash/compare/v0.4.2...HEAD
+[Unreleased]: https://github.com/xiaodoudou/homelabdash/compare/v0.5.0...HEAD
+[0.5.0]: https://github.com/xiaodoudou/homelabdash/compare/v0.4.2...v0.5.0
 [0.4.2]: https://github.com/xiaodoudou/homelabdash/compare/v0.4.1...v0.4.2
 [0.4.1]: https://github.com/xiaodoudou/homelabdash/compare/v0.4.0...v0.4.1
 [0.4.0]: https://github.com/xiaodoudou/homelabdash/compare/v0.3.1...v0.4.0

@@ -50,7 +50,10 @@ const style = computed(() => ({ '--scols': props.ctx.stats?.cols ?? props.view.i
       :target="c.it.href ? '_blank' : undefined"
       :rel="c.it.href ? 'noopener' : undefined"
     >
-      <span :class="c.cls"><ValueText
+      <span
+        :class="c.cls"
+        :data-f="c.it.format"
+      ><ValueText
         :text="c.value"
         :format="c.it.format"
         :unit="c.it.unit ?? undefined"

@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest'
 import { fmt, clockTime, duration, threshold } from '../../web/src/format.js'
 import { isEmpty, valueParts, hidesLabel, compactCell, sectionGroups, errorParts } from '../../web/src/views.js'
-import { plan, fill } from '../../web/src/layout.js'
+import { plan } from '../../web/src/layout.js'
 
 describe('formats', () => {
   it('prints numbers, sizes and rates the way the tiles show them', () => {
@@ -83,17 +83,5 @@ describe('row packing', () => {
     expect(plan([11, 7, 6, 16, 24], 24)).toEqual([[0, 2], [2, 4], [4, 5]])
     expect(plan([11, 7, 6, 16, 24], 24, [true, true, true, false, false])).toEqual([[0, 3], [3, 4], [4, 5]])
     expect(plan([12, 12], 24, [true, false])).toEqual([[0, 2]])
-  })
-
-  it('leaves a tile with a set width as it is', () => {
-    const tiles = [{ need: 600, flex: 1, span: 6, fixed: 6 }, { need: 200, flex: 1, span: 4 }]
-    fill(tiles, 12, span => span * 100)
-    expect(tiles.map(t => t.span)).toEqual([6, 6])
-  })
-
-  it('gives spare columns to the most cramped tile', () => {
-    const tiles = [{ need: 600, flex: 1, span: 6 }, { need: 200, flex: 1, span: 4 }]
-    fill(tiles, 12, span => span * 100)
-    expect(tiles.map(t => t.span)).toEqual([8, 4])
   })
 })

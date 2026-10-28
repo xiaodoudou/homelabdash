@@ -118,16 +118,25 @@ button { font: inherit; color: inherit; }
 .config-errors ul { margin: 8px 0 0; padding-left: 18px; }
 .config-errors code { color: var(--muted); }
 
-/* bands share one column grid (--page-cols, set by the page), so tile edges line up across rows */
 .page { display: flex; flex-direction: column; gap: 26px; }
 .band { min-width: 0; }
 .band-title { display: flex; align-items: center; gap: 10px; font-size: 17px; font-weight: 600; letter-spacing: -.1px; margin: 0 0 10px; }
-.groups { display: grid; grid-template-columns: repeat(var(--page-cols, 24), minmax(0, 1fr)); gap: 16px var(--gap); }
-.group { grid-column: 1 / -1; display: grid; grid-template-columns: subgrid; grid-template-rows: auto 1fr; min-width: 0; }
-.group:not(:has(> .group-title)) { grid-template-rows: 1fr; }
-.group-title { grid-column: 1 / -1; display: flex; align-items: center; gap: 6px; margin: 0 0 7px; font-size: 11.5px; font-weight: 600; letter-spacing: .07em; text-transform: uppercase; color: var(--muted); }
-.tiles { grid-column: 1 / -1; display: grid; grid-template-columns: subgrid; row-gap: var(--gap); }
-.tiles > .tile { grid-column: 1 / -1; }
+/* rows of cards sized by the browser from their content: a card that does not fit moves to the next row, every row
+   fills exactly, and spare width goes to the cards of the row. fit.js wraps numbers when a card is still too narrow. */
+.groups { display: flex; flex-direction: column; gap: 16px; }
+.group-row { display: flex; flex-wrap: wrap; gap: 16px var(--gap); }
+/* fit.js reads every group at its content width to plan the rows */
+.groups.is-measuring > .group-row { flex-wrap: nowrap; width: max-content; }
+.groups.is-measuring .group { flex: none; }
+.group { flex: 1 1 auto; display: flex; flex-direction: column; min-width: 0; }
+.group[style*="--pct"], .tiles > .tile[style*="--pct"] { flex: calc(var(--pct) / 100) 1 calc(var(--pct) * 1% - var(--gap) * (1 - var(--pct) / 100)); }
+.group:has(.v-log, .tile.span-full, .tile.bare) { flex-basis: 100%; }
+.group-title { display: flex; align-items: center; gap: 6px; margin: 0 0 7px; font-size: 11.5px; font-weight: 600; letter-spacing: .07em; text-transform: uppercase; color: var(--muted); }
+.tiles { flex: 1; display: flex; flex-wrap: wrap; gap: var(--gap); }
+.tiles > .tile { flex: 1 1 auto; min-width: 0; }
+.tiles > .tile:has(.v-list, .v-progress, .v-text, .tile-error) { flex: 1.5 1 340px; min-width: 0; }
+.tiles > .tile:has(.v-log), .tiles > .tile.span-full, .tiles > .tile.bare { flex-basis: 100%; min-width: 0; }
+.tiles > .tile[style*="--span"] { min-width: min(100%, calc(var(--span) * 220px)); }
 
 /* sections with an explicit layout keep their own grid */
 .grid { display: grid; gap: var(--gap); grid-template-columns: repeat(auto-fill, minmax(min(var(--min), 100%), 1fr)); container-type: inline-size; }
@@ -187,11 +196,16 @@ a.tile-title:hover { color: var(--accent); }
 @keyframes shimmer { to { background-position: -200% 0; } }
 
 /* stats: one row of cells; the page sets --scols and .is-wrapped when the tile is too narrow (phone) */
-.v-stats { flex: 1; display: grid; grid-template-columns: repeat(var(--scols, 1), minmax(max-content, 1fr)); }
-.v-stat { display: flex; flex-direction: column; gap: 2px; min-width: 0; padding: 0 var(--cell-pad); border-left: 1px solid var(--line); }
+/* stats: --scols columns (fit.js lowers it while the card overflows), each as wide as its content, spare width shared */
+.v-stats { flex: 1; display: grid; grid-template-columns: repeat(var(--scols, 1), auto); }
+.v-stat { display: flex; flex-direction: column; gap: 2px; min-width: max-content; padding: 0 var(--cell-pad); border-left: 1px solid var(--line); }
 .v-stat:first-child { padding-left: 0; border-left: 0; }
 .v-stats.is-wrapped { gap: 14px 16px; }
 .v-stats.is-wrapped > .v-stat { padding: 0; border-left: 0; }
+.v-stat-value[data-f="percent"] { min-width: 5.1ch; }
+.v-stat-value[data-f="temperature"] { min-width: 4ch; }
+.v-stat-value[data-f="bytes"], .v-stat-value[data-f="bits"] { min-width: 6.5ch; }
+.v-stat-value[data-f="byterate"], .v-stat-value[data-f="bitrate"] { min-width: 7.6ch; }
 a.v-stat:hover .v-stat-value { color: var(--accent); }
 .v-stat-value { font-size: var(--value); font-weight: 620; line-height: 1.15; letter-spacing: -.3px; font-variant-numeric: tabular-nums; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .v-stat-value .u { margin-left: .2em; font-size: .6em; font-weight: 500; letter-spacing: 0; color: var(--text-2); }
@@ -302,6 +316,7 @@ a.v-stat:hover .v-stat-value { color: var(--accent); }
   .page { gap: 30px; }
   .band-title { font-size: 16px; margin-bottom: 12px; }
   .groups { row-gap: 20px; }
+  .group[style*="--pct"], .tiles > .tile[style*="--pct"] { flex: 1 1 auto; }
 }
 
 /* sections placed in the header: chips that open the full list over the page, so nothing below moves */
@@ -338,14 +353,19 @@ a.mcell:hover .mcell-title { color: var(--text-2); }
 .icon-lg { width: 30px; height: 30px; }
 .tile-merged:has(.mpanel) { align-items: stretch; }
 .tile-merged:not(:has(.mpanel)) { gap: 16px; }
-/* spare width goes to a panel by its count of numbers, so its cells stay even; what still does not fit is cut off,
-   with room left for the dot at the end of a graph */
-.mpanel { display: flex; flex: var(--cells, 1) 1 auto; flex-direction: column; gap: 12px; min-width: 0; overflow: clip; overflow-clip-margin: 8px; }
-.mpanel.is-list { flex: 2 1 0; }
+/* panels keep their content width (fit.js wraps their numbers when the card overflows); spare width goes by count of numbers */
+.mpanel { display: flex; flex: var(--cells, 1) 0 auto; flex-direction: column; gap: 12px; min-width: 0; }
+.mpanel.is-list { flex: 2 1 340px; }
+.mpanel > .tile-head, .tiles > .tile > .tile-head { min-width: max-content; }
+/* a merged card too narrow for its panels side by side (fit.js): they wrap, and gaps stand in for the separators */
+.tile-merged.is-wrapping { flex-wrap: wrap; row-gap: 18px; column-gap: 41px; }
+.tile-merged.is-wrapping > .mcell-sep { display: none; }
+.tile-merged.is-wrapping > .mpanel { max-width: 100%; }
 /* a phone has no room for cells side by side: panels stack, single values pair up two by two */
 @media (max-width: 640px) {
   .tile-merged:has(.mpanel) { flex-direction: column; gap: 14px; }
   .tile-merged:has(.mpanel) .mcell-sep { width: auto; height: 1px; }
+  .tile-merged > .mpanel { flex: none; }
   .tile-merged:not(:has(.mpanel)) { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 12px; }
   .tile-merged:not(:has(.mpanel)) .mcell-sep { display: none; }
   .mcell-end { flex-direction: row; text-align: left; }

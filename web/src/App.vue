@@ -1,7 +1,7 @@
 <script setup>
-import { computed, onMounted, onBeforeUnmount, ref, watch } from 'vue'
-import { state, layout, tiles, defs, expanded, isHidden, start } from './store.js'
-import { arrange, metrics } from './arrange.js'
+import { computed, nextTick, onMounted, onBeforeUnmount, ref, watch } from 'vue'
+import { state, layout, expanded, start } from './store.js'
+import { fit, planRows, pageGap } from './fit.js'
 import TopBar from './components/TopBar.vue'
 import ConfigErrors from './components/ConfigErrors.vue'
 import PageSection from './components/PageSection.vue'
@@ -14,23 +14,25 @@ const pageSections = computed(() => sections.value.filter((/** @type {any} */ s)
 /** @type {import('vue').Ref<HTMLElement | null>} */
 const main = ref(null)
 const width = ref(0)
-/** Widest each tile has needed so far: widths only grow, so rows never jitter. */
-const widths = new Map()
+/** Stat columns of each tile; reset when the page width changes, otherwise they only go down. */
+const cols = new Map()
 let queued = false
+let measured = 0
 
-function relayout () {
+/** Widest each group has been at its content size: rows only change when a group grows. */
+const seen = new Map()
+
+async function relayout () {
   queued = false
-  if (!width.value) return
-  Object.assign(layout, arrange({
-    sections: pageSections.value,
-    width: width.value,
-    metrics: metrics(),
-    tile: id => tiles.get(id),
-    def: id => defs.get(id),
-    hidden: isHidden,
-    widths,
-    phone: state.phone
-  }))
+  if (!width.value || !main.value) return
+  if (width.value !== measured) cols.clear()
+  measured = width.value
+  const rows = planRows(main.value, width.value, pageGap(), seen)
+  if (JSON.stringify(rows) !== JSON.stringify(layout.rows)) {
+    layout.rows = rows
+    await nextTick()
+  }
+  layout.stats = fit(main.value, cols)
 }
 
 watch([() => state.version, () => state.page, () => state.phone, () => expanded.size, width], () => {
