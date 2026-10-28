@@ -125,7 +125,9 @@ button { font: inherit; color: inherit; }
    fills exactly, and spare width goes to the cards of the row. fit.js wraps numbers when a card is still too narrow. */
 .groups { display: flex; flex-direction: column; gap: 16px; }
 .group-row { display: flex; flex-wrap: wrap; gap: 16px var(--gap); }
-/* fit.js reads every group at its content width to plan the rows */
+/* fit.js reads every group at its content width to plan the rows; until the first plan the section stays unseen,
+   so it does not show for a frame in the wrong rows */
+.groups:not(.is-planned) { visibility: hidden; }
 .groups.is-measuring > .group-row { flex-wrap: nowrap; width: max-content; }
 .groups.is-measuring .group { flex: none; }
 .group { flex: 1 1 auto; display: flex; flex-direction: column; min-width: 0; }

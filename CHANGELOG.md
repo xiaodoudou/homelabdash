@@ -4,6 +4,12 @@ Changes that people running homelabdash or writing plugins would notice. The for
 
 ## [Unreleased]
 
+## [0.5.1] - 2026-10-28
+
+### Fixed
+
+- **No jumble while the page opens.** A section stays hidden for the frame it takes to plan its rows, instead of showing its cards in the wrong rows first.
+
 ## [0.5.0] - 2026-10-28
 
 ### Changed
@@ -98,7 +104,8 @@ The first public version.
 - **Coding agents get skills.** The repository is a Claude Code plugin marketplace with skills to write plugins, edit the config and deploy, and `AGENTS.md` describes the code for any agent.
 - **A showcase runs on fake services.** `npm run dev:showcase` starts a full homelab against recorded responses, and `npm run docs:screenshots` takes the documentation pictures from it.
 
-[Unreleased]: https://github.com/xiaodoudou/homelabdash/compare/v0.5.0...HEAD
+[Unreleased]: https://github.com/xiaodoudou/homelabdash/compare/v0.5.1...HEAD
+[0.5.1]: https://github.com/xiaodoudou/homelabdash/compare/v0.5.0...v0.5.1
 [0.5.0]: https://github.com/xiaodoudou/homelabdash/compare/v0.4.2...v0.5.0
 [0.4.2]: https://github.com/xiaodoudou/homelabdash/compare/v0.4.1...v0.4.2
 [0.4.1]: https://github.com/xiaodoudou/homelabdash/compare/v0.4.0...v0.4.1
