@@ -209,7 +209,7 @@ export default {
           return await archive(ctx, input)
         } catch (err) {
           if (/forbidden/i.test(/** @type {Error} */ (err).message)) {
-            throw new Error('this API key may not archive notifications: give it notification update rights (Settings > Management Access > API Keys) or set notifications.archive: false')
+            throw new Error('this API key may not archive notifications: give it notification update rights (Settings > Management Access > API Keys) or set notifications.archive: false', { cause: err })
           }
           throw err
         }

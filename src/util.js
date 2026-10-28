@@ -12,7 +12,7 @@ export function parseDuration (value) {
   if (typeof value === 'number') return value
   const m = /^(\d+(?:\.\d+)?)(ms|s|m|h|d)$/.exec(String(value).trim())
   if (!m) throw new Error(`invalid duration "${value}" (use 500ms, 15s, 2m, 1h)`)
-  return Math.round(Number(m[1]) * UNITS[/** @type {keyof UNITS} */ (m[2])])
+  return Math.round(Number(m[1]) * UNITS[/** @type {keyof typeof UNITS} */ (m[2])])
 }
 
 /** @param {string} text */

@@ -12,7 +12,7 @@ async function call (ctx, path, o = {}) {
     return await ctx.http.request(`${base(ctx)}${path}`, { ...o, auth: username ? { basic: { username, password } } : undefined })
   } catch (err) {
     const status = /** @type {any} */ (err).status
-    if (status === 401 || status === 403) throw new Error(`AdGuard Home answered ${status} to ${path}: check username and password`)
+    if (status === 401 || status === 403) throw new Error(`AdGuard Home answered ${status} to ${path}: check username and password`, { cause: err })
     throw err
   }
 }

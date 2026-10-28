@@ -44,7 +44,7 @@ async function evaluate (source, data, bindings) {
     try {
       e = jsonata(source)
     } catch (err) {
-      throw new Error(`JSONata "${source}": ${/** @type {Error} */ (err).message}`)
+      throw new Error(`JSONata "${source}": ${/** @type {Error} */ (err).message}`, { cause: err })
     }
     compiled.set(source, e)
   }
@@ -52,7 +52,7 @@ async function evaluate (source, data, bindings) {
     const v = await e.evaluate(data, bindings)
     return Array.isArray(v) && /** @type {any} */ (v).sequence ? [...v] : v
   } catch (err) {
-    throw new Error(`JSONata "${source}": ${/** @type {Error} */ (err).message}`)
+    throw new Error(`JSONata "${source}": ${/** @type {Error} */ (err).message}`, { cause: err })
   }
 }
 
