@@ -19,3 +19,7 @@ updates:
     target-branch: dev
     schedule:
       interval: monthly
+    # The image follows the Node line in package.json engines; a major moves both by hand.
+    ignore:
+      - dependency-name: node
+        update-types: [version-update:semver-major]

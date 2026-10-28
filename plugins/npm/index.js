@@ -31,7 +31,7 @@ async function login (ctx) {
   try {
     res = await ctx.http.json(`${base(ctx.config)}/api/tokens`, { json: { identity: ctx.config.email, secret: ctx.config.password } })
   } catch (err) {
-    throw new Error(`Nginx Proxy Manager login failed: ${/** @type {Error} */ (err).message}`)
+    throw new Error(`Nginx Proxy Manager login failed: ${/** @type {Error} */ (err).message}`, { cause: err })
   }
   if (typeof res?.token !== 'string') throw new Error('Nginx Proxy Manager login returned no token')
   ctx.state.set('session', { token: res.token, expires: res.expires ?? null, url: base(ctx.config), email: ctx.config.email })

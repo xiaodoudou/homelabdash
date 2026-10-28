@@ -4,6 +4,13 @@ Changes that people running homelabdash or writing plugins would notice. The for
 
 ## [Unreleased]
 
+## [0.2.1] - 2026-10-28
+
+### Changed
+
+- **Dependencies are up to date.** The image ships chokidar 6, which watches the config folder for hot reload, and newer icon sets. Nothing changes in your config.
+- **Plugin errors keep their cause.** When AdGuard Home, HTTP JSON, Nginx Proxy Manager or Unraid turn an error into a clearer message, the original error stays attached, so `/api/debug` and the logs still show where it came from.
+
 ## [0.2.0] - 2026-10-28
 
 ### Added
@@ -47,6 +54,7 @@ The first public version.
 - **Coding agents get skills.** The repository is a Claude Code plugin marketplace with skills to write plugins, edit the config and deploy, and `AGENTS.md` describes the code for any agent.
 - **A showcase runs on fake services.** `npm run dev:showcase` starts a full homelab against recorded responses, and `npm run docs:screenshots` takes the documentation pictures from it.
 
-[Unreleased]: https://github.com/xiaodoudou/homelabdash/compare/v0.2.0...HEAD
+[Unreleased]: https://github.com/xiaodoudou/homelabdash/compare/v0.2.1...HEAD
+[0.2.1]: https://github.com/xiaodoudou/homelabdash/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/xiaodoudou/homelabdash/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/xiaodoudou/homelabdash/releases/tag/v0.1.0
