@@ -4,6 +4,8 @@ Changes that people running homelabdash or writing plugins would notice. The for
 
 ## [Unreleased]
 
+## [0.4.0] - 2026-10-28
+
 ### Added
 
 - **Set the width of a group or a tile.** `width: 45%` gives it that share of the row, and groups with a width stay on one row while they add up to 100%. Without one, tiles keep sizing themselves from their numbers. See [Setting widths](docs/reference/CONFIG.md#setting-widths).
@@ -76,7 +78,8 @@ The first public version.
 - **Coding agents get skills.** The repository is a Claude Code plugin marketplace with skills to write plugins, edit the config and deploy, and `AGENTS.md` describes the code for any agent.
 - **A showcase runs on fake services.** `npm run dev:showcase` starts a full homelab against recorded responses, and `npm run docs:screenshots` takes the documentation pictures from it.
 
-[Unreleased]: https://github.com/xiaodoudou/homelabdash/compare/v0.3.1...HEAD
+[Unreleased]: https://github.com/xiaodoudou/homelabdash/compare/v0.4.0...HEAD
+[0.4.0]: https://github.com/xiaodoudou/homelabdash/compare/v0.3.1...v0.4.0
 [0.3.1]: https://github.com/xiaodoudou/homelabdash/compare/v0.3.0...v0.3.1
 [0.3.0]: https://github.com/xiaodoudou/homelabdash/compare/v0.2.1...v0.3.0
 [0.2.1]: https://github.com/xiaodoudou/homelabdash/compare/v0.2.0...v0.2.1
