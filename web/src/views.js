@@ -18,6 +18,8 @@ export function isEmpty (view) {
  * @returns {{ text: string, unit: boolean }[]}
  */
 export function valueParts (text, format, unit) {
+  const missing = /^--\s+(.+)$/.exec(text)
+  if (missing && unit) return [{ text: '--', unit: false }, { text: missing[1], unit: true }]
   if (!(UNIT_FORMATS.has(/** @type {string} */ (format)) || format === undefined || unit) || !/\d/.test(text)) return [{ text, unit: false }]
   return text.split(/\s*([^\d.,\s-]+)/).map((p, i) => ({ text: p, unit: i % 2 === 1 })).filter(p => p.text)
 }

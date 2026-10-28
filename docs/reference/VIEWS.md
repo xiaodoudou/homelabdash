@@ -26,7 +26,7 @@ A row of numbers with a label under each.
 | `tone` | colors the value directly: `ok`, `info`, `warning`, `error`, `neutral` |
 | `href` | makes the value a link |
 
-Zeros are drawn dimmed, and a single stat whose label just repeats the tile title ("CPU" in a tile called CPU) drops the label. With `graph:` on the tile, each number gets a line of its last hour underneath.
+A `null` value with a `unit` draws as `-- unit`, holding the place of a number not known yet. An item can also carry `detail`, a short text drawn beside its label, to give a second reading of the same thing: VRAM as `52%` with `12.4 / 24.0 GB` next to the label. Zeros are drawn dimmed, and a single stat whose label just repeats the tile title ("CPU" in a tile called CPU) drops the label. With `graph:` on the tile, each number gets a line of its last hour underneath.
 
 ## list
 

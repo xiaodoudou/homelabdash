@@ -1,0 +1,8 @@
+{
+  "SSH nvidia-smi --query-gpu=index,name,utilization.gpu,memory.used,memory.total,power.draw,power.limit,temperature.gpu,fan.speed,pstate --format=csv,noheader,nounits": {
+    "stdout": "0, NVIDIA GeForce RTX 3090, 84, 12666, 24576, 341.39, 350.00, 87, 98, P2\n1, NVIDIA GeForce RTX 3090, 0, 404, 24576, 22.10, 350.00, 41, 30, P8\n"
+  },
+  "EXEC nvidia-smi --query-gpu=index,name,utilization.gpu,memory.used,memory.total,power.draw,power.limit,temperature.gpu,fan.speed,pstate --format=csv,noheader,nounits": {
+    "stdout": "0, NVIDIA GeForce RTX 3090, 84, 12666, 24576, 341.39, 350.00, 87, 98, P2\n1, NVIDIA GeForce RTX 3090, 0, 404, 24576, 22.10, 350.00, 41, 30, P8\n"
+  }
+}

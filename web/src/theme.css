@@ -198,6 +198,7 @@ a.v-stat:hover .v-stat-value { color: var(--accent); }
 .v-stat-value.is-zero, .v-stat-value.is-zero .u { color: var(--muted); }
 .v-stat-value.is-text { font-weight: 550; color: var(--text-2); }
 .v-stat-label { font-size: 12px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.v-stat-detail { margin-left: 6px; color: var(--text-2); font-variant-numeric: tabular-nums; }
 .v-stat-value.tone-error .u, .v-stat-value.tone-warning .u { color: inherit; }
 
 /* sparklines: pinned to the bottom of their cell so every graph in a row shares one baseline */

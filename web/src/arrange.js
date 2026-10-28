@@ -50,7 +50,7 @@ export function cellNeed (it, hideLabel, m) {
   const [main, unit] = sample ?? [fmt(it.value, it.format, it.unit), '']
   const vw = textWidth(main, `620 ${m.value}px ${m.family}`) +
     (unit ? textWidth(unit, `500 ${m.value * 0.6}px ${m.family}`) + unit.length * 0.2 * m.value * 0.6 : 0)
-  const lw = hideLabel ? 0 : textWidth(String(it.label), `400 12px ${m.family}`)
+  const lw = hideLabel ? 0 : textWidth(String(it.label), `400 12px ${m.family}`) + (it.detail ? 6 + textWidth(String(it.detail), `400 12px ${m.family}`) : 0)
   return Math.ceil(Math.max(56, vw, lw)) + 4
 }
 
