@@ -33,7 +33,11 @@ const cells = computed(() => {
     }
   })
 })
-const style = computed(() => ({ '--scols': props.ctx.stats?.cols ?? props.view.items.length }))
+const style = computed(() => {
+  const cols = props.ctx.stats?.cols ?? props.view.items.length
+  // The last column keeps its content width, so spare width goes between the cells instead of after the last one.
+  return { '--scols': cols, '--stracks': cols > 1 ? `repeat(${cols - 1}, minmax(max-content, 1fr)) max-content` : 'minmax(max-content, 1fr)' }
+})
 </script>
 
 <template>

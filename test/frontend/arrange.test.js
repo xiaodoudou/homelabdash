@@ -48,6 +48,16 @@ describe('arrange', () => {
     expect(Object.keys(out.tiles)).toEqual(['backlog:merged'])
   })
 
+  it('a panel of a merged card is at least as wide as its title, so one number does not cut it short', () => {
+    const card = (/** @type {string} */ title) => {
+      const widths = new Map()
+      const tiles = [{ id: 'x', title, graph: true }, { id: 'y', graph: true }]
+      run([{ id: 'm', tiles: [], groups: [{ id: 'host', merge: true, tiles }] }], { x: stats(1), y: stats(3) }, 1600, widths)
+      return /** @type {number} */ (widths.get('host:merged'))
+    }
+    expect(card('A long panel title')).toBeGreaterThan(card('A'))
+  })
+
   it('wraps a tile\'s stats into balanced rows when one row does not fit', () => {
     expect(statColumns([100, 100, 100, 100], 1000, m)).toEqual({ cols: 4, wrapped: false })
     expect(statColumns([100, 100, 100, 100], 330, m)).toEqual({ cols: 2, wrapped: true })

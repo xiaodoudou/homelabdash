@@ -4,6 +4,11 @@ Changes that people running homelabdash or writing plugins would notice. The for
 
 ## [Unreleased]
 
+### Fixed
+
+- **No more empty space at the end of a card.** Spare width used to collect after a tile's last number. It now spreads between the numbers, and a single number in a merged card stays as narrow as it needs.
+- **Titles in merged cards are no longer cut short.** A panel holding one number, such as CPU, is always wide enough for its title, so it no longer reads "C...".
+
 ## [0.3.0] - 2026-10-28
 
 ### Changed
