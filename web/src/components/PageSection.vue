@@ -59,7 +59,7 @@ const gridStyle = computed(() => {
     </div>
     <div
       v-else
-      class="groups"
+      :class="['groups', { 'is-planned': layout.rows[section.id] }]"
       :data-groups="section.id"
     >
       <div

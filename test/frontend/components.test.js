@@ -5,7 +5,8 @@ import ListView from '../../web/src/components/views/ListView.vue'
 import StatsView from '../../web/src/components/views/StatsView.vue'
 import MergedCard from '../../web/src/components/MergedCard.vue'
 import TopChips from '../../web/src/components/TopChips.vue'
-import { tiles, state } from '../../web/src/store.js'
+import PageSection from '../../web/src/components/PageSection.vue'
+import { tiles, state, layout } from '../../web/src/store.js'
 
 /** @param {Partial<import('../../web/src/components/context.js').ViewCtx>} [o] */
 const ctx = (o = {}) => ({ tileId: 't', pending: new Set(), expanded: false, graph: undefined, history: undefined, window: 3_600_000, titles: [], stats: undefined, onToggle () {}, onAction () {}, ...o })
@@ -160,3 +161,16 @@ describe('action buttons', () => {
   })
 })
 
+describe('PageSection', () => {
+  it('stays unseen until its rows are planned, then shows them in that order', async () => {
+    const group = (/** @type {string} */ id) => ({ id, title: id, tiles: [], hideWhen: 'never' })
+    const section = { id: 'sys', title: 'System', tiles: [], groups: [group('a'), group('b'), group('c')] }
+    const w = mount(PageSection, { props: { section } })
+    expect(w.find('.groups').classes()).not.toContain('is-planned')
+    layout.rows = { sys: [['b', 'a'], ['c']] }
+    await nextTick()
+    expect(w.find('.groups').classes()).toContain('is-planned')
+    expect(w.findAll('.group-row').map(r => r.findAll('.group').map(g => g.attributes('data-section')))).toEqual([['a', 'b'], ['c']])
+    layout.rows = {}
+  })
+})
