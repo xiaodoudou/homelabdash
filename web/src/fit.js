@@ -35,8 +35,9 @@ export function planRows (root, W, gap, seen) {
 /**
  * Wraps the numbers of the cards that are wider than the room the page gives them. The browser sizes and places the
  * cards (theme.css); this only reads what it drew, so no text is estimated. While a card overflows, its stats block with
- * the most columns (then the widest) loses one, rounded to balanced rows (4 as 2x2, 3 as 2+1). Numbers first go to two
- * rows at most; only then do the panels of a merged card wrap, and then the numbers go further.
+ * the most columns (then the widest) loses one, rounded to balanced rows (4 as 2x2, 3 as 2+1). First only blocks of four
+ * numbers or more go to two rows, since a pair split into two lines of one wastes the room beside it; then the panels of
+ * a merged card wrap, and only then do the numbers go further.
  * `cols` keeps what was decided between calls so it only goes one way while the page width stays the same: numbers that
  * change do not make a card jump back and forth.
  * @param {ParentNode} root
@@ -78,7 +79,7 @@ export function fit (root, cols) {
   for (const b of blocks) set(b, Math.max(1, Math.min(b.n, cols.get(b.id) ?? b.n)))
   const cards = new Set(blocks.map(b => b.card))
   for (const card of cards) card.classList.toggle('is-wrapping', cols.get(`wrap:${card.dataset.tile}`) === 1)
-  shrink(b => Math.ceil(b.n / 2))
+  shrink(b => b.n >= 4 ? Math.ceil(b.n / 2) : b.n)
   for (const card of cards) {
     if (!card.classList.contains('tile-merged') || !overflows(card)) continue
     card.classList.add('is-wrapping')

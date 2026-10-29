@@ -67,6 +67,28 @@ describe('fit', () => {
     expect(out.ram).toEqual({ cols: 2, wrapped: true })
     expect(out.gpu).toEqual({ cols: 2, wrapped: true })
   })
+
+  it('a merged card of small blocks wraps its panels before it splits a pair or a three into lines', () => {
+    const { root, groups } = page()
+    const card = document.createElement('article')
+    card.className = 'tile tile-merged'
+    card.dataset.tile = 'ai:merged'
+    groups.append(card)
+    const blocks = [['up', 1], ['disk', 2], ['cpu', 3]].map(([id, n]) => {
+      const panel = document.createElement('div')
+      panel.dataset.cell = String(id)
+      card.append(panel)
+      return stats(panel, Number(n))
+    })
+    // wrapped, the first two panels share a line and the third gets its own
+    widths(card, () => {
+      const [a, b, c] = blocks.map(x => cols(x) * 100)
+      return card.classList.contains('is-wrapping') ? Math.max(a + b, c) : a + b + c
+    }, 450)
+    const out = fit(root, new Map())
+    expect(card.classList.contains('is-wrapping')).toBe(true)
+    expect(out).toEqual({ up: { cols: 1, wrapped: false }, disk: { cols: 2, wrapped: false }, cpu: { cols: 3, wrapped: false } })
+  })
 })
 
 describe('planRows', () => {
