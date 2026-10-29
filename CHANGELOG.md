@@ -4,6 +4,16 @@ Changes that people running homelabdash or writing plugins would notice. The for
 
 ## [Unreleased]
 
+## [0.5.3] - 2026-10-29
+
+### Changed
+
+- **Tautulli: who and how on their own line.** Each stream shows the title, then the user, player and play mode under it, then the progress bar, instead of squeezing them beside the title.
+
+### Fixed
+
+- **A cut-off list line can be read.** Hovering a row's title or the line under it shows the whole text.
+
 ## [0.5.2] - 2026-10-29
 
 ### Fixed
