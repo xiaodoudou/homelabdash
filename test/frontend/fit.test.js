@@ -118,6 +118,10 @@ describe('planRows', () => {
   it('groups with a width that add up to the row stay on it even when wider content, and a group never gets narrower', () => {
     const fixed = section([['host', 1300, 45], ['ai', 400, 30], ['ups', 300, 25], ['gpus', 1500]])
     expect(planRows(fixed, 2000, 16, new Map()).system).toEqual([['host', 'ai', 'ups'], ['gpus']])
+    const stacked = section([['plex', 900], ['side', 700]])
+    stacked.querySelector('[data-section="side"]')?.classList.add('stack')
+    planRows(stacked, 2000, 16, new Map())
+    expect(/** @type {HTMLElement} */ (stacked.querySelector('.stack')).style.getPropertyValue('--min')).toBe('700px')
     const seen = new Map([['a', 1500]])
     expect(planRows(section([['a', 600], ['b', 500], ['c', 500]]), 2000, 16, seen).system).toEqual([['a'], ['b', 'c']])
   })

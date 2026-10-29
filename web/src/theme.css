@@ -134,7 +134,7 @@ button { font: inherit; color: inherit; }
 .group[style*="--pct"], .tiles > .tile[style*="--pct"] { flex: calc(var(--pct) / 100) 1 calc(var(--pct) * 1% - var(--gap) * (1 - var(--pct) / 100)); }
 .group:has(.v-log, .tile.span-full, .tile.bare) { flex-basis: 100%; }
 /* a stack takes the room its row leaves: its groups sit side by side when they fit there, else under each other */
-.group.stack { flex: 1 1 0; }
+.group.stack { flex: 1 1 0; min-width: min(100%, var(--min, 0px)); }
 .stack-groups { flex: 1; display: flex; flex-wrap: wrap; gap: 16px var(--gap); }
 .groups.is-measuring .stack-groups { flex-direction: column; }
 .stack-groups.is-stacked { display: grid; grid-auto-rows: 1fr; }
