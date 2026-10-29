@@ -30,7 +30,7 @@ sections:
 
 `view`: `sessions` (default) or `summary`.
 
-- `sessions`: list, one line per stream. Episodes read "Show: S01E05 - Episode", movies "Movie (Year)", music "Artist - Track". Next to the title come the user, the player and `transcode`, `direct play` or `direct stream`; a play, pause or hourglass icon shows the state. The value is the time left as `HH:MM:SS`, counting down every second in the browser while the stream plays, and the thin bar under the row fills along with it; a paused stream stays put. Each fetch sets the position again from Tautulli. Empty: "Nothing playing".
+- `sessions`: list, one row per stream. Episodes read "Show: S01E05 - Episode", movies "Movie (Year)", music "Artist - Track". Under the title come the user, the player and `transcode`, `direct play` or `direct stream`, and the whole line shows on hover; a play, pause or hourglass icon shows the state. The value is the time left as `HH:MM:SS`, counting down every second in the browser while the stream plays, and the bar under it fills along with it; a paused stream stays put. Each fetch sets the position again from Tautulli. Empty: "Nothing playing".
 - `summary`: stats Streams, Transcodes, Bandwidth.
 
 `showUser` (default `true`): set `false` to keep user names off a shared screen.

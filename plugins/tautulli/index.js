@@ -109,7 +109,6 @@ export default {
     return {
       type: 'list',
       empty: 'Nothing playing',
-      dense: true,
       items: data.sessions.map((/** @type {any} */ s) => {
         // A playing stream counts down in the browser between fetches; a paused one stays put.
         const live = s.state === 'playing' && s.remaining !== null && s.duration
