@@ -92,7 +92,7 @@ sections:
           - title: Streams
             hideWhen: empty
             tiles:
-              - { title: Plex, icon: "mdi:chart-areaspline#e5a00d", source: plex, options: { view: summary }, hideWhen: empty, graph: [Bandwidth] }
+              - { source: plex, options: { view: summary }, hideWhen: empty, graph: [Bandwidth] }
 
   - title: System
     icon: "si:unraid#f15a2c"
