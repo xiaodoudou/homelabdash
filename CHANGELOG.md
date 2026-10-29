@@ -4,6 +4,12 @@ Changes that people running homelabdash or writing plugins would notice. The for
 
 ## [Unreleased]
 
+## [0.5.2] - 2026-10-29
+
+### Fixed
+
+- **Two or three numbers stay on one line.** When a merged card is too narrow, its panels move under each other first; before, a block like Disk (used, free) became two lines of one number with empty room beside them.
+
 ## [0.5.1] - 2026-10-28
 
 ### Fixed
