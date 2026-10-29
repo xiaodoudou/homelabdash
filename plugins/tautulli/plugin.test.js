@@ -7,7 +7,7 @@ const config = { url: 'http://tautulli.example:8181', apiKey: 'test-key' }
 test('one row per stream with progress and time left', async () => {
   const r = await runPlugin(import.meta.dirname, { config })
   assert.equal(r.view?.type, 'list')
-  assert.equal(r.view.dense, true, 'one line per stream')
+  assert.equal(r.view.dense, undefined, 'title, then who and how, then the bar')
   assert.deepEqual(r.view.items.map((/** @type {any} */ i) => i.title), [
     'Example Show: S01E05 - The Fifth One',
     'Sample Movie (2024)',

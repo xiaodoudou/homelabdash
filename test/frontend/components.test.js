@@ -36,6 +36,7 @@ describe('ListView', () => {
     expect(values()).toEqual(['00:01:30', '00:10:00'])
     expect(w.find('.v-list').classes()).toContain('dense')
     expect(w.find('.v-row-icon').attributes('style')).toContain('/icons/mdi/play.svg')
+    expect(w.find('.v-row-title').attributes('title')).toBe('Show')
 
     vi.advanceTimersByTime(3000)
     await nextTick()
