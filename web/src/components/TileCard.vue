@@ -55,7 +55,10 @@ const cls = computed(() => ['tile', spanClass.value, props.tile.kind === 'link' 
     :data-plugin="tile.plugin ?? ''"
     :style="style"
   >
-    <header class="tile-head">
+    <header
+      v-if="tile.title || tile.icon || failed || st?.stale"
+      class="tile-head"
+    >
       <AppIcon :icon="tile.icon" />
       <a
         v-if="tile.href"

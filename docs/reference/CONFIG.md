@@ -107,7 +107,7 @@ tiles:
 
 | Tile key | |
 |---|---|
-| `title`, `icon` | heading of the tile |
+| `title`, `icon` | heading of the tile; a tile with neither has no heading (handy alone in a titled group), except to show an error |
 | `href`, `target` | the title becomes a link; `target` overrides `settings.target` |
 | `source` | id of a source, or `alerts` |
 | `options` | what the tile shows, checked against the plugin's schema |

@@ -7,6 +7,7 @@ import MergedCard from '../../web/src/components/MergedCard.vue'
 import TopChips from '../../web/src/components/TopChips.vue'
 import PageSection from '../../web/src/components/PageSection.vue'
 import TileGroup from '../../web/src/components/TileGroup.vue'
+import TileCard from '../../web/src/components/TileCard.vue'
 import { tiles, state, layout } from '../../web/src/store.js'
 
 /** @param {Partial<import('../../web/src/components/context.js').ViewCtx>} [o] */
@@ -188,5 +189,16 @@ describe('TileGroup', () => {
     await nextTick()
     expect(w.find('.group.stack').exists()).toBe(true)
     expect(w.findAll('.stack-groups > .group').map(x => x.attributes('data-section'))).toEqual(['m.streams'])
+  })
+})
+
+describe('TileCard', () => {
+  it('a tile without a title or icon has no header, until it has an error to show', async () => {
+    tiles.set('s', { id: 's', view: { type: 'stats', items: [{ label: 'Streams', value: 3 }] } })
+    const w = mount(TileCard, { props: { tile: { id: 's', kind: 'data', hideWhen: 'never' } } })
+    expect(w.find('.tile-head').exists()).toBe(false)
+    tiles.set('s', { id: 's', error: 'down' })
+    await nextTick()
+    expect(w.find('.tile-head .badge').text()).toBe('error')
   })
 })
