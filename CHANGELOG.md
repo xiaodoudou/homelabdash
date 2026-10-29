@@ -4,6 +4,12 @@ Changes that people running homelabdash or writing plugins would notice. The for
 
 ## [Unreleased]
 
+## [0.6.1] - 2026-10-29
+
+### Changed
+
+- **A tile without a title or icon has no heading.** Alone in a group, the group's title is enough; an error still shows.
+
 ## [0.6.0] - 2026-10-29
 
 ### Added
