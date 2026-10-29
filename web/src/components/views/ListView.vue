@@ -70,6 +70,7 @@ const glyph = icon => ({ '--icon': `url('/icons/${icon.replace(':', '/')}.svg')`
           <a
             v-if="it.href"
             class="v-row-title"
+            :title="it.title"
             :href="it.href"
             target="_blank"
             rel="noopener"
@@ -77,10 +78,12 @@ const glyph = icon => ({ '--icon': `url('/icons/${icon.replace(':', '/')}.svg')`
           <span
             v-else
             class="v-row-title"
+            :title="it.title"
           >{{ it.title }}</span>
           <span
             v-if="it.subtitle || it.time"
             class="v-row-sub"
+            :title="sub(it)"
           >{{ sub(it) }}</span>
           <TimeBar
             v-if="it.progress && it.progress.end > it.progress.start"
