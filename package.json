@@ -1,6 +1,6 @@
 {
   "name": "homelabdash",
-  "version": "0.5.3",
+  "version": "0.6.0",
   "description": "Self-hosted homelab dashboard with Node plugins that people and coding agents can write, validate and test.",
   "type": "module",
   "license": "Apache-2.0",

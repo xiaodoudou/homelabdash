@@ -25,11 +25,26 @@ export function planRows (root, W, gap, seen) {
       return w
     })
     box.classList.remove('is-measuring')
+    // a stack is measured with its groups one over another, and never gets narrower than that
+    groups.forEach((g, i) => { if (g.classList.contains('stack')) g.style.setProperty('--min', `${Math.ceil(widths[i])}px`) })
     const pct = groups.map(g => parseFloat(g.style.getPropertyValue('--pct')) || 0)
     const spans = widths.map((w, i) => Math.min(24, pct[i] ? pct[i] / 100 * 24 : ((w + gap) / (W + gap)) * 24))
     out[box.dataset.groups ?? ''] = plan(spans, 24.001, pct.map(Boolean)).map(([a, b]) => groups.slice(a, b).map(g => g.dataset.section ?? ''))
   }
   return out
+}
+
+/**
+ * Marks the stacks whose groups went under each other, so they share its height evenly: a stack is a wrapping row,
+ * and only where its groups landed says whether they fit side by side.
+ * @param {ParentNode} root
+ */
+export function stack (root) {
+  for (const s of /** @type {NodeListOf<HTMLElement>} */ (root.querySelectorAll('.stack-groups'))) {
+    s.classList.remove('is-stacked')
+    const tops = new Set([...s.children].map(c => /** @type {HTMLElement} */ (c).offsetTop))
+    s.classList.toggle('is-stacked', tops.size > 1)
+  }
 }
 
 /**

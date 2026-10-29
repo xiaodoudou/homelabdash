@@ -128,6 +128,35 @@ test('the editor schema compiles and accepts the example config', async () => {
   }
 })
 
+test('a stack holds groups whose ids sit beside it, and takes no tiles of its own', () => {
+  const dir = tempConfig({
+    'homelabdash.yaml': [
+      'sources: { c: { plugin: counter } }',
+      'sections:',
+      '  - title: Media',
+      '    sections:',
+      '      - title: Backlog',
+      '        tiles: [{ title: Movies, source: c }]',
+      '      - stack:',
+      '          - title: Backlog',
+      '            tiles: [{ title: Shows, source: c }]',
+      '          - title: Streams',
+      '            tiles: [{ title: Plex, source: c }]'
+    ].join('\n')
+  })
+  const r = loadConfig(dir)
+  assert.deepEqual(r.errors, [])
+  const media = /** @type {any} */ (r.config).pages[0].sections[0]
+  const stack = media.groups[1]
+  assert.equal(stack.stack, true)
+  assert.equal(stack.hideWhen, 'empty')
+  assert.deepEqual(stack.groups.map((/** @type {any} */ g) => g.id), ['media.backlog-2', 'media.streams'])
+  assert.deepEqual(stack.groups[1].tiles, ['home.media.streams.plex'])
+
+  const mixed = tempConfig({ 'homelabdash.yaml': 'sections:\n  - title: Media\n    sections:\n      - { stack: [], tiles: [] }' })
+  assert.deepEqual(loadConfig(mixed).errors.map(e => `${e.path}: ${e.message}`), ['sections[0].sections[0].stack: a group has `stack`, `tiles` or `source`, only one of them'])
+})
+
 test('bands hold groups one level deep; ids and error paths include the group', () => {
   const dir = tempConfig({
     'homelabdash.yaml': [

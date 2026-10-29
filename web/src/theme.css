@@ -133,6 +133,11 @@ button { font: inherit; color: inherit; }
 .group { flex: 1 1 auto; display: flex; flex-direction: column; min-width: 0; }
 .group[style*="--pct"], .tiles > .tile[style*="--pct"] { flex: calc(var(--pct) / 100) 1 calc(var(--pct) * 1% - var(--gap) * (1 - var(--pct) / 100)); }
 .group:has(.v-log, .tile.span-full, .tile.bare) { flex-basis: 100%; }
+/* a stack takes the room its row leaves: its groups sit side by side when they fit there, else under each other */
+.group.stack { flex: 1 1 0; min-width: min(100%, var(--min, 0px)); }
+.stack-groups { flex: 1; display: flex; flex-wrap: wrap; gap: 16px var(--gap); }
+.groups.is-measuring .stack-groups { flex-direction: column; }
+.stack-groups.is-stacked { display: grid; grid-auto-rows: 1fr; }
 .group-title { display: flex; align-items: center; gap: 6px; margin: 0 0 7px; font-size: 11.5px; font-weight: 600; letter-spacing: .07em; text-transform: uppercase; color: var(--muted); }
 .tiles { flex: 1; display: flex; flex-wrap: wrap; gap: var(--gap); }
 .tiles > .tile { flex: 1 1 auto; min-width: 0; }

@@ -88,7 +88,17 @@ export const sectionSchema = {
     sections: {
       type: 'array',
       description: 'Groups shown side by side under this title (each group has its own title and tiles)',
-      items: sectionBase
+      items: {
+        ...sectionBase,
+        properties: {
+          ...sectionBase.properties,
+          stack: {
+            type: 'array',
+            description: 'Groups that sit side by side when the row has room for them and under each other when it does not',
+            items: sectionBase
+          }
+        }
+      }
     }
   }
 }

@@ -1,7 +1,7 @@
 <script setup>
 import { computed, nextTick, onMounted, onBeforeUnmount, ref, watch } from 'vue'
 import { state, layout, expanded, start } from './store.js'
-import { fit, planRows, pageGap } from './fit.js'
+import { fit, planRows, pageGap, stack } from './fit.js'
 import TopBar from './components/TopBar.vue'
 import ConfigErrors from './components/ConfigErrors.vue'
 import PageSection from './components/PageSection.vue'
@@ -32,6 +32,7 @@ async function relayout () {
     layout.rows = rows
     await nextTick()
   }
+  stack(main.value)
   layout.stats = fit(main.value, cols)
 }
 
