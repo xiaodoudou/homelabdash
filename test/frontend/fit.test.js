@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { fit, planRows } from '../../web/src/fit.js'
+import { fit, planRows, stack } from '../../web/src/fit.js'
 
 // jsdom draws nothing, so each element reports the widths a browser would: 100 px a stat column.
 const cols = (/** @type {Element} */ el) => Number(/** @type {HTMLElement} */ (el).style.getPropertyValue('--scols') || el.children.length)
@@ -120,5 +120,27 @@ describe('planRows', () => {
     expect(planRows(fixed, 2000, 16, new Map()).system).toEqual([['host', 'ai', 'ups'], ['gpus']])
     const seen = new Map([['a', 1500]])
     expect(planRows(section([['a', 600], ['b', 500], ['c', 500]]), 2000, 16, seen).system).toEqual([['a'], ['b', 'c']])
+  })
+})
+
+describe('stack', () => {
+  it('marks a stack whose groups landed on different lines, and clears it once they share one', () => {
+    const { root, groups } = page()
+    const box = document.createElement('div')
+    box.className = 'stack-groups'
+    groups.append(box)
+    let tops = [0, 90]
+    const kids = [0, 1].map(i => {
+      const g = document.createElement('div')
+      Object.defineProperty(g, 'offsetTop', { get: () => tops[i] })
+      box.append(g)
+      return g
+    })
+    stack(root)
+    expect(box.classList.contains('is-stacked')).toBe(true)
+    tops = [0, 0]
+    stack(root)
+    expect(box.classList.contains('is-stacked')).toBe(false)
+    expect(kids).toHaveLength(2)
   })
 })

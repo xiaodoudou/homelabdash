@@ -33,6 +33,19 @@ export function planRows (root, W, gap, seen) {
 }
 
 /**
+ * Marks the stacks whose groups went under each other, so they share its height evenly: a stack is a wrapping row,
+ * and only where its groups landed says whether they fit side by side.
+ * @param {ParentNode} root
+ */
+export function stack (root) {
+  for (const s of /** @type {NodeListOf<HTMLElement>} */ (root.querySelectorAll('.stack-groups'))) {
+    s.classList.remove('is-stacked')
+    const tops = new Set([...s.children].map(c => /** @type {HTMLElement} */ (c).offsetTop))
+    s.classList.toggle('is-stacked', tops.size > 1)
+  }
+}
+
+/**
  * Wraps the numbers of the cards that are wider than the room the page gives them. The browser sizes and places the
  * cards (theme.css); this only reads what it drew, so no text is estimated. While a card overflows, its stats block with
  * the most columns (then the widest) loses one, rounded to balanced rows (4 as 2x2, 3 as 2+1). First only blocks of four

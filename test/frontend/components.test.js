@@ -6,6 +6,7 @@ import StatsView from '../../web/src/components/views/StatsView.vue'
 import MergedCard from '../../web/src/components/MergedCard.vue'
 import TopChips from '../../web/src/components/TopChips.vue'
 import PageSection from '../../web/src/components/PageSection.vue'
+import TileGroup from '../../web/src/components/TileGroup.vue'
 import { tiles, state, layout } from '../../web/src/store.js'
 
 /** @param {Partial<import('../../web/src/components/context.js').ViewCtx>} [o] */
@@ -173,5 +174,19 @@ describe('PageSection', () => {
     expect(w.find('.groups').classes()).toContain('is-planned')
     expect(w.findAll('.group-row').map(r => r.findAll('.group').map(g => g.attributes('data-section')))).toEqual([['a', 'b'], ['c']])
     layout.rows = {}
+  })
+})
+
+describe('TileGroup', () => {
+  it('a stack draws its groups inside it, and goes away when none of them has anything to show', async () => {
+    const tile = (/** @type {string} */ id) => ({ id, title: id, hideWhen: 'empty' })
+    const g = (/** @type {string} */ id) => ({ id, title: id, tiles: [tile(id)], hideWhen: 'empty', groups: [] })
+    const group = { id: 'm.s1', stack: true, hideWhen: 'empty', tiles: [], groups: [g('m.backlog'), g('m.streams')] }
+    const w = mount(TileGroup, { props: { group } })
+    expect(w.find('.stack').exists()).toBe(false)
+    tiles.set('m.streams', { id: 'm.streams', view: { type: 'stats', items: [{ label: 'Streams', value: 2 }] } })
+    await nextTick()
+    expect(w.find('.group.stack').exists()).toBe(true)
+    expect(w.findAll('.stack-groups > .group').map(x => x.attributes('data-section'))).toEqual(['m.streams'])
   })
 })

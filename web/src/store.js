@@ -91,7 +91,7 @@ export async function load () {
     defs.clear()
     for (const p of dash.pages) {
       for (const s of p.sections) {
-        for (const t of [...s.tiles, ...(s.groups ?? []).flatMap((/** @type {any} */ g) => g.tiles)]) {
+        for (const t of allTiles(s)) {
           defs.set(t.id, t)
           if (t.widget) import(/* @vite-ignore */ t.widget).catch(() => {})
         }
@@ -269,7 +269,12 @@ export function isHidden (t) {
   return false
 }
 
+/** Tiles of a section with those of its groups and their stacks. @param {any} s @returns {any[]} */
+function allTiles (s) {
+  return [...s.tiles, ...(s.groups ?? []).flatMap(allTiles)]
+}
+
 /** Visible tiles of a section; a band counts the tiles of its groups. @param {any} s */
 export function visibleTiles (s) {
-  return [...s.tiles, ...(s.groups ?? []).flatMap((/** @type {any} */ g) => g.tiles)].filter((/** @type {any} */ t) => !isHidden(t))
+  return allTiles(s).filter(t => !isHidden(t))
 }

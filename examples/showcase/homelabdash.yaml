@@ -78,17 +78,21 @@ sections:
     sections:
       - title: Now Playing
         hideWhen: empty
-        merge: true
         tiles:
           - { title: Plex, icon: "si:plex#e5a00d", source: plex, options: { view: sessions }, hideWhen: empty }
-          - { title: Streams, icon: "mdi:chart-areaspline#e5a00d", source: plex, options: { view: summary }, hideWhen: empty, graph: [Bandwidth] }
-      - title: Backlog
-        merge: true
-        tiles:
-          - { title: Pending requests, icon: "mdi:inbox-arrow-down#a78bfa", source: seerr, options: { stats: [pending] } }
-          - { title: Open issues, icon: "mdi:alert-circle-outline#a78bfa", source: seerr, options: { stats: [issues] } }
-          - { title: Missing movies, icon: "mdi:movie-open-outline#ffc230", source: radarr, options: { view: missing } }
-          - { title: Missing episodes, icon: "mdi:television-play#35c5f4", source: sonarr, options: { view: missing } }
+      # beside Now Playing these two go under each other; with nothing playing they share the row
+      - stack:
+          - title: Backlog
+            merge: true
+            tiles:
+              - { title: Pending requests, icon: "mdi:inbox-arrow-down#a78bfa", source: seerr, options: { stats: [pending] } }
+              - { title: Open issues, icon: "mdi:alert-circle-outline#a78bfa", source: seerr, options: { stats: [issues] } }
+              - { title: Missing movies, icon: "mdi:movie-open-outline#ffc230", source: radarr, options: { view: missing } }
+              - { title: Missing episodes, icon: "mdi:television-play#35c5f4", source: sonarr, options: { view: missing } }
+          - title: Streams
+            hideWhen: empty
+            tiles:
+              - { title: Plex, icon: "mdi:chart-areaspline#e5a00d", source: plex, options: { view: summary }, hideWhen: empty, graph: [Bandwidth] }
 
   - title: System
     icon: "si:unraid#f15a2c"

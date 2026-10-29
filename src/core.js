@@ -197,6 +197,7 @@ export class Homelabdash {
       hideWhen: s.hideWhen,
       placement: s.placement,
       merge: s.merge,
+      stack: s.stack,
       width: s.width,
       collapsed: s.collapsed,
       layout: s.layout,

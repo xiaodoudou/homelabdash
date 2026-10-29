@@ -84,7 +84,7 @@ A section holds `tiles`, or groups under `sections`, or just a `source` for one 
 |---|---|
 | `title`, `icon` | heading of the section |
 | `tiles` | the tiles, laid out by content width (see [Concepts](../start/CONCEPTS.md#how-a-page-is-laid-out)) |
-| `sections` | groups, side by side under this heading; a group has `title`, `icon`, `tiles`, `merge`, `width`, `hideWhen`, `layout` |
+| `sections` | groups, side by side under this heading; a group has `title`, `icon`, `tiles`, `merge`, `width`, `hideWhen`, `layout`, or a `stack` of groups ([Stacking groups](#stacking-groups)) |
 | `source`, `options` | shorthand for one full-width tile of that source |
 | `merge` | `true` draws the tiles as one card ([merged cards](../start/CONCEPTS.md#merged-cards)); works on groups too |
 | `width` | on a group, its share of the row, such as `45%`; see [Setting widths](#setting-widths) |
@@ -139,6 +139,22 @@ sections:
 - On a tile, `width` is its share of its group's row of tiles, not of the page.
 - On a phone, where everything stacks, widths are ignored.
 - When a group is narrower than its numbers need, they wrap onto more rows (four as 2x2, three as 2+1), and the panels of a merged card move under each other if that is still not enough. Nothing is cut off.
+
+### Stacking groups
+
+A `stack` holds groups that sit side by side when the room left on their row is enough, and go under each other when it is not. Paired with `hideWhen: empty`, the layout follows what is going on:
+
+```yaml
+sections:
+  - title: Media
+    sections:
+      - { title: Now Playing, hideWhen: empty, tiles: [{ title: Plex, source: plex, options: { view: sessions }, hideWhen: empty }] }
+      - stack:
+          - { title: Backlog, merge: true, tiles: [...] }
+          - { title: Streams, hideWhen: empty, tiles: [...] }
+```
+
+While something plays, Now Playing takes the left and Backlog sits over Streams beside it, each taking half the height. With nothing playing the stack has the row to itself, and Backlog and Streams share it. A stack hides itself when none of its groups has anything to show. Its groups keep the ids they would have outside it, so moving a group into a stack keeps its graph history.
 
 ## Icons
 

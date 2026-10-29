@@ -73,7 +73,8 @@ export const ALERTS_SOURCE = 'alerts'
  * @property {boolean} collapsed
  * @property {{ minTileWidth?: number, columns?: number, gap?: number }} layout
  * @property {string[]} tiles tile ids
- * @property {Section[]} groups sub-sections laid out side by side (a band); empty for a plain section
+ * @property {Section[]} groups sub-sections laid out side by side (a band), or the groups of a stack; empty for a plain section
+ * @property {boolean} stack a group whose groups go under each other when the row has no room for them side by side
  *
  * @typedef {{ id: string, title: string, icon?: string, sections: Section[] }} Page
  *
@@ -378,6 +379,11 @@ function normalize (raw, fail) {
         const sub = new Set()
         groups = sec.sections.map((/** @type {any} */ g, /** @type {number} */ gi) => buildSection(g, [...sp, 'sections', gi], gi, sub, fullId))
       }
+      if (sec.stack) {
+        if (sec.tiles || sec.source) fail([...sp, 'stack'], 'a group has `stack`, `tiles` or `source`, only one of them')
+        // stacked groups take ids beside their stack, so moving a group into a stack keeps its tile ids
+        groups = sec.stack.map((/** @type {any} */ g, /** @type {number} */ gi) => buildSection(g, [...sp, 'stack', gi], gi, used, parentId))
+      }
       let rawTiles = sec.tiles ?? []
       if (sec.source) {
         if (sec.tiles) fail([...sp, 'source'], 'a section has either `source` or `tiles`, not both')
@@ -427,6 +433,7 @@ function normalize (raw, fail) {
         title: sec.title,
         icon: sec.icon,
         hideWhen: sec.hideWhen ?? (sec.source === ALERTS_SOURCE || groups.length ? 'empty' : 'never'),
+        stack: !!sec.stack,
         placement: sec.placement ?? 'page',
         merge: !!sec.merge,
         width: percent(sec.width),

@@ -46,7 +46,7 @@ A section with `layout: { columns: 4 }` or `layout: { minTileWidth: 220 }` switc
     - { title: Missing episodes, icon: mdi:television-play, source: sonarr, options: { view: missing } }
 ```
 
-If every tile shows a single number, each one becomes a compact cell with a large icon, the value and the title. Otherwise every tile keeps its whole view under a small heading; that's how the list of streams and the stream counts share one card in the showcase. Each cell keeps its own source and link. On a phone the cells stack, or pair up two by two when they're single numbers.
+If every tile shows a single number, each one becomes a compact cell with a large icon, the value and the title. Otherwise every tile keeps its whole view under a small heading; so a list of streams and a row of counts can share one card. Each cell keeps its own source and link. On a phone the cells stack, or pair up two by two when they're single numbers.
 
 <img src="../ui/phone-dark.png" alt="The showcase on a phone: the stream list above its counts, the backlog two by two" width="300">
 
