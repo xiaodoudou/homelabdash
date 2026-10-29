@@ -4,6 +4,12 @@ Changes that people running homelabdash or writing plugins would notice. The for
 
 ## [Unreleased]
 
+## [0.6.0] - 2026-10-29
+
+### Added
+
+- **Stacks of groups.** A `stack` in a section's groups puts its groups side by side when their row has room and under each other when it does not, so a group that comes and goes (Now Playing) can share its row with a column of smaller ones. Stacked groups split the height evenly. See [Stacking groups](docs/reference/CONFIG.md#stacking-groups).
+
 ## [0.5.3] - 2026-10-29
 
 ### Changed
