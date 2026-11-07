@@ -4,6 +4,12 @@ Changes that people running homelabdash or writing plugins would notice. The for
 
 ## [Unreleased]
 
+## [0.6.2] - 2026-11-07
+
+### Changed
+
+- **nvidia: each card is colored by its own temperature limits.** Temp turns red at the card's max operating temperature from `nvidia-smi -q` (93 °C for an RTX 3090, 98 °C for an RTX A4000) and yellow 5 °C below, instead of 80 and 90 °C for every card. A key locked to the old command keeps working with 80 and 90; to get the limits, lock it to the new line in the [nvidia README](plugins/nvidia/README.md#a-key-that-can-only-read-the-gpus).
+
 ## [0.6.1] - 2026-10-29
 
 ### Changed
