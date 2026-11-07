@@ -1,6 +1,6 @@
 # nvidia
 
-Load, VRAM, power, temperature and fan of NVIDIA GPUs, from one `nvidia-smi` query. It runs over SSH on the machine with the GPUs, or inside the dashboard container when that container has GPU access and no `host` is set.
+Load, VRAM, power, temperature and fan of NVIDIA GPUs, from one `nvidia-smi` command. It runs over SSH on the machine with the GPUs, or inside the dashboard container when that container has GPU access and no `host` is set.
 
 ```yaml
 sources:
@@ -25,20 +25,22 @@ sections:
 The plugin only ever runs this one command:
 
 ```sh
-nvidia-smi --query-gpu=index,name,utilization.gpu,memory.used,memory.total,power.draw,power.limit,temperature.gpu,fan.speed,pstate --format=csv,noheader,nounits
+nvidia-smi --query-gpu=index,name,utilization.gpu,memory.used,memory.total,power.draw,power.limit,temperature.gpu,fan.speed,pstate --format=csv,noheader,nounits && nvidia-smi -q -d TEMPERATURE
 ```
 
-so the key can be locked to it. Set up the account as the [ssh plugin](../ssh/README.md#an-account-that-can-only-do-this) explains, with this line in its `~/.ssh/authorized_keys` (one line, with the dashboard's public key at the end):
+The first half reads the cards, the second gives each card's own temperature limits. The key can be locked to that line. Set up the account as the [ssh plugin](../ssh/README.md#an-account-that-can-only-do-this) explains, with this line in its `~/.ssh/authorized_keys` (one line, with the dashboard's public key at the end):
 
 ```text
-restrict,command="nvidia-smi --query-gpu=index,name,utilization.gpu,memory.used,memory.total,power.draw,power.limit,temperature.gpu,fan.speed,pstate --format=csv,noheader,nounits" ssh-ed25519 AAAA... homelabdash
+restrict,command="nvidia-smi --query-gpu=index,name,utilization.gpu,memory.used,memory.total,power.draw,power.limit,temperature.gpu,fan.speed,pstate --format=csv,noheader,nounits && nvidia-smi -q -d TEMPERATURE" ssh-ed25519 AAAA... homelabdash
 ```
 
-Whatever a client asks for, that key gets the GPU readings and nothing more. Set `hostFingerprint` too, or let the first connection pin the host key.
+Whatever a client asks for, that key gets the GPU readings and nothing more. A key locked to the readings alone, as before 0.6.2, keeps working; its temperatures just use 80 and 90 °C. Set `hostFingerprint` too, or let the first connection pin the host key.
 
 ## Options
 
 `view`: `gpu` (default) shows one GPU (`gpu: 0`, `1`...) as Load, VRAM (share of the card in use, warning from 90%, with the GB beside the label), Power and Temp; `list` shows one row per GPU with its load as a bar, VRAM, power, temperature and fan.
+
+Temp turns red at the card's own max operating temperature as `nvidia-smi -q` gives it (its slowdown temperature when that is all it gives), and yellow 5 °C below. Cards differ: an RTX 3090 tops out at 93 °C, an RTX A4000 at 98 °C. A card that reports neither keeps 80 and 90 °C. The `list` view colors each row the same way.
 
 ## Config
 

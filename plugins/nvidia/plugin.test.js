@@ -25,6 +25,25 @@ test('what a card does not report stays empty instead of failing', async () => {
   assert.deepEqual(r.view.items.map((/** @type {any} */ i) => i.value), [5, (100 / 15360) * 100, null, 50])
 })
 
+test('each card turns yellow and red by its own limits, from the readings and nvidia-smi -q in one command', async () => {
+  const r = await runPlugin(import.meta.dirname, { config: ssh })
+  assert.deepEqual(r.view.items.at(-1), { label: 'Temp', value: 87, format: 'temperature', warn: 88, crit: 93 })
+  const local = await runPlugin(import.meta.dirname, { config: {}, options: { gpu: 1 } })
+  assert.deepEqual([local.view.items.at(-1).warn, local.view.items.at(-1).crit], [88, 93])
+
+  // a workstation card that runs hotter, with a slowdown but no max operating temperature reported
+  const csv = '0, NVIDIA RTX A4000, 0, 200, 16376, 52.80, 140.00, 96, 100, P2\n'
+  const q = '==============NVSMI LOG==============\nGPU 00000000:01:00.0\n    Temperature\n        GPU Shutdown Temp : 103 C\n        GPU Slowdown Temp : 100 C\n        GPU Max Operating Temp : N/A\n'
+  const hot = await runPlugin(import.meta.dirname, { config: ssh, fixtures: { [`SSH ${QUERY}`]: { stdout: csv + q } }, options: { view: 'list' } })
+  assert.equal(hot.view.items[0].tone, 'warning')
+})
+
+test('a key still locked to the readings alone keeps 80 and 90', async () => {
+  const fixtures = { [`SSH ${QUERY}`]: { stdout: '0, NVIDIA GeForce RTX 3090, 84, 12666, 24576, 341.39, 350.00, 91, 98, P2\n' } }
+  const r = await runPlugin(import.meta.dirname, { config: ssh, fixtures, options: { view: 'list' } })
+  assert.equal(r.view.items[0].tone, 'error')
+})
+
 test('a GPU that does not exist, and nvidia-smi failing, are explained', async () => {
   const r = await runPlugin(import.meta.dirname, { config: ssh, options: { gpu: 4 } })
   assert.equal(r.view.type, 'text')
