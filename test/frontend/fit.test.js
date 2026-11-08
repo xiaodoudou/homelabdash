@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { fit, planRows, stack } from '../../web/src/fit.js'
+import { fit, planRows, planTiles, stack } from '../../web/src/fit.js'
 
 // jsdom draws nothing, so each element reports the widths a browser would: 100 px a stat column.
 const cols = (/** @type {Element} */ el) => Number(/** @type {HTMLElement} */ (el).style.getPropertyValue('--scols') || el.children.length)
@@ -124,6 +124,33 @@ describe('planRows', () => {
     expect(/** @type {HTMLElement} */ (stacked.querySelector('.stack')).style.getPropertyValue('--min')).toBe('700px')
     const seen = new Map([['a', 1500]])
     expect(planRows(section([['a', 600], ['b', 500], ['c', 500]]), 2000, 16, seen).system).toEqual([['a'], ['b', 'c']])
+  })
+})
+
+describe('planTiles', () => {
+  it('cuts the cards of a group into even rows at its width, and leaves a single card alone', () => {
+    const { root, groups } = page()
+    const g = document.createElement('div')
+    g.className = 'group'
+    g.dataset.section = 'net'
+    Object.defineProperty(g, 'clientWidth', { get: () => 2000 })
+    const rows = document.createElement('div')
+    rows.className = 'tile-rows'
+    const box = document.createElement('div')
+    box.className = 'tiles'
+    rows.append(box)
+    g.append(rows)
+    groups.append(g)
+    for (const [id, w] of /** @type {[string, number][]} */ ([['router', 560], ['conns', 150], ['clash', 500], ['vpn', 340], ['adguard', 330], ['sab', 330], ['qbit', 330]])) {
+      const t = document.createElement('article')
+      t.className = 'tile'
+      t.dataset.tile = id
+      t.getBoundingClientRect = () => /** @type {DOMRect} */ ({ width: w })
+      box.append(t)
+    }
+    expect(planTiles(root, 16, new Map())['tiles:net']).toEqual([['router', 'conns', 'clash'], ['vpn', 'adguard', 'sab', 'qbit']])
+    for (const t of [...box.children].slice(1)) t.remove()
+    expect(planTiles(root, 16, new Map())).toEqual({})
   })
 })
 

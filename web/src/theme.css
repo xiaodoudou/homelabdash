@@ -144,6 +144,10 @@ button { font: inherit; color: inherit; }
 .tiles > .tile:has(.v-list, .v-progress, .v-text, .tile-error) { flex: 1.5 1 340px; min-width: 0; }
 .tiles > .tile:has(.v-log), .tiles > .tile.span-full, .tiles > .tile.bare { flex-basis: 100%; min-width: 0; }
 .tiles > .tile[style*="--span"] { min-width: min(100%, calc(var(--span) * 220px)); }
+/* the cards of a group in the rows fit.js planned for them, measured there at their content width */
+.tile-rows { flex: 1; display: flex; flex-direction: column; gap: var(--gap); }
+.group.is-measuring .tiles > .tile { flex: none; }
+.group.is-measuring .tiles > .tile:has(.v-list, .v-progress, .v-text, .tile-error) { flex: 0 0 340px; }
 
 /* sections with an explicit layout keep their own grid */
 .grid { display: grid; gap: var(--gap); grid-template-columns: repeat(auto-fill, minmax(min(var(--min), 100%), 1fr)); container-type: inline-size; }
