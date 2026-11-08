@@ -77,6 +77,15 @@ describe('StatsView', () => {
     expect(w.find('.v-stats').attributes('style')).toContain('--scols: 2')
   })
 
+  it('a text value on two lines draws the first small over the second', () => {
+    const item = { label: 'Node', value: 'AI Auto\nTokyo 01', format: 'text' }
+    const w = mount(StatsView, { props: { view: { type: 'stats', items: [item] }, ctx: ctx() } })
+    expect(w.find('.v-stat-over').text()).toBe('AI Auto')
+    expect(w.find('.v-stat-value').text()).toBe('AI AutoTokyo 01')
+    const one = mount(StatsView, { props: { view: { type: 'stats', items: [{ label: 'Node', value: 'Tokyo 01', format: 'text' }] }, ctx: ctx() } })
+    expect(one.find('.v-stat-over').exists()).toBe(false)
+  })
+
   it('draws the detail beside the label', () => {
     const item = { label: 'VRAM', value: 52, format: 'percent', detail: '12.4 / 24.0 GB' }
     const w = mount(StatsView, { props: { view: { type: 'stats', items: [item] }, ctx: ctx({ titles: ['GPU0'] }) } })

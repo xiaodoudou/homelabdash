@@ -35,5 +35,5 @@ sections:
 ## Notes
 
 - Polls `/proxies/<group>` and `/connections` (only the counts and totals are kept, the connection list can be large). While a dashboard is open, `/traffic` streams one sample per second and the rates update live; without a viewer the rates are empty.
-- When the group's `now` is itself a group (a `url-test`, `fallback` or `load-balance`), the summary follows its choice down to the node really in use and shows the groups beside the label, as "via AI Auto"; names keep their emoji.
+- When the group's `now` is itself a group (a `url-test`, `fallback` or `load-balance`), the summary follows its choice down to the node really in use and shows the group on a small line over the node; names keep their emoji.
 - Recent builds also send running totals on `/traffic`; with them the totals update every second too.

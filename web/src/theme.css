@@ -217,7 +217,9 @@ a.v-stat:hover .v-stat-value { color: var(--accent); }
 .v-stat-value { font-size: var(--value); font-weight: 620; line-height: 1.15; letter-spacing: -.3px; font-variant-numeric: tabular-nums; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .v-stat-value .u { margin-left: .2em; font-size: .6em; font-weight: 500; letter-spacing: 0; color: var(--text-2); }
 .v-stat-value.is-zero, .v-stat-value.is-zero .u { color: var(--muted); }
-.v-stat-value.is-text { font-weight: 550; color: var(--text-2); }
+.v-stat-value.is-text { font-weight: 550; letter-spacing: 0; color: var(--text-2); }
+/* a text value on two lines: the first, smaller, says where the second comes from (a node via its group) */
+.v-stat-over { display: block; font-size: .6em; font-weight: 500; letter-spacing: 0; color: var(--muted); overflow: hidden; text-overflow: ellipsis; }
 .v-stat-label { font-size: 12px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .v-stat-detail { margin-left: 6px; color: var(--text-2); font-variant-numeric: tabular-nums; }
 .v-stat-value.tone-error .u, .v-stat-value.tone-warning .u { color: inherit; }

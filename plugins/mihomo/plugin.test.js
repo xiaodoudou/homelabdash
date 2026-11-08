@@ -54,7 +54,7 @@ test('unknown group is reported', async () => {
   )
 })
 
-test('a group that picks another group shows the node in use, and the group beside the label', async () => {
+test('a group that picks another group shows itself over the node in use', async () => {
   const r = await runPlugin(import.meta.dirname, {
     config,
     fixtures: {
@@ -64,7 +64,7 @@ test('a group that picks another group shows the node in use, and the group besi
       'GET /proxies/%F0%9F%87%AF%F0%9F%87%B5%20Tokyo%2001': { body: { name: '🇯🇵 Tokyo 01', type: 'Trojan' } }
     }
   })
-  assert.deepEqual([r.view.items[0].value, r.view.items[0].detail], ['🇯🇵 Tokyo 01', 'via AI Auto'])
+  assert.equal(r.view.items[0].value, 'AI Auto\n🇯🇵 Tokyo 01')
   assert.deepEqual(r.data.via, ['AI Auto'])
 })
 
