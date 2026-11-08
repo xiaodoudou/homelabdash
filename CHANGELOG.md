@@ -4,6 +4,12 @@ Changes that people running homelabdash or writing plugins would notice. The for
 
 ## [Unreleased]
 
+## [0.6.7] - 2026-11-08
+
+### Changed
+
+- **Dependencies updated** within their versions: ws 8.22.1 and express-rate-limit 8.7.3 on the server, and the build and test tools. Nothing changes in how the dashboard works.
+
 ## [0.6.6] - 2026-11-08
 
 ### Fixed
