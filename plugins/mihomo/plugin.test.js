@@ -54,6 +54,33 @@ test('unknown group is reported', async () => {
   )
 })
 
+test('a group that picks another group shows the node in use, and the group beside the label', async () => {
+  const r = await runPlugin(import.meta.dirname, {
+    config,
+    fixtures: {
+      ...fixtures,
+      'GET /proxies/Proxy': { body: { name: 'Proxy', type: 'Selector', now: 'AI Auto' } },
+      'GET /proxies/AI%20Auto': { body: { name: 'AI Auto', type: 'URLTest', now: '🇯🇵 Tokyo 01' } },
+      'GET /proxies/%F0%9F%87%AF%F0%9F%87%B5%20Tokyo%2001': { body: { name: '🇯🇵 Tokyo 01', type: 'Trojan' } }
+    }
+  })
+  assert.deepEqual([r.view.items[0].value, r.view.items[0].detail], ['🇯🇵 Tokyo 01', 'via AI Auto'])
+  assert.deepEqual(r.data.via, ['AI Auto'])
+})
+
+test('groups that pick each other stop instead of looping', async () => {
+  const r = await runPlugin(import.meta.dirname, {
+    config,
+    fixtures: {
+      ...fixtures,
+      'GET /proxies/Proxy': { body: { name: 'Proxy', now: 'A' } },
+      'GET /proxies/A': { body: { name: 'A', now: 'B' } },
+      'GET /proxies/B': { body: { name: 'B', now: 'A' } }
+    }
+  })
+  assert.deepEqual([r.data.node, r.data.via], ['A', ['A', 'B']])
+})
+
 test('group names are escaped in the path', async () => {
   const r = await runPlugin(import.meta.dirname, {
     config: { ...config, group: '🎬 Media' },

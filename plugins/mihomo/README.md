@@ -30,10 +30,10 @@ sections:
 |---|---|---|
 | `url` | required | `external-controller` address (port 9090 by default) |
 | `secret` | | `secret` from the mihomo config, sent as `Authorization: Bearer`; use `${secret:...}` |
-| `group` | `Proxy` | proxy group whose `now` the summary shows |
+| `group` | `Proxy` | proxy group whose node in use the summary shows |
 
 ## Notes
 
 - Polls `/proxies/<group>` and `/connections` (only the counts and totals are kept, the connection list can be large). While a dashboard is open, `/traffic` streams one sample per second and the rates update live; without a viewer the rates are empty.
-- The node is the group's `now`, which can itself be a group (a `url-test` or `fallback`); names keep their emoji.
+- When the group's `now` is itself a group (a `url-test`, `fallback` or `load-balance`), the summary follows its choice down to the node really in use and shows the groups beside the label, as "via AI Auto"; names keep their emoji.
 - Recent builds also send running totals on `/traffic`; with them the totals update every second too.
