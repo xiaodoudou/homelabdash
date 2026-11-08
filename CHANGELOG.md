@@ -4,6 +4,12 @@ Changes that people running homelabdash or writing plugins would notice. The for
 
 ## [Unreleased]
 
+## [0.6.6] - 2026-11-08
+
+### Fixed
+
+- **Real flags on Windows.** Windows draws flag emoji, such as the one in a Clash node name, as two letters (SG). The page now brings a small font of flags (Twemoji, about 80 KB) and uses it only there.
+
 ## [0.6.5] - 2026-11-08
 
 ### Fixed
