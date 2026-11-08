@@ -114,7 +114,7 @@ export default {
     return {
       type: 'stats',
       items: [
-        { label: 'Node', value: data?.node ?? null, format: 'text', detail: data?.via?.length ? `via ${data.via.join(' > ')}` : null },
+        { label: 'Node', value: data?.node && data.via?.length ? `${data.via.join(' > ')}\n${data.node}` : data?.node ?? null, format: 'text' },
         { label: 'Conns', value: data?.connections ?? null, format: 'number' },
         { label: 'Down', value: t?.down ?? null, format: 'byterate' },
         { label: 'Up', value: t?.up ?? null, format: 'byterate' }
