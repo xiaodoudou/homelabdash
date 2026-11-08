@@ -25,9 +25,13 @@ const cells = computed(() => {
     const text = it.format === 'text' || (typeof it.value === 'string' && Number.isNaN(Number(it.value)))
     const first = !seen.has(it.label)
     seen.add(it.label)
+    const value = fmt(it.value, it.format, it.unit)
+    // a text value on two lines: the first, small, says where the second comes from (a node via its group)
+    const cut = text ? value.indexOf('\n') : -1
     return {
       it,
-      value: fmt(it.value, it.format, it.unit),
+      over: cut < 0 ? null : value.slice(0, cut),
+      value: cut < 0 ? value : value.slice(cut + 1),
       cls: ['v-stat-value', tone && `tone-${tone}`, !tone && it.value === 0 && 'is-zero', text && 'is-text'],
       series: graphed(it.label) && first ? history?.[it.label] : undefined
     }
@@ -53,7 +57,10 @@ const style = computed(() => ({ '--scols': props.ctx.stats?.cols ?? props.view.i
       <span
         :class="c.cls"
         :data-f="c.it.format"
-      ><ValueText
+      ><span
+        v-if="c.over"
+        class="v-stat-over"
+      >{{ c.over }}</span><ValueText
         :text="c.value"
         :format="c.it.format"
         :unit="c.it.unit ?? undefined"

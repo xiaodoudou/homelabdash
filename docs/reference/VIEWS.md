@@ -20,7 +20,7 @@ A row of numbers with a label under each.
 
 | Item key | |
 |---|---|
-| `label`, `value` | `value` is a number, a string or `null` (shown as `-`) |
+| `label`, `value` | `value` is a number, a string or `null` (shown as `-`); a string with a line break shows its first line small over the second |
 | `format`, `unit` | see [Formats](#formats); `unit` is appended in small type |
 | `warn`, `crit` | the value turns amber, then red, at or above these (at or below with `invert: true`) |
 | `tone` | colors the value directly: `ok`, `info`, `warning`, `error`, `neutral` |
