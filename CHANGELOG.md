@@ -4,6 +4,13 @@ Changes that people running homelabdash or writing plugins would notice. The for
 
 ## [Unreleased]
 
+## [0.6.4] - 2026-11-08
+
+### Changed
+
+- **mihomo: the group over the node.** The group that picked the node shows on a small line above it, instead of "via ..." beside the label.
+- **Names read at their normal spacing.** Text values such as a node name no longer use the tighter spacing meant for numbers.
+
 ## [0.6.3] - 2026-11-08
 
 ### Changed
