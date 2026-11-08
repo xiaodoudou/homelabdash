@@ -7,3 +7,9 @@ declare module '*.vue' {
 
 // Stylesheets are imported for their side effect; Vite bundles them.
 declare module '*.css'
+
+// `?url` imports give the URL Vite serves the file at.
+declare module '*?url' {
+  const url: string
+  export default url
+}
