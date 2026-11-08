@@ -4,6 +4,12 @@ Changes that people running homelabdash or writing plugins would notice. The for
 
 ## [Unreleased]
 
+## [0.6.5] - 2026-11-08
+
+### Fixed
+
+- **Cards inside a group share their rows evenly.** A group of separate cards, such as Network, is cut into balanced rows the way groups are, instead of filling the first row and stretching the last one or two cards across the page.
+
 ## [0.6.4] - 2026-11-08
 
 ### Changed
