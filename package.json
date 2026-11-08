@@ -1,6 +1,6 @@
 {
   "name": "homelabdash",
-  "version": "0.6.5",
+  "version": "0.6.6",
   "description": "Self-hosted homelab dashboard with Node plugins that people and coding agents can write, validate and test.",
   "type": "module",
   "license": "Apache-2.0",
@@ -61,6 +61,7 @@
     "@types/ws": "^8.18.2",
     "@vitejs/plugin-vue": "^6.0.10",
     "@vue/test-utils": "^2.5.1",
+    "country-flag-emoji-polyfill": "^0.1.10",
     "eslint": "^10.13.0",
     "eslint-plugin-vue": "^10.11.1",
     "globals": "^17.13.0",

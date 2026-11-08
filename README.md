@@ -125,4 +125,4 @@ Buttons that change something upstream, such as pausing SABnzbd or approving a r
 
 [CONTRIBUTING.md](CONTRIBUTING.md) explains how to run the project, test it and send a change. Security problems go through private reporting, see [SECURITY.md](SECURITY.md), and what changed between versions is in [CHANGELOG.md](CHANGELOG.md).
 
-homelabdash is released under the [Apache License 2.0](LICENSE).
+homelabdash is released under the [Apache License 2.0](LICENSE). Flag emoji on Windows are drawn with the Twemoji Country Flags font from [country-flag-emoji-polyfill](https://github.com/talkjs/country-flag-emoji-polyfill) (MIT), whose flag art comes from [Twemoji](https://github.com/twitter/twemoji) under [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/).
