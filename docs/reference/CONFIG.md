@@ -155,7 +155,7 @@ sections:
           - { title: Streams, hideWhen: empty, tiles: [...] }
 ```
 
-While something plays, Now Playing takes the left and Backlog sits over Streams beside it, each taking half the height. With nothing playing the stack has the row to itself, and Backlog and Streams share it. A stack hides itself when none of its groups has anything to show. Its groups keep the ids they would have outside it, so moving a group into a stack keeps its graph history.
+While something plays, Now Playing takes the left half of the row and Backlog sits over Streams in the right half, each taking half the height. A stack never gets narrower than its groups need under each other. With nothing playing the stack has the row to itself, and Backlog and Streams share it. A stack hides itself when none of its groups has anything to show. Its groups keep the ids they would have outside it, so moving a group into a stack keeps its graph history.
 
 ## Icons
 

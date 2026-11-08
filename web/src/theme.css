@@ -135,6 +135,8 @@ button { font: inherit; color: inherit; }
 .group:has(.v-log, .tile.span-full, .tile.bare) { flex-basis: 100%; }
 /* a stack takes the room its row leaves: its groups sit side by side when they fit there, else under each other */
 .group.stack { flex: 1 1 0; min-width: min(100%, var(--min, 0px)); }
+/* beside a stack, a group shares the row evenly instead of taking all the room the stack leaves */
+.group-row:has(> .group.stack) > .group { flex: 1 1 0; }
 .stack-groups { flex: 1; display: flex; flex-wrap: wrap; gap: 16px var(--gap); }
 .groups.is-measuring .stack-groups { flex-direction: column; }
 .stack-groups.is-stacked { display: grid; grid-auto-rows: 1fr; }

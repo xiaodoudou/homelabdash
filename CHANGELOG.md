@@ -4,6 +4,10 @@ Changes that people running homelabdash or writing plugins would notice. The for
 
 ## [Unreleased]
 
+### Fixed
+
+- **A group beside a stack** now shares the row evenly with it, so Now Playing no longer takes most of the width with one stream on.
+
 ## [0.6.7] - 2026-11-08
 
 ### Changed
