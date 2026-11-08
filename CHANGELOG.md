@@ -4,6 +4,13 @@ Changes that people running homelabdash or writing plugins would notice. The for
 
 ## [Unreleased]
 
+## [0.6.3] - 2026-11-08
+
+### Changed
+
+- **mihomo: the node really in use.** When the group picks another group, such as a url-test "Auto", the summary shows the node that group chose, with "via Auto" beside the label, instead of the group's name.
+- **minimatch 11.0.1** for the build tools, closing a Dependabot alert (nothing changes in the dashboard).
+
 ## [0.6.2] - 2026-11-07
 
 ### Changed

@@ -53,16 +53,28 @@ export default {
   async fetch (ctx) {
     const { base, opts } = api(ctx)
     const group = ctx.config.group
-    const [proxy, conns] = await Promise.all([
-      ctx.http.json(`${base}/proxies/${encodeURIComponent(group)}`, opts).catch(err => {
+    const proxy = (/** @type {string} */ name) => ctx.http.json(`${base}/proxies/${encodeURIComponent(name)}`, opts)
+    const [first, conns] = await Promise.all([
+      proxy(group).catch(err => {
         throw err?.status === 404 ? new Error(`mihomo has no proxy group "${group}"`) : err
       }),
       ctx.http.json(`${base}/connections`, opts)
     ])
+    // A group can pick another group (url-test, fallback, load-balance): follow its choice down to the node in use.
+    let node = typeof first?.now === 'string' ? first.now : null
+    /** @type {string[]} */
+    const via = []
+    while (node && via.length < 5 && !via.includes(node)) {
+      const next = await proxy(node).catch(() => null)
+      if (typeof next?.now !== 'string' || !next.now) break
+      via.push(node)
+      node = next.now
+    }
     const traffic = ctx.data?.traffic
     return {
       group,
-      node: typeof proxy?.now === 'string' ? proxy.now : null,
+      node,
+      via,
       connections: Array.isArray(conns?.connections) ? conns.connections.length : 0,
       downloadTotal: num(conns?.downloadTotal),
       uploadTotal: num(conns?.uploadTotal),
@@ -102,7 +114,7 @@ export default {
     return {
       type: 'stats',
       items: [
-        { label: 'Node', value: data?.node ?? null, format: 'text' },
+        { label: 'Node', value: data?.node ?? null, format: 'text', detail: data?.via?.length ? `via ${data.via.join(' > ')}` : null },
         { label: 'Conns', value: data?.connections ?? null, format: 'number' },
         { label: 'Down', value: t?.down ?? null, format: 'byterate' },
         { label: 'Up', value: t?.up ?? null, format: 'byterate' }
