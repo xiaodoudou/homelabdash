@@ -35,6 +35,35 @@ export function planRows (root, W, gap, seen) {
 }
 
 /**
+ * Cuts the cards of each group into rows the way planRows() cuts groups, against the width the group got: a card is
+ * measured at its content width (a list at its usual 340 px), and a row never ends with one card stretched alone.
+ * @param {ParentNode} root @param {number} gap @param {Map<string, number>} seen
+ * @returns {Record<string, string[][]>} keyed `tiles:<group id>`
+ */
+export function planTiles (root, gap, seen) {
+  /** @type {Record<string, string[][]>} */
+  const out = {}
+  for (const g of /** @type {NodeListOf<HTMLElement>} */ (root.querySelectorAll('.group[data-section]:not(.stack)'))) {
+    const tiles = /** @type {HTMLElement[]} */ ([...g.querySelectorAll(':scope > .tile-rows > .tiles > .tile')])
+    if (tiles.length < 2) continue
+    const W = g.clientWidth
+    g.classList.add('is-measuring')
+    const widths = tiles.map(t => {
+      const key = `tile:${t.dataset.tile}`
+      const w = Math.max(t.getBoundingClientRect().width, seen.get(key) ?? 0)
+      seen.set(key, w)
+      return w
+    })
+    g.classList.remove('is-measuring')
+    const pct = tiles.map(t => parseFloat(t.style.getPropertyValue('--pct')) || 0)
+    const full = tiles.map(t => t.matches('.span-full, .bare, :has(.v-log)'))
+    const spans = widths.map((w, i) => full[i] ? 24 : Math.min(24, pct[i] ? pct[i] / 100 * 24 : ((w + gap) / (W + gap)) * 24))
+    out[`tiles:${g.dataset.section}`] = plan(spans, 24.001, pct.map(Boolean)).map(([a, b]) => tiles.slice(a, b).map(t => t.dataset.tile ?? ''))
+  }
+  return out
+}
+
+/**
  * Marks the stacks whose groups went under each other, so they share its height evenly: a stack is a wrapping row,
  * and only where its groups landed says whether they fit side by side.
  * @param {ParentNode} root

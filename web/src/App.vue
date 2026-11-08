@@ -1,7 +1,7 @@
 <script setup>
 import { computed, nextTick, onMounted, onBeforeUnmount, ref, watch } from 'vue'
 import { state, layout, expanded, start } from './store.js'
-import { fit, planRows, pageGap, stack } from './fit.js'
+import { fit, planRows, planTiles, pageGap, stack } from './fit.js'
 import TopBar from './components/TopBar.vue'
 import ConfigErrors from './components/ConfigErrors.vue'
 import PageSection from './components/PageSection.vue'
@@ -27,9 +27,18 @@ async function relayout () {
   if (!width.value || !main.value) return
   if (width.value !== measured) cols.clear()
   measured = width.value
-  const rows = planRows(main.value, width.value, pageGap(), seen)
-  if (JSON.stringify(rows) !== JSON.stringify(layout.rows)) {
-    layout.rows = rows
+  const gap = pageGap()
+  /** @param {boolean} tiles */
+  const part = tiles => Object.fromEntries(Object.entries(layout.rows).filter(([k]) => k.startsWith('tiles:') === tiles))
+  // groups first, then the cards of each group in the width its row gave it
+  const rows = planRows(main.value, width.value, gap, seen)
+  if (JSON.stringify(rows) !== JSON.stringify(part(false))) {
+    layout.rows = { ...part(true), ...rows }
+    await nextTick()
+  }
+  const tiles = planTiles(main.value, gap, seen)
+  if (JSON.stringify(tiles) !== JSON.stringify(part(true))) {
+    layout.rows = { ...part(false), ...tiles }
     await nextTick()
   }
   stack(main.value)

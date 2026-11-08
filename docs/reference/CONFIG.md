@@ -137,6 +137,7 @@ sections:
 - Groups with a width keep it. The ones without share the rest of the row.
 - Neighbours with a width stay on one row as long as they add up to 100% or less.
 - On a tile, `width` is its share of its group's row of tiles, not of the page.
+- The cards of a group without `merge` are cut into rows the same way: as few as fit, then as even as they can be.
 - On a phone, where everything stacks, widths are ignored.
 - When a group is narrower than its numbers need, they wrap onto more rows (four as 2x2, three as 2+1), and the panels of a merged card move under each other if that is still not enough. Nothing is cut off.
 
