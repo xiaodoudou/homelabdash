@@ -15,6 +15,13 @@ const clock = computed(() => { void minute.value; return clockFmt.format(new Dat
 const graphs = computed(() => { void state.dash; return [...defs.values()].some(t => t.graph) })
 const step = computed(() => Math.round((state.dash?.history?.step ?? 10_000) / 1000))
 const windowMin = computed(() => Math.round((state.dash?.history?.window ?? 3_600_000) / 60_000))
+const timeFmt = new Intl.DateTimeFormat(undefined, { hour: '2-digit', minute: '2-digit' })
+const offline = computed(() => {
+  if (state.conn === 'live' || !state.dataAt) return null
+  const at = new Date(state.dataAt)
+  const day = at.toDateString() === new Date().toDateString() ? timeFmt.format(at) : clockFmt.format(at)
+  return { text: state.conn === 'offline' ? 'Offline' : 'Connecting', day }
+})
 const topTiles = computed(() => props.topSections.flatMap((/** @type {any} */ s) => visibleTiles(s)))
 </script>
 
@@ -68,10 +75,14 @@ const topTiles = computed(() => props.topSections.flatMap((/** @type {any} */ s)
         /></svg>
         Graphs: last {{ windowMin >= 60 ? 'hour' : `${windowMin} min` }}
       </span>
+      <span
+        v-if="offline"
+        class="offline-note"
+      >{{ offline.text }}, data from {{ offline.day }}</span>
       <span class="clock">{{ clock }}</span>
       <span
         :class="['conn', `conn-${state.conn}`]"
-        :title="state.conn === 'live' ? 'Live' : 'Reconnecting'"
+        :title="state.conn === 'live' ? 'Live' : state.conn === 'offline' ? 'Offline, retrying' : 'Connecting'"
       />
     </div>
   </header>

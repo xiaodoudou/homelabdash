@@ -15,3 +15,6 @@ document.head.append(css)
 createApp(App).mount('#app')
 
 document.body.append(Object.assign(document.createElement('script'), { type: 'module', src: '/custom.js' }))
+
+// Only over HTTPS or on localhost, where browsers allow service workers; elsewhere the page just has no offline copy.
+if (import.meta.env.PROD && 'serviceWorker' in navigator) navigator.serviceWorker.register('/sw.js').catch(() => {})

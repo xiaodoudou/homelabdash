@@ -72,6 +72,8 @@ Dismissing an alert hides it until it stops firing. The dismissal is kept on the
 
 The browser opens a single WebSocket and the server pushes tiles to it when they change, so the page itself never polls. If the connection drops, or goes quiet for 45 seconds (a laptop that slept, a network change), the page reconnects and gets every tile again.
 
+When the server is down or stops answering, the page still opens: the browser keeps a copy of the page and the last tiles it received, shows them dimmed, and the header says "Offline, data from" and the time of that data until the server is back. That copy needs HTTPS (or localhost), since browsers only allow the service worker that keeps it there; over plain HTTP the page works as before, without it.
+
 On the server, each source runs on its `interval`, or `settings.defaultInterval` (30 seconds) when neither the source nor its plugin sets one. With no browser connected, sources slow down to `settings.idleInterval` (5 minutes), and opening the page brings them back up to speed.
 
 Some plugins also stream. The `docker` plugin follows Docker events, `ssh` can follow a log with `tail -F`, and `mihomo` reads live traffic. A stream updates its tiles as things happen, and only runs while a page is open.
