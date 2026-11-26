@@ -15,6 +15,8 @@ export const state = reactive({
   page: pageFromHash(),
   /** @type {'connecting' | 'live' | 'offline'} */
   conn: 'connecting',
+  /** @type {number | null} when the tiles shown last came from the server, while it cannot be reached */
+  dataAt: null,
   /** @type {any[]} */
   errors: [],
   /** @type {{ text: string, tone: string } | null} */
@@ -59,6 +61,16 @@ let release
 const waiting = new Map()
 /** @type {ReturnType<typeof setTimeout> | undefined} */
 let toastTimer
+/** @type {ReturnType<typeof setTimeout> | undefined} */
+let saveTimer
+/** @type {ReturnType<typeof setTimeout> | undefined} */
+let staleTimer
+
+const SNAPSHOT = 'homelabdash:tiles'
+// A server that accepts the connection but never answers would otherwise leave the page on "connecting" for minutes.
+const CONNECT_TIMEOUT = 8000
+// Long enough that a watchdog reconnect does not dim every tile for a moment.
+const STALE_AFTER = 5000
 
 function pageFromHash () {
   return location.hash.replace(/^#\/?/, '')
@@ -66,6 +78,7 @@ function pageFromHash () {
 
 /** Starts loading, the WebSocket and the listeners that keep the page current. Called once by the app. */
 export function start () {
+  restore()
   load()
   connect()
   window.addEventListener('hashchange', () => { state.page = pageFromHash() })
@@ -108,8 +121,16 @@ export async function load () {
 function connect () {
   const socket = new WebSocket(`${location.protocol === 'https:' ? 'wss' : 'ws'}://${location.host}/api/ws`)
   ws = socket
-  socket.onopen = () => { retry = 0; lastSeen = Date.now(); state.conn = 'live' }
+  const give = setTimeout(() => {
+    if (socket.readyState === WebSocket.OPEN) return
+    socket.onclose = null
+    socket.close()
+    lost()
+    setTimeout(connect, Math.min(15_000, 500 * 2 ** retry++))
+  }, CONNECT_TIMEOUT)
+  socket.onopen = () => { clearTimeout(give); retry = 0; lastSeen = Date.now(); state.conn = 'live' }
   socket.onclose = () => {
+    clearTimeout(give)
     lost()
     setTimeout(connect, Math.min(15_000, 500 * 2 ** retry++))
   }
@@ -126,6 +147,8 @@ export function receive (msg) {
       // After an update the server runs another release: load its page instead of keeping this one.
       if (release && msg.release && msg.release !== release) return location.reload()
       release ??= msg.release
+      clearTimeout(staleTimer)
+      state.dataAt = null
       tiles.clear()
       for (const t of msg.tiles) tiles.set(t.id, t)
       history.clear()
@@ -133,6 +156,7 @@ export function receive (msg) {
       state.errors = msg.configErrors ?? []
       if (state.dash && msg.version !== state.dash.version) load()
       state.version++
+      save()
       break
     case 'tiles':
       for (const t of msg.tiles) {
@@ -140,6 +164,7 @@ export function receive (msg) {
         if (t.point) addPoints(t.id, t.point)
       }
       state.version++
+      save()
       break
     case 'dashboard':
       load()
@@ -162,9 +187,41 @@ export function receive (msg) {
 }
 
 function lost () {
+  const was = state.conn
   state.conn = 'offline'
   for (const [, done] of waiting) done({ ok: false, error: 'connection lost' })
   waiting.clear()
+  if (was !== 'live') return
+  const at = lastSeen
+  clearTimeout(staleTimer)
+  staleTimer = setTimeout(() => {
+    if (state.conn === 'live') return
+    state.dataAt = at
+    for (const [id, t] of tiles) tiles.set(id, { ...t, stale: true })
+    state.version++
+  }, STALE_AFTER)
+}
+
+/** Keeps the last tiles in the browser, so a page opened while the server is down still shows them. */
+function save () {
+  if (saveTimer) return
+  saveTimer = setTimeout(() => {
+    saveTimer = undefined
+    try {
+      localStorage.setItem(SNAPSHOT, JSON.stringify({ at: Date.now(), tiles: [...tiles.values()].map(({ point: _point, ...t }) => t) }))
+    } catch { /* storage full or disabled: the page works without it */ }
+  }, 2000)
+}
+
+/** Shows the saved tiles, dimmed, until the server sends its own. */
+export function restore () {
+  try {
+    const snap = JSON.parse(localStorage.getItem(SNAPSHOT) ?? 'null')
+    if (!snap?.tiles?.length || tiles.size) return
+    for (const t of snap.tiles) tiles.set(t.id, { ...t, stale: true, loading: false })
+    state.dataAt = snap.at
+    state.version++
+  } catch { /* nothing saved, or not readable */ }
 }
 
 /**

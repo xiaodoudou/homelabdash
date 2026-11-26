@@ -29,6 +29,7 @@ class FakeSocket {
 /** A fresh store, with the WebSocket and fetch replaced. */
 async function fresh () {
   vi.resetModules()
+  localStorage.clear()
   FakeSocket.all = []
   vi.stubGlobal('WebSocket', FakeSocket)
   vi.stubGlobal('fetch', vi.fn(async () => ({ status: 200, json: async () => ({ version: 1, pages: [], history: { step: 10_000, window: 3_600_000 } }) })))
@@ -115,5 +116,59 @@ describe('store', () => {
     await done
     expect(s.pending.size).toBe(0)
     expect(s.state.toast).toEqual({ text: 'Done', tone: 'ok' })
+  })
+
+  it('the last tiles are saved and shown dimmed on a page opened while the server is down', async () => {
+    vi.useFakeTimers()
+    let s = await fresh()
+    s.receive({ type: 'hello', version: 1, tiles: [{ id: 'a', view: { type: 'text', text: 'zero' }, stale: false }] })
+    // Updates faster than the save delay must not keep pushing the save back.
+    for (let i = 0; i < 4; i++) {
+      vi.advanceTimersByTime(600)
+      s.receive({ type: 'tiles', tiles: [{ id: 'a', view: { type: 'text', text: 'one' }, stale: false }] })
+    }
+    vi.advanceTimersByTime(2000)
+
+    vi.resetModules()
+    FakeSocket.all = []
+    s = await import('../../web/src/store.js')
+    s.start()
+    expect(s.tiles.get('a')).toMatchObject({ view: { text: 'one' }, stale: true })
+    expect(s.state.dataAt).toBeTypeOf('number')
+
+    FakeSocket.all[0].open()
+    FakeSocket.all[0].message({ type: 'hello', version: 1, tiles: [{ id: 'a', view: { type: 'text', text: 'two' }, stale: false }] })
+    expect(s.tiles.get('a')).toMatchObject({ view: { text: 'two' }, stale: false })
+    expect(s.state.dataAt).toBe(null)
+  })
+
+  it('tiles turn stale once the server has been gone a few seconds, not on a quick reconnect', async () => {
+    vi.useFakeTimers()
+    const s = await fresh()
+    s.start()
+    FakeSocket.all[0].open()
+    FakeSocket.all[0].message({ type: 'hello', version: 1, tiles: [{ id: 'a', view: { type: 'text', text: 'one' } }] })
+
+    FakeSocket.all[0].onclose()
+    vi.advanceTimersByTime(1000)
+    FakeSocket.all[1].open()
+    vi.advanceTimersByTime(10_000)
+    expect(s.tiles.get('a').stale).toBeFalsy()
+
+    FakeSocket.all[1].onclose()
+    vi.advanceTimersByTime(6000)
+    expect(s.tiles.get('a').stale).toBe(true)
+    expect(s.state.dataAt).toBeTypeOf('number')
+  })
+
+  it('a connection that never opens is given up after 8 s and tried again', async () => {
+    vi.useFakeTimers()
+    const s = await fresh()
+    s.start()
+    vi.advanceTimersByTime(8000)
+    expect(FakeSocket.all[0].closed).toBe(true)
+    expect(s.state.conn).toBe('offline')
+    vi.advanceTimersByTime(1000)
+    expect(FakeSocket.all).toHaveLength(2)
   })
 })

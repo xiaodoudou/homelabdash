@@ -48,7 +48,8 @@ The page is built from Vue 3 single-file components without scoped styles. `them
 - Header sections (`placement: top`) render list items as chips and open the full list over the page.
 - Graphs are `SparkLine.vue`, an SVG with a fixed vertical scale per format and a tooltip on hover.
 - `CountDown.vue` and `TimeBar.vue` share a one-second clock that only runs while one of them is on the page; they're the only things that move between fetches.
-- The page reconnects when the socket closes, and also when it hasn't heard anything for 45 seconds, so a laptop waking up doesn't sit on old numbers.
+- The page reconnects when the socket closes, and also when it hasn't heard anything for 45 seconds, so a laptop waking up doesn't sit on old numbers. A socket that hasn't opened after 8 seconds is dropped and retried.
+- `store.js` saves the last tiles in `localStorage` and shows them, marked stale, on a page opened while the server is down. `web/public/sw.js`, a service worker, answers for the page, its assets, icons and `/api/dashboard` from its cache when the server errors (5xx), fails or takes more than 4 seconds; a 401 always goes through so the login prompt still shows. The WebSocket and every other `/api` call bypass it.
 
 ## Plugins and their tests
 
