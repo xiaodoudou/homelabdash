@@ -4,6 +4,8 @@ Changes that people running homelabdash or writing plugins would notice. The for
 
 ## [Unreleased]
 
+## [0.6.9] - 2026-11-26
+
 ### Added
 
 - **The page opens even when the server is down.** The browser keeps a copy of the page and of the last tiles, so with the server off or hung you get the dashboard, dimmed, with "Offline, data from 14:02" in the header, instead of a proxy error or a page that never loads. It comes back to life on its own once the server answers. Needs HTTPS, or localhost.
